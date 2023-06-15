@@ -1,6 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-
+import  Hello  from './components/Hello';
+import Message from './components/Message';
+import Profile from './components/Profile';
+import Counter from './components/counter';
+import FunctionEvent from './components/FunctionEvent';
 function App() {
   return (
     <div className="App">
@@ -17,6 +21,13 @@ function App() {
         >
           Learn React
         </a>
+        <Hello/>
+        <Message message="this is attribut"/>
+        <Profile 
+          name = "thos"
+        />
+        <Counter/>
+        <FunctionEvent></FunctionEvent>
       </header>
     </div>
   );
