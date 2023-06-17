@@ -5,6 +5,10 @@ import Message from './components/Message';
 import Profile from './components/Profile';
 import Counter from './components/counter';
 import FunctionEvent from './components/FunctionEvent';
+import Home from './page/homepage';
+import {  Route,Routes, Switch ,Link} from 'react-router-dom';
+
+
 function App() {
   return (
     <div className="App">
@@ -28,6 +32,13 @@ function App() {
         />
         <Counter/>
         <FunctionEvent></FunctionEvent>
+
+        <Link to={"/home"}> Home</Link>
+
+        <Routes>
+          <Route  path='/home' element={<Home/>} />
+        </Routes>
+        
       </header>
     </div>
   );
