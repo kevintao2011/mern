@@ -1,4 +1,5 @@
 import React from 'react'
+// Functional event
 
 function handleClick(){
   console.log('clicked');
