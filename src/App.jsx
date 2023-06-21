@@ -5,14 +5,15 @@ import Message from './components/Message';
 import Profile from './components/Profile';
 import Counter from './components/counter';
 import FunctionEvent from './components/FunctionEvent';
-import Home from './page/homepage';
 import {  Route,Routes, Switch ,Link} from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
 
+import Home from './page/homepage/homepage';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -39,7 +40,10 @@ function App() {
           <Route  path='/home' element={<Home/>} />
         </Routes>
         
-      </header>
+      </header> */}
+      <Routes>
+        <Route  path='/home' element={<Home/>} />
+      </Routes>
     </div>
   );
 }

@@ -1,13 +1,100 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+} */
+
+.mainpage{
+  width: 100vw;
+  
 }
+.mainpage-1{
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../public/assests/img/background.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+  /* make the background consistent or in samge */
+  /* background-attachment: fixed;  */
+}
+.description{
+  font-size: 12px;
+}
+
+
+body {
+  color: black;
+}
+
+.hover-list {
+  display: none;
+}
+
+.hover-list-btn:hover + .hover-list {
+  display: block;
+}
+
+
+@layer components {
+  .red_btn {
+    @apply rounded-full border-red-600 bg-red-600 py-5 px-5 text-white transition-all hover:bg-white hover:text-red-600  
+  }
+
+  .selectlink{
+    font-family: 'Tensentype RuiHei GB18030';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 50px;
+    letter-spacing: 0.2em;
+    @apply  text-su-green transition-all hover:bg-white hover:text-su-green font-bold
+  }
+
+  .greentxt{
+    font-family: 'Tensentype RuiHei GB18030';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 50px;
+    letter-spacing: 0.2em;
+    @apply  text-su-green
+  }
+
+  .greensmalltxt{
+    font-family: 'Tensentype RuiHei GB18030';
+    font-style: normal;
+    font-weight: 400;
+  
+    
+    @apply  text-su-green
+  }
+    
+}
+
+p{
+  font-family: 'IM FELL Double Pica';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 170%;
+
+  /* or 34px */
+  letter-spacing: 0.2em;
+
+  color: #000000;
+}
+
+
