@@ -20,7 +20,7 @@ const Login = () => {
         
         // Or you can work with it as a plain object:
         const formJson = JSON.stringify(Object.fromEntries(formData.entries())) ;
-        console.log("form data", formJson)
+        console.log("formJson: ", formJson)
         // try{
         //     await register(data.email,data.password);
         // }catch(e){
@@ -29,29 +29,32 @@ const Login = () => {
         //You can pass formData as a fetch body directly:
         
         try{
-            await fetch('https://localhost:3001/signin', 
-            // { 
+            await fetch('/api/signin', 
+            { 
                 
-            //     method: "POST",
-            //     body: formJson,
+                method: "POST",
+                body: formJson,
+                headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                
+                mode:'cors'
+                
+            }
+            // {
+            //     mode: 'no-cors',
+            //     method: 'POST',
+                
             //     headers: {
             //         "Content-Type": "application/json",
-            //         // 'Content-Type': 'application/x-www-form-urlencoded',
             //     },
-            //     url: `http://localhost:3001`,
-            //     mode:'no-cors'
-                
-            // }
-            {
-                mode: 'cors',
-                method: 'POST',
-                url: `http://localhost:3001`,
-                body: formJson,
                
-            }
-            ,).then(response => response.json())
+            // }
+            
+            ).then(async response => await response.json())
             .then(data => {
-                console.log(data.code)
+                console.log("data.uid",data.user.uid)
                 if (data.error===false){
                     setsuccess(true);
                 }
