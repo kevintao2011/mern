@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Link,Outlet } from "react-router-dom";
-
+import { auth } from "../utils/firebasefunction";
 
 const Nav = () => {
     
