@@ -1,5 +1,6 @@
 import React , {useState} from 'react'
-
+import { loginfirebase } from '../../utils/firebasefunction';
+import { auth } from '../../utils/firebasefunction';
 const Login = () => {
     
     
@@ -15,25 +16,28 @@ const Login = () => {
         e.preventDefault();
         // Read the form data
         const form = e.target;
-        const formData = new FormData(form);
+        const formData = new FormData(form); 
         const data = formData.entries();
         
         // Or you can work with it as a plain object:
         const formJson = JSON.stringify(Object.fromEntries(formData.entries())) ;
-        console.log("formJson: ", formJson)
-        // try{
-        //     await register(data.email,data.password);
-        // }catch(e){
-        //     console.log("Error:",e.code);
-        // }
-        //You can pass formData as a fetch body directly:
-        
+        const formObject = Object.fromEntries(formData.entries())
+        console.log("formJson: ", formJson,formObject.email,formObject.password)
         try{
-            await fetch('/api/signin', 
+            const userCredential = await loginfirebase(formObject.email,formObject.password);
+            const sessionToken = await userCredential.user.getIdToken()
+            
+            await fetch('/api/checkauth', 
             { 
                 
                 method: "POST",
-                body: formJson,
+                body: JSON.stringify(
+                    {
+                        user:{
+                            jwt:sessionToken
+                        }
+                    }
+                ),
                 headers: {
                     "Content-Type": "application/json",
                     // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -42,38 +46,19 @@ const Login = () => {
                 mode:'cors'
                 
             }
-            // {
-            //     mode: 'no-cors',
-            //     method: 'POST',
-                
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-               
-            // }
-            
-            ).then(async response => await response.json())
+            ).then(async response => console.log(await response.json()))
             .then(data => {
-                console.log("data.uid",data.user.uid)
-                if (data.error===false){
-                    setsuccess(true);
-                }
-                if (data.code === "auth/email-already-in-use"){
-                    seterror("Email already in use");
-                }
-                if (data.code === "auth/weak-password"){
-                    seterror("Password is too weak");
-                }
-                
+                sessionStorage.setItem('sessionID',sessionToken)
+                auth.updateCurrentUser(userCredential.user)
             });
             
             
-        }catch (error) {
-           
-            console.log("fetch error",error);
-        } 
-  
+        }catch(e){
+            console.log("Error:",e.code);
+        }
+       
         
+   
     }
 
     function checkEmail(event){
