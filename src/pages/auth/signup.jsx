@@ -1,5 +1,10 @@
 import React from 'react'
 import { useState } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../utils/firebasefunction';
+import { Link } from 'react-router-dom';
+
+
 const SignUp = () => {
       const [email, setEmail] = useState('');
       const [emailAlert, setemailAlert] = useState(false);
@@ -9,7 +14,7 @@ const SignUp = () => {
       
       const [success, setsuccess] = useState(false);
       const handleSubmit = async (e) => {
-          console.log("Running handleSubmit");
+          console.log("Submitting signup form");
           e.preventDefault();
           // Read the form data
           const form = e.target;
@@ -18,43 +23,62 @@ const SignUp = () => {
           
           // Or you can work with it as a plain object:
           const formJson = JSON.stringify(Object.fromEntries(formData.entries())) ;
-      
-          // try{
-          //     await register(data.email,data.password);
-          // }catch(e){
-          //     console.log("Error:",e.code);
-          // }
-          //You can pass formData as a fetch body directly:
-          
+        //  register in server side
           try{
-              const res = await fetch('/api/signup', { 
-                  method: form.method,
-                  body: formJson,
-                  headers: {
-                  "Content-Type": "application/json",
-                  // 'Content-Type': 'application/x-www-form-urlencoded',
-                  },
-                  
-              }).then(response => response.json())
-              .then(data => {
-                  console.log(data.code)
-                  if (data.error==false){
-                      setsuccess(true);
-                  }
-                  if (data.code == "auth/email-already-in-use"){
-                      seterror("Email already in use");
-                  }
-                  if (data.code == "auth/weak-password"){
-                      seterror("Password is too weak");
-                  }
-                  
-              });
-              
-              
-          }catch (error) {
+            // await createUserWithEmailAndPassword(auth,data.email,data.password)
+            const res = await fetch('/api/signup', { 
+                method: "POST",
+                body: formJson,
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                mode:'cors'
+                
+            }).then(async response => {
+                
+                if (response.ok){
+                    // registered
+                    
+                    console.log("registered")
+                    setsubmit(true)
+                    return true
+                }else{
+                    console.log("response.body",response.body)
+                    const data = await response.json()
+                    console.log("data.error",data)
+                    if (data.code === "auth/email-already-in-use"){
+                        console.log("Email already in use")
+                        seterror("Email already in use");
+                    }
+                    else if (data.code === "auth/weak-password"){
+                        seterror("Password is too weak");
+                    }
+                    else{
+                        seterror("Password is too weak");
+                        
+                    }
+                    setsubmit(false)
+                }
+                
+                
+            })
+        
             
-              console.log("fetch error",error);
-          } 
+          }catch(e){
+            setsubmit(false)
+            console.log(e)
+          }
+          
+          
+        //   try{
+        //       //FirebaseError: Firebase: Error (auth/admin-restricted-operation).
+        //       await createUserWithEmailAndPassword(auth,data.email,data.password);
+        //   }catch(e){
+        //       console.log("Error:",e);
+        //   }
+        //   You can pass formData as a fetch body directly:
+          
     
           
       }
@@ -100,7 +124,7 @@ const SignUp = () => {
 
       return(
 
-          success?(
+          submit?(
               <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
               
                   {/* <Image 
@@ -115,9 +139,9 @@ const SignUp = () => {
                       Verification has been sent to your email, please check it.
                   </h3>
                   <div className="py-10">
-                      <button className='text-white p-5  bg-su-green rounded-md' onClick={()=>{}}>
+                      <Link to="home" className='text-white p-5  bg-su-green rounded-md' >
                           back to Home page
-                      </button>
+                      </Link>
                   </div>
                   
               </div>
@@ -138,7 +162,7 @@ const SignUp = () => {
                       <label htmlFor="email" className="block mb-2 text-lg font-medium greentxt">
                               Your email
                           </label>
-                          <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@ln.hk" required="required"    onChange={(e)=>{checkEmail(e)}}>
+                          <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@ln.hk" required="required"    onChange={(e)=>{/*checkEmail(e)*/}}>
 
                           </input>
                           
@@ -155,7 +179,7 @@ const SignUp = () => {
 
                       <div>
                           <label htmlFor="password" className="block mb-2 text-lg font-medium greentxt">Password</label>
-                          <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="required" onChange={(e)=>{checkPassword(e)}} >
+                          <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="required" onChange={(e)=>{/*checkPassword(e)*/}} >
                           </input>
                       </div>
                       
@@ -180,14 +204,14 @@ const SignUp = () => {
 
                       <div>
                           <label htmlFor="confirmpassword" className="block mb-2 text-lg font-medium greentxt">Confirm Password</label>
-                          <input type="confirmpassword" name="confirmpassword" id="confirmpassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+                          <input type="password" name="confirmpassword" id="confirmpassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                           </input>
                       </div>
                       
                       
                       
                   <button type="submit"  className="w-full underline underline-offset-1 greentxt boarder border-su-green bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" disabled={emailAlert || passwordAlert}>Sign Up</button>
-                      {error!=""?(
+                      {error!==""?(
                           <ul className="text-red-600 text-sm">
                               {error}
                           </ul>):(<></>)

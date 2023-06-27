@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useEffect, Component } from 'react';
-import firebase from 'firebase/app';
 import 'firebase/auth';
 import { auth } from '../utils/firebasefunction';
 
+//handle refresh 
 export default function session(){
-    const [currentUser, setCurrentUser] = useState(null);
-    const [User, setUser] = useState(User)
+    const [currentUser, setCurrentUser] = useState(auth.currentUser);
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async user => {
             await user.getIdToken()
@@ -18,10 +17,10 @@ export default function session(){
     
     return (
     <div>
-        {currentUser ? (
+        {currentUser.emailVerified ? (
         <p>Welcome, {currentUser.email}!</p>
         ) : (
-        <p>Please sign in.</p>
+        <p>Please verify the email before using the system.</p>
         )}
     </div>
     );

@@ -6,7 +6,9 @@ import { auth } from "../utils/firebasefunction";
 
 const Nav = () => {
     
+    const [toggleDropdown, setToggleDropdown] = useState(false);
     
+    console.log("refreshed, user",auth.currentUser?.email)
     return (
        
         <>
@@ -17,7 +19,9 @@ const Nav = () => {
                         to={"/"}
                         className="flex gap-2 "
                     >
-                        <img src="./logo192.png" alt="" className=""/>
+                        <img src="./assests/img/LingULogoGreen.png" alt="" className="" width="100" height="100" />
+                        
+
                         {/* <Image 
                             src     ="./assests/img/LingULogoGreen.svg" 
                             alt     = "promptation logo"
@@ -25,14 +29,15 @@ const Nav = () => {
                             height  = {100}
                             className = "object-contain"
                         /> */}
+                        
                     </Link>
                 </div>
                 <div className="flex flex-row gap-5">
                     <Link 
                         href="/api/auth/"
-                        className="flex gap-2 justify-center selectlink"
+                        className="flex gap-2 justify-center "
                     >
-                        <p className="p-2">Event</p>
+                        <p className=" selectlink">Event</p>
                     </Link>
                     <Link 
                         href="/api/auth/"
@@ -48,10 +53,11 @@ const Nav = () => {
                     </Link> */}
                     
                     <div className="">
-                        {false?(
+                        {auth.currentUser?(
+                            
                             <div className="flex flex-row">
                                 <Link 
-                                    href="/profile"
+                                    to="profile"
                                     className="flex gap-2 selectlink"
                                 >
                                     Profile
@@ -79,7 +85,7 @@ const Nav = () => {
                         ):(
                             <div className="flex flex-row px-0">
                                 <Link 
-                                    to={"/login"}
+                                    to={"/signup"}
                                     className="flex gap-2 selectlink"
                                 >
                                     Sign Up

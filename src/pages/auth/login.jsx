@@ -1,15 +1,18 @@
 import React , {useState} from 'react'
 import { loginfirebase } from '../../utils/firebasefunction';
 import { auth } from '../../utils/firebasefunction';
+import { useNavigate } from 'react-router-dom';
+import { sendEmailVerification } from 'firebase/auth';
 const Login = () => {
     
-    
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState('');
     const [emailAlert, setemailAlert] = useState(false);
     const [passwordAlert, setpasswordAlert] = useState(false);
     const [error, seterror] = useState("");
-    const [submit, setsubmit] = useState(false);
-    
+    const [Verified, setVerified] = useState(false)
+    const [User, setUser] = useState(null)
     const [success, setsuccess] = useState(false);
     const handleSubmit = async (e) => {
         console.log("Running handleSubmit");
@@ -48,12 +51,26 @@ const Login = () => {
             }
             ).then(async response => console.log(await response.json()))
             .then(data => {
-                sessionStorage.setItem('sessionID',sessionToken)
-                auth.updateCurrentUser(userCredential.user)
+                // sessionStorage.setItem('sessionID',sessionToken)
+                
+                if (!userCredential.user.emailVerified){
+                    auth.signOut()
+                    setVerified(false)
+                    
+                    setUser(userCredential.user)
+                    seterror("Your account is not yet Verified, please check your email or press resend to reset your email.")
+                }else{
+                    //login success
+                    auth.updateCurrentUser(userCredential.user)
+                    setsuccess(true)
+                navigate("/home" ,false)
+                }
+                
             });
             
             
         }catch(e){
+            auth.signOut()
             console.log("Error:",e.code);
         }
        
@@ -124,6 +141,7 @@ const Login = () => {
                 
             </div>
         ):(
+           
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <p>Log in page</p>
                 {/* <Image 
@@ -189,6 +207,16 @@ const Login = () => {
                         <ul className="text-red-600 text-sm">
                             {error}
                         </ul>):(<></>)
+                    }
+                    {User?(
+                            <button className='text-su-green' onClick={()=>{
+                                sendEmailVerification(User)
+                                seterror("email has been sent please wait")
+                                setUser(null)
+                            }}>
+                                Resend verification Email
+                            </button>
+                        ):(<></>)
                     }
                 </form>
             </div>
