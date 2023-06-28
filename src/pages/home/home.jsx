@@ -56,19 +56,25 @@ const Home = () => {
                       //   {/* <li>Cart</li> */}
                       // </ul>
                       <div className='dropdown flex flex-col'>
-                        <Link
+                        {/* <Link
                           href='/shop'
                           className='dropdown_link text-su-green text-lg font-semibold py-5'
                           onClick={() => {}}
                         >
                           商店 Shop
-                        </Link>
-                        <Link
-                          href='/events'
-                          className='dropdown_link text-su-green text-lg font-semibold '
-                          onClick={() => {}}
+                        </Link> */}
+                        <Link 
+                            to={"shop"}
+                            className="dropdown_link text-su-green text-lg font-semibold py-5"
                         >
-                          活動 Event
+                            商店 Shop
+                        </Link>
+                        
+                        <Link 
+                            to={"events"}
+                            className="dropdown_link text-su-green text-lg font-semibold py-5"
+                        >
+                            活動 Event
                         </Link>
                         
                       </div>

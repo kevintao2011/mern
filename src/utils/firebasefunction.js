@@ -1,7 +1,7 @@
 import { signInWithEmailAndPassword,getIdToken,createUserWithEmailAndPassword,getAuth,signOut,sendEmailVerification } from "firebase/auth";
 import { FirebaseError, initializeApp } from "firebase/app";
 // import { getFirestore,doc, getDoc } from "firebase/firestore";
-
+import { setPersistence ,browserSessionPersistence, inMemoryPersistence } from "firebase/auth";
 
 // const firebaseConfig = {
 //     apiKey: process.env.FIREBASE_apikey,
@@ -39,10 +39,14 @@ const firebaseConfig = {
   };
   
 
-export const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app);
+// setPersistence(auth, inMemoryPersistence)
+// auth.setPersistence()
+
 
 export async function loginfirebase(email,password){
+    // setPersistence(auth, browserSessionPersistence)
     
     console.log('function loginfirebase');
     console.log(app.options);
@@ -55,7 +59,8 @@ export async function loginfirebase(email,password){
 
 
 export async function logOutfirebase(){
-    const auth = getAuth(app);
+    // const a = getAuth(app)
+    console.log("signOut")
     await signOut(auth).then(() => {
         // Sign-out successful.
         return true;
@@ -66,7 +71,7 @@ export async function logOutfirebase(){
     
 }
 export async function register (email,password){
-    const auth = getAuth(app);
+    
     var result;
   
     try{
