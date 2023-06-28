@@ -3,12 +3,64 @@
 import { useState, useEffect } from "react";
 import { Link,Outlet } from "react-router-dom";
 import { auth } from "../utils/firebasefunction";
-
+import { updateCurrentUser } from "firebase/auth";
+import DropdownComponent from "./dropdown";
 const Nav = () => {
     
     const [toggleDropdown, setToggleDropdown] = useState(false);
+    const [MySociety, setMySociety] = useState([])
+    const [loggedIn, setLoggedIn] = useState(false);
+    auth.onAuthStateChanged((user) => {
+        console.log("AuthStateChanged")
+        if (user) {
+            setLoggedIn(true);
+        } else {
+            setLoggedIn(false);
+        }
+    });
     
-    console.log("refreshed, user",auth.currentUser?.email)
+    
+    useEffect(() => {
+        async function getSocieties(){
+            if (loggedIn){
+                console.log("fetching societies")
+                await auth.currentUser.getIdToken().then(async token=>{
+                    console.log("token",token)
+                    await fetch ("/api/getusersocieties",
+                    {
+                        method:"POST",
+                        body:JSON.stringify({
+                            user:{
+                                token:token
+                            }
+                        }),
+                        headers: {
+                            "Content-Type": "application/json",
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            mode:'cors'
+                        
+                    }).then(async response =>{
+                        if(response.ok){
+                            const data = await response.json()
+                            setMySociety(Object.keys(data.societies))
+                            console.log(MySociety)
+                        }
+                    })}
+                )
+            }
+            
+           
+        }
+        getSocieties()
+        
+        if (loggedIn !== undefined) {
+            
+            
+        }
+    }, [loggedIn]);
+
+    
     return (
        
         <>
@@ -33,18 +85,13 @@ const Nav = () => {
                     </Link>
                 </div>
                 <div className="flex flex-row gap-5">
-                    <Link 
-                        href="/api/auth/"
-                        className="flex gap-2 justify-center "
-                    >
-                        <p className=" selectlink">Event</p>
-                    </Link>
-                    <Link 
+                    
+                    {/* <Link 
                         href="/api/auth/"
                         className="flex gap-2 selectlink"
                     >
                         Shop
-                    </Link>
+                    </Link> */}
                     {/* <Link 
                         href="/api/auth/"
                         className="flex gap-2 selectlink"
@@ -55,21 +102,59 @@ const Nav = () => {
                     <div className="">
                         {auth.currentUser?(
                             
-                            <div className="flex flex-row">
+                            <div className="flex flex-row gap-5">
                                 <Link 
                                     to="profile"
-                                    className="flex gap-2 selectlink"
+                                    className="flex  selectlink"
                                 >
                                     Profile
                                 </Link>
 
+                                <Link 
+                                    to="/"
+                                    className="flex-col  selectlink "
+                                    onMouseEnter={()=>{
+                                        console.log("moved")
+                                        setToggleDropdown(true)
+                                    }}
+                                    onMouseLeave={()=>{
+                                        console.log("moved")
+                                        setToggleDropdown(false)
+                                    }}
+                                    
+                                >
+                                    My Society
+                                    {toggleDropdown?
+                                        (<div className="hover-list">
+                                            {
+                                                MySociety.map((soc)=>{
+                                                console.log(soc)
+                                                return(
+                                                    
+                                                   
+                                                    <Link to={"/soc:id"} className="selectlink">
+                                                        {soc}
+                                                    </Link>
+                                                )
+                                            })}
+                                            {/* {for soc in MySociety} */}
+                                            
+                                            </div>
+                                        ):(<></>)}
+                                    
+                                </Link>
+
+                                
+                                
+
                                 <button 
-                                    className="flex gap-2 selectlink "
+                                    className="flex  selectlink "
                                     onClick={(e)=>{
                                         e.preventDefault();
+                                        auth.signOut()
                                         // alert("'trigggered onclick action'");
                                         console.log('trigggered onclick action');
-                                    
+                                        
 
                                     }}
 
@@ -83,10 +168,10 @@ const Nav = () => {
                             
                             
                         ):(
-                            <div className="flex flex-row px-0">
+                            <div className="flex flex-row px-0 gap-5">
                                 <Link 
                                     to={"/signup"}
-                                    className="flex gap-2 selectlink"
+                                    className="flex  selectlink"
                                 >
                                     Sign Up
                                 </Link>

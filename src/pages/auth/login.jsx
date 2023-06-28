@@ -26,48 +26,52 @@ const Login = () => {
         const formJson = JSON.stringify(Object.fromEntries(formData.entries())) ;
         const formObject = Object.fromEntries(formData.entries())
         console.log("formJson: ", formJson,formObject.email,formObject.password)
+        if(auth.currentUser){
+            navigate("/home" ,false)
+        }
         try{
             const userCredential = await loginfirebase(formObject.email,formObject.password);
             const sessionToken = await userCredential.user.getIdToken()
             
-            await fetch('/api/checkauth', 
-            { 
-                
-                method: "POST",
-                body: JSON.stringify(
-                    {
-                        user:{
-                            jwt:sessionToken
-                        }
-                    }
-                ),
-                headers: {
-                    "Content-Type": "application/json",
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                
-                mode:'cors'
-                
-            }
-            ).then(async response => console.log(await response.json()))
-            .then(data => {
-                // sessionStorage.setItem('sessionID',sessionToken)
-                
-                if (!userCredential.user.emailVerified){
-                    auth.signOut()
-                    setVerified(false)
-                    
-                    setUser(userCredential.user)
-                    seterror("Your account is not yet Verified, please check your email or press resend to reset your email.")
-                }else{
-                    //login success
-                    auth.updateCurrentUser(userCredential.user)
-                    setsuccess(true)
-                navigate("/home" ,false)
-                }
-                
-            });
             
+            // await fetch('/api/checkauth', 
+            // { 
+                
+            //     method: "POST",
+            //     body: JSON.stringify(
+            //         {
+            //             user:{
+            //                 jwt:sessionToken
+            //             }
+            //         }
+            //     ),
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //         // 'Content-Type': 'application/x-www-form-urlencoded',
+            //     },
+                
+            //     mode:'cors'
+                
+            // }
+            // ).then(async response => console.log(await response.json()))
+            // .then(data => {
+            //     // sessionStorage.setItem('sessionID',sessionToken)
+                
+            //     if (!userCredential.user.emailVerified){
+            //         auth.signOut()
+            //         setVerified(false)
+                    
+            //         setUser(userCredential.user)
+            //         seterror("Your account is not yet Verified, please check your email or press resend to reset your email.")
+            //     }else{
+            //         //login success
+            //         auth.updateCurrentUser(userCredential.user)
+            //         setsuccess(true)
+            //     navigate("/home" ,false)
+            //     }
+                
+            // });
+            navigate("/home" ,false)
             
         }catch(e){
             auth.signOut()
@@ -121,7 +125,7 @@ const Login = () => {
 
         success?(
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-            
+                
                 {/* <Image 
                     src     ="/assests/img/LingULogoGreen.svg"
                     alt     = "profile"
