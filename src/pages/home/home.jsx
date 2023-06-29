@@ -168,7 +168,12 @@ const Home = () => {
             className='flex flex-row justify-center py-5'
           >
             <p className="flex flex-col justify-center selectlink">   
-              <a href="">結構 Structure</a>
+              <a href=""></a>
+              <Link
+                to={"/structure/exco"}
+              >
+                結構 Structure
+              </Link>
             </p>
           </div>
           
@@ -178,10 +183,34 @@ const Home = () => {
             
             <div className="flex flex-col justify-center selectlink text-center">
               
-              <a href="/structure/secretary">幹事會 Secretary</a>
-              <a href="/structure/deputation">代表會 Deputation</a>
-              <a href="/structure/judicialcouncil">仲議會 Judicial Council</a>
-              <a href="/structure/editorialboard">編輯委員會 Editorial Board</a>
+             
+              <Link
+                to={"/structure/exco"}
+                className="py-5"
+              >
+                幹事會 Secretary
+              </Link>
+
+              <Link
+                className="py-5"
+                to={"/structure/deputation"}
+              >
+                代表會 Deputation
+              </Link>
+
+              <Link
+                to={"/structure/judicialcouncil"}
+                className="py-5"
+              >
+                仲議會 Judicial Council
+              </Link>
+
+              <Link
+                to={"/structure/editorialboard"}
+                className="py-5"
+              >
+                編輯委員會 Editorial Board
+              </Link>
               
                 
             </div>
