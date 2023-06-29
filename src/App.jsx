@@ -6,13 +6,16 @@ import Error from './pages/error';
 import Profile from './pages/profile';
 import Login from './pages/auth/login';
 import SignUp from './pages/auth/signup';
+import session from './components/session';
 // import Error from './pages/error';
 
 import './App.css';
+import Session from './components/session';
 
 
 function App() {
   return (
+    
     <BrowserRouter>
       
       <Routes>

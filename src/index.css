@@ -33,7 +33,9 @@
 .description{
   font-size: 12px;
 }
-
+.mainpage-i{
+  background-image: url("../public/assests/img/background.png");
+}
 
 body {
   color: black;

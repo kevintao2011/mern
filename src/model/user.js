@@ -1,6 +1,6 @@
 
 
-export class UserInfo {
+class ProfileInfo {
     constructor() {  // Constructor
         this.major = "loading....";
         this.cohort = "loading....";
@@ -17,3 +17,5 @@ export class UserInfo {
         
     }
 }
+
+export {ProfileInfo}

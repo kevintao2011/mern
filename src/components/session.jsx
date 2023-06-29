@@ -1,27 +1,59 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState, useEffect, Component } from 'react';
+import React, { useState, useEffect, createContext, Children} from 'react';
 import 'firebase/auth';
 import { auth } from '../utils/firebasefunction';
 
-//handle refresh 
-// export default function session(){
-//     const [currentUser, setCurrentUser] = useState(auth.currentUser);
-//     useEffect(() => {
-//         const unsubscribe = auth.onAuthStateChanged(async user => {
-//             await user.getIdToken()
-//             setCurrentUser(user); // Update the current user state when the auth state changes
-//         });
 
-//         return unsubscribe; // Unsubscribe from the onAuthStateChanged listener when the component unmounts
-//     }, []);
+export default function Session(){
+    const UserContext = createContext()
     
-//     return (
-//     <div>
-//         {currentUser.emailVerified ? (
-//         <p>Welcome, {currentUser.email}!</p>
-//         ) : (
-//         <p>Please verify the email before using the system.</p>
-//         )}
-//     </div>
-//     );
-// }
+    const [userDBInfo, setuserDBInfo] = useState(null)
+    const [SessionID, setSessionID] = useState(null)
+    const [loggedIn, setLoggedIn] = useState(false);
+    useEffect(() => {
+        auth.onAuthStateChanged((user) => {
+            
+            console.log("AuthStateChanged")
+            async function getUserDBInfo(){
+                await auth.currentUser.getIdToken().then(async token=>{
+                    console.log("token",token)
+                    await fetch ("/api/getuser",
+                    {
+                        method:"POST",
+                        body:JSON.stringify({
+                            user:{
+                                token:token
+                            }
+                        }),
+                        headers: {
+                            "Content-Type": "application/json",
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            mode:'cors'
+                        
+                    }).then(async response =>{
+                        if(response.ok){
+                            const data = await response.json()
+                            setuserDBInfo(Object.keys(data.societies))
+                            return data
+                        }
+                    })}
+                    
+                )
+                
+            }
+            if (user) {
+                setuserDBInfo(getUserDBInfo()) 
+                setLoggedIn(true);
+            } else {
+                setLoggedIn(false);
+            }
+        });// Unsubscribe from the onAuthStateChanged listener when the component unmounts
+    }, []);
+    
+    return (
+        <UserContext.Provider value={{userDBInfo,SessionID}}>
+            {Children}
+        </UserContext.Provider>
+    );
+}

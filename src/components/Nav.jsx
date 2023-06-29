@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState, useEffect } from "react";
 import { Link,Outlet } from "react-router-dom";
@@ -10,22 +10,23 @@ const Nav = () => {
     const [toggleDropdown, setToggleDropdown] = useState(false);
     const [MySociety, setMySociety] = useState([])
     const [loggedIn, setLoggedIn] = useState(false);
-    auth.onAuthStateChanged((user) => {
-        console.log("AuthStateChanged")
-        if (user) {
-            setLoggedIn(true);
-        } else {
-            setLoggedIn(false);
-        }
-    });
+    
     
     
     useEffect(() => {
+        auth.onAuthStateChanged((user) => {
+            console.log("AuthStateChanged",user?.email)
+            if (user) {
+                setLoggedIn(true);
+            } else {
+                setLoggedIn(false);
+            }
+        });
         async function getSocieties(){
             if (loggedIn){
                 console.log("fetching societies")
                 await auth.currentUser.getIdToken().then(async token=>{
-                    console.log("token",token)
+                    // console.log("token",token)
                     await fetch ("/api/getusersocieties",
                     {
                         method:"POST",
@@ -44,7 +45,7 @@ const Nav = () => {
                         if(response.ok){
                             const data = await response.json()
                             setMySociety(Object.keys(data.societies))
-                            console.log(MySociety)
+                            
                         }
                     })}
                 )
@@ -58,7 +59,7 @@ const Nav = () => {
             
             
         }
-    }, [loggedIn]);
+    }, [ loggedIn]);
 
     
     return (
@@ -110,41 +111,16 @@ const Nav = () => {
                                     Profile
                                 </Link>
 
-                                <Link 
-                                    to="/"
-                                    className="flex-col  selectlink "
-                                    onMouseEnter={()=>{
-                                        console.log("moved")
-                                        setToggleDropdown(true)
-                                    }}
-                                    onMouseLeave={()=>{
-                                        console.log("moved")
-                                        setToggleDropdown(false)
-                                    }}
-                                    
-                                >
-                                    My Society
-                                    {toggleDropdown?
-                                        (<div className="hover-list">
-                                            {
-                                                MySociety.map((soc)=>{
-                                                console.log(soc)
-                                                return(
-                                                    
-                                                   
-                                                    <Link to={"/soc:id"} className="selectlink">
-                                                        {soc}
-                                                    </Link>
-                                                )
-                                            })}
-                                            {/* {for soc in MySociety} */}
-                                            
-                                            </div>
-                                        ):(<></>)}
-                                    
-                                </Link>
+                            <button onClick={()=>{setToggleDropdown((prev)=>!prev)}}>
+                                <DropdownComponent 
+                                    items={MySociety} 
+                                    title={"My Society"}
+                                    show={toggleDropdown} 
+                                    className="text-su-green relative w-full lg:max-w-sm"
+                                />
+                            </button>
 
-                                
+                            
                                 
 
                                 <button 

@@ -1,14 +1,52 @@
 import React from "react";
-
-export default function DropdownComponent() {
+import { Link } from "react-router-dom";
+export default function DropdownComponent(props) {
+    const items = props.items
+    const title = props.title
+    const show = props.show
+    console.log("show",show)
     return (
-        <div className="relative w-full lg:max-w-sm">
-            <select className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
-                <option>ReactJS Dropdown</option>
-                <option>Laravel 9 with React</option>
-                <option>React with Tailwind CSS</option>
-                <option>React With Headless UI</option>
-            </select>
+        <div className="w-full  appearance-none  ">
+            <Link 
+                to="/"
+                className="flex-col  selectlink "
+                onClick={()=>{
+                    console.log("moved")
+                    
+                }}
+                
+                
+            >
+                {title}
+                
+                
+            </Link>
+            {show&&items?.map(item=>{
+                    return(
+                        <p className="selectlink ">{item}</p>
+                    )
+                })
+                
+            }
+            
+            {/* <select className="w-full p-2.5 text-su-green bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
+                
+                
+                {items.map(item=>{
+                    return(
+                        <option className={item}>{item}</option>
+                    )
+                })}
+            </select> */}
+            {/* <select className="w-full p-2.5 text-su-green bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
+                
+                
+                {items.map(item=>{
+                    return(
+                        <option className={item}>{item}</option>
+                    )
+                })}
+            </select> */}
         </div>
     );
 }
