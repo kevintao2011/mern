@@ -5,17 +5,67 @@ import { auth } from '../utils/firebasefunction'
 import SocietyCard from '../components/SocietyCard';
 import ProductCard from '../components/ProductCard';
 
+import * as Info from '../model/info.js'
+import { onAuthStateChanged } from 'firebase/auth';
+
 const iconsize = 20;
 const Profile = () => {
-  const [first, setfirst] = useState(false)
-  const user = auth.currentUser.accessToken
+  const [ProfileInfo, setProfileInfo] = useState(new Info.ProfileInfo())
+  if (auth.currentUser)(
+    
+    console.log(auth.currentUser.accessToken)
+  )
   
-  console.log(user)
+  const [init, setinit] = useState(false)
+
+  async function fetchProfileInfo(){
+      
+        await auth.currentUser.getIdToken().then(async token=>{
+          console.log("function fetchProfileInfo",token)
+          await fetch('/api/getuser'
+          ,{
+            method:"POST",
+            body:JSON.stringify({
+              user:{
+                token:token
+              }}),
+              headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+              mode:'cors'
+          }).then(async response =>{
+            if(response.ok){
+                const data = await response.json()
+                console.log(data)
+                setProfileInfo(data)
+            }
+          })
+        })
+        
+      
+        
+  }
+  useEffect(() => {
+    // window.onbeforeunload = function() {
+    //     setinit((prev)=>!prev);
+    //     console.log("use-effect fetchProfileInfo")
+    //     fetchProfileInfo()
+    // };
+    if(auth.currentUser){fetchProfileInfo()}
+    
+    return () => {
+      // window.onbeforeunload = null;
+    }
+    
+  }, [])
+  
+  
   return (
-    <div className="mainpage-i">
+    <div className="mainpage-1">
         
         <div className="flex flex-row ">
-          <div className="flex flex-col px-10 w-3/12">
+          <div className="flex flex-col px-10 w-3/12 items-center">
             <div className="py-10">
               <img 
                 src     ="/assests/img/cow.png" 
@@ -30,7 +80,7 @@ const Profile = () => {
                 Edit Profile
               </button>
             </div>
-            <div className="flex flex-row justify-between py-5">
+            <div className="flex flex-row w-full justify-between py-5">
               <button>
                 <img 
                   src     ="/assests/img/icon/icon_notifications.svg" 
@@ -68,133 +118,136 @@ const Profile = () => {
                 />
               </button>
             </div>
-            <div className=" flex flex-row py-5">
-              <div className=" w-2/12 ">
-                <button>
-                  <img 
-                    src     ="/assests/img/icon/icon_education.svg" 
-                    alt     = "major"
-                    width   = {iconsize}
-                    height  = {iconsize}
-                    className = "object-contain "
-                  />
-                </button>
-              </div>
+            <div className="w-full">
+              <div className=" flex flex-row py-5">
+                <div className=" w-2/12 ">
+                  <button>
+                    <img 
+                      src     ="/assests/img/icon/icon_education.svg" 
+                      alt     = "major"
+                      width   = {iconsize}
+                      height  = {iconsize}
+                      className = "object-contain "
+                    />
+                  </button>
+                </div>
                 
               <div className=" w-10/12 flex justify-center major">
-                8
+                  {ProfileInfo.major}
+                </div>
+              </div>
+
+              <div className=" flex flex-row py-5">
+                <div className=" w-2/12 ">
+                  <button>
+                    <img 
+                      src     ="/assests/img/icon/icon_time.svg" 
+                      alt     = "cohort"
+                      width   = {iconsize}
+                      height  = {iconsize}
+                      className = "object-contain "
+                    />
+                  </button>
+                </div>
+                  
+                <div className=" w-10/12 flex justify-center ">
+                  {ProfileInfo.cohort}
+                </div>
+              </div>
+
+              
+              <div className=" flex flex-row py-5">
+                <div className=" w-2/12 ">
+                  <button>
+                    <img 
+                      src     ="/assests/img/icon/icon_user.svg" 
+                      alt     = "SID "
+                      width   = {iconsize}
+                      height  = {iconsize}
+                      className = "object-contain "
+                    />
+                  </button>
+                </div>
+                  
+                <div className=" w-10/12 flex justify-center">
+                  {ProfileInfo.sid}
+                </div>
+              </div>
+
+              
+              <div className=" flex flex-row py-5">
+                <div className=" w-2/12 ">
+                  <button>
+                    <img 
+                      src     ="/assests/img/icon/icon_calendar.svg" 
+                      alt     = "registerDay"
+                      width   = {iconsize}
+                      height  = {iconsize}
+                      className = "object-contain "
+                    />
+                  </button>
+                </div>
+                  
+                <div className=" w-10/12 flex justify-center">
+                  {ProfileInfo.registerDay}
+                </div>
+              </div>
+
+              <div className=" flex flex-row py-5">
+                <div className=" w-2/12 ">
+                  <button>
+                    <img 
+                      src     ="/assests/img/icon/gender.svg" 
+                      alt     = "gender"
+                      width   = {iconsize}
+                      height  = {iconsize}
+                      className = "object-contain "
+                    />
+                  </button>
+                </div>
+                  
+                <div className=" w-10/12 flex justify-center">
+                  {ProfileInfo.gender}
+                </div>
+              </div>
+
+              <div className=" flex flex-row py-5">
+                <div className=" w-2/12 ">
+                  <button>
+                    <img 
+                      src     ="/assests/img/icon/icon_phone.svg" 
+                      alt     = "contact"
+                      width   = {iconsize}
+                      height  = {iconsize}
+                      className = "object-contain "
+                    />
+                  </button>
+                </div>
+                  
+                <div className=" w-10/12 flex justify-center">
+                  {ProfileInfo.contact}
+                </div>
+              </div>
+
+              <div className=" flex flex-row py-5">
+                <div className=" w-2/12 ">
+                  <button>
+                    <img 
+                      src     ="/assests/img/icon/icon_envelope.svg" 
+                      alt     = "email"
+                      width   = {iconsize}
+                      height  = {iconsize}
+                      className = "object-contain "
+                    />
+                  </button>
+                </div>
+                  
+                <div className=" w-10/12 flex justify-center">
+                  {ProfileInfo.email}
+                </div>
               </div>
             </div>
-
-            <div className=" flex flex-row py-5">
-              <div className=" w-2/12 ">
-                <button>
-                  <img 
-                    src     ="/assests/img/icon/icon_time.svg" 
-                    alt     = "cohort"
-                    width   = {iconsize}
-                    height  = {iconsize}
-                    className = "object-contain "
-                  />
-                </button>
-              </div>
-                
-              <div className=" w-10/12 flex justify-center ">
-                7
-              </div>
-            </div>
-
             
-            <div className=" flex flex-row py-5">
-              <div className=" w-2/12 ">
-                <button>
-                  <img 
-                    src     ="/assests/img/icon/icon_user.svg" 
-                    alt     = "SID "
-                    width   = {iconsize}
-                    height  = {iconsize}
-                    className = "object-contain "
-                  />
-                </button>
-              </div>
-                
-              <div className=" w-10/12 flex justify-center">
-                5
-              </div>
-            </div>
-
-            
-            <div className=" flex flex-row py-5">
-              <div className=" w-2/12 ">
-                <button>
-                  <img 
-                    src     ="/assests/img/icon/icon_calendar.svg" 
-                    alt     = "registerDay"
-                    width   = {iconsize}
-                    height  = {iconsize}
-                    className = "object-contain "
-                  />
-                </button>
-              </div>
-                
-              <div className=" w-10/12 flex justify-center">
-                4
-              </div>
-            </div>
-
-            <div className=" flex flex-row py-5">
-              <div className=" w-2/12 ">
-                <button>
-                  <img 
-                    src     ="/assests/img/icon/gender.svg" 
-                    alt     = "gender"
-                    width   = {iconsize}
-                    height  = {iconsize}
-                    className = "object-contain "
-                  />
-                </button>
-              </div>
-                
-              <div className=" w-10/12 flex justify-center">
-                3
-              </div>
-            </div>
-
-            <div className=" flex flex-row py-5">
-              <div className=" w-2/12 ">
-                <button>
-                  <img 
-                    src     ="/assests/img/icon/icon_phone.svg" 
-                    alt     = "contact"
-                    width   = {iconsize}
-                    height  = {iconsize}
-                    className = "object-contain "
-                  />
-                </button>
-              </div>
-                
-              <div className=" w-10/12 flex justify-center">
-                2
-              </div>
-            </div>
-
-            <div className=" flex flex-row py-5">
-              <div className=" w-2/12 ">
-                <button>
-                  <img 
-                    src     ="/assests/img/icon/icon_envelope.svg" 
-                    alt     = "email"
-                    width   = {iconsize}
-                    height  = {iconsize}
-                    className = "object-contain "
-                  />
-                </button>
-              </div>
-                
-              <div className=" w-10/12 flex justify-center">
-                1
-              </div>
-            </div>
           </div> 
           <div className="RHS w-9/12 px-10">
               <img src="./assests/img/BelongSociety.svg" alt="" />

@@ -109,11 +109,20 @@ const Home = () => {
         </div>
 
         <div 
-          className="mainpage flex flex-col  "
+          className="mainpage flex flex-col items-center "
         >
+         
+         <img 
+            src     =".\assests\img\aboutusphoto.svg" 
+            alt     = "promptation logo"
+            width   = {1000}
+            height  = {1000}
+            className = "object-contain p-20"
+          />
           <span
             className='flex flex-row justify-center py-10'
           >
+            
             
             <img src="./assests/img/AboutUs.png" alt="" className="" width="200" height="200" />
           </span>
@@ -168,12 +177,8 @@ const Home = () => {
             className='flex flex-row justify-center py-5'
           >
             <p className="flex flex-col justify-center selectlink">   
-              <a href=""></a>
-              <Link
-                to={"/structure/exco"}
-              >
-                結構 Structure
-              </Link>
+              
+              <p className="selectlink">結構 Structure</p>
             </p>
           </div>
           
@@ -199,7 +204,7 @@ const Home = () => {
               </Link>
 
               <Link
-                to={"/structure/judicialcouncil"}
+                to={"/structure/judicial"}
                 className="py-5"
               >
                 仲議會 Judicial Council
