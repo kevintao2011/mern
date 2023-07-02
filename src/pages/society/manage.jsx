@@ -164,7 +164,7 @@ const Manage = () => {
                         Member 
                     </button>
                 </div>
-                <div className="h-full w-full bg-green-100 rounded-b-3xl rounded-tr-3xl">
+                <div className="h-full w-full bg-slate-100 rounded-b-3xl rounded-tr-3xl">
                     <div className="p-10 ">
                         {tab==="Member"&&(
                             <div className="">

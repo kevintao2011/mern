@@ -11,7 +11,7 @@ import { useAuth } from "./session";
 
 // from context
 const Nav = () => {
-    console.log("loading Nav")
+    
     const location = useLocation() //get current path
     const [toggleDropdown, setToggleDropdown] = useState(false);
     // const [MySociety, setMySociety] = useState([])
@@ -21,7 +21,8 @@ const Nav = () => {
     
     // from context
 
-    const {currentUser,userDBInfo} = useAuth()
+    const {currentUser,userDBInfo,loading} = useAuth()
+    // console.log("loading Nav",currentUser,userDBInfo,loading)
     // console.log("load user",currentUser,userDBInfo.societies)
     if(currentUser && userDBInfo){
         console.log("Nav status",currentUser,userDBInfo.societies)
@@ -83,7 +84,7 @@ const Nav = () => {
     // }, [ loggedIn]);
 
     console.log(location.pathname)
-    if(true){ //location.pathname==="/"
+    if(!loading){ //location.pathname==="/"
         return (
         
             <>
