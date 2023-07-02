@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
 import { auth } from "../utils/firebasefunction"
+import { signInWithEmailAndPassword } from "firebase/auth"
 
 const AuthContext = React.createContext()
 
@@ -17,7 +18,7 @@ export function AuthProvider({ children }) {
   }
 
   function login(email, password) {
-    return auth.signInWithEmailAndPassword(email, password)
+    return signInWithEmailAndPassword(auth,email, password)
   }
 
   function logout() {
@@ -39,7 +40,7 @@ export function AuthProvider({ children }) {
   async function getDBInfo(){
     console.log("getDBInfo",auth.currentUser.uid)
     await auth.currentUser.getIdToken().then(async token=>{
-        // console.log("token",token)
+        console.log("token",token)
         await fetch ("/api/getuser",
         {
             method:"POST",
@@ -61,8 +62,10 @@ export function AuthProvider({ children }) {
                 console.log("userInfo",data)
                 setuserDBInfo(data)
                 
-                setLoading(false)
                 
+                
+            }else{
+              console.log("failed fetch user")
             }
         })}
 
@@ -78,13 +81,13 @@ export function AuthProvider({ children }) {
       
       setCurrentUser(user)
       if(user){
-        getDBInfo()
+        await getDBInfo()
         
       }else{
         console.log("no user")
-        setLoading(false)
+        
       }
-
+      setLoading(false)
       
     })
     
@@ -95,22 +98,22 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     userDBInfo,
+    loading,
     login,
     signup,
     logout,
     resetPassword,
     updateEmail,
-    updatePassword
-  }
-  try{
-    return (
+    updatePassword,
     
-      <AuthContext.Provider value={value}>
-        {!loading && children}
-      </AuthContext.Provider>
-    )
-  }catch(e){
-    console.log(e)
   }
+  
+  return (
+  
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  )
+  
   
 }
