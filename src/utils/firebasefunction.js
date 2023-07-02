@@ -43,10 +43,10 @@ export const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app);
 // setPersistence(auth, inMemoryPersistence)
 // auth.setPersistence()
-
+setPersistence(auth, browserSessionPersistence)
 
 export async function loginfirebase(email,password){
-    // setPersistence(auth, browserSessionPersistence)
+    
     
     console.log('function loginfirebase');
     console.log(app.options);

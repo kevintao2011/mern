@@ -4,7 +4,7 @@ import React, { useEffect,useState } from 'react'
 import { auth } from '../utils/firebasefunction'
 import SocietyCard from '../components/SocietyCard';
 import ProductCard from '../components/ProductCard';
-
+import { useAuth } from '../components/session';
 import * as Info from '../model/info.js'
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -14,13 +14,15 @@ const Profile = () => {
   if (auth.currentUser)(
     
     console.log(auth.currentUser.accessToken)
+    
   )
   
   const [init, setinit] = useState(false)
-
+  const {currentUser,userDBInfo} = useAuth()
+  const societies = userDBInfo.societies
   async function fetchProfileInfo(){
-      
-        await auth.currentUser.getIdToken().then(async token=>{
+        
+        await currentUser.getIdToken().then(async token=>{
           console.log("function fetchProfileInfo",token)
           await fetch('/api/getuser'
           ,{
@@ -46,19 +48,19 @@ const Profile = () => {
       
         
   }
-  useEffect(() => {
-    // window.onbeforeunload = function() {
-    //     setinit((prev)=>!prev);
-    //     console.log("use-effect fetchProfileInfo")
-    //     fetchProfileInfo()
-    // };
-    if(auth.currentUser){fetchProfileInfo()}
+  // useEffect(() => {
+  //   // window.onbeforeunload = function() {
+  //   //     setinit((prev)=>!prev);
+  //   //     console.log("use-effect fetchProfileInfo")
+  //   //     fetchProfileInfo()
+  //   // };
+  //   if(auth.currentUser){fetchProfileInfo()}
     
-    return () => {
-      // window.onbeforeunload = null;
-    }
+  //   return () => {
+  //     // window.onbeforeunload = null;
+  //   }
     
-  }, [])
+  // }, [])
   
   
   return (
@@ -133,7 +135,7 @@ const Profile = () => {
                 </div>
                 
               <div className=" w-10/12 flex justify-center major">
-                  {ProfileInfo.major}
+                  {userDBInfo.major}
                 </div>
               </div>
 
@@ -151,7 +153,7 @@ const Profile = () => {
                 </div>
                   
                 <div className=" w-10/12 flex justify-center ">
-                  {ProfileInfo.cohort}
+                  {userDBInfo.cohort}
                 </div>
               </div>
 
@@ -170,7 +172,7 @@ const Profile = () => {
                 </div>
                   
                 <div className=" w-10/12 flex justify-center">
-                  {ProfileInfo.sid}
+                  {userDBInfo.sid}
                 </div>
               </div>
 
@@ -189,7 +191,7 @@ const Profile = () => {
                 </div>
                   
                 <div className=" w-10/12 flex justify-center">
-                  {ProfileInfo.registerDay}
+                  {userDBInfo.registerDay}
                 </div>
               </div>
 
@@ -207,7 +209,7 @@ const Profile = () => {
                 </div>
                   
                 <div className=" w-10/12 flex justify-center">
-                  {ProfileInfo.gender}
+                  {userDBInfo.gender}
                 </div>
               </div>
 
@@ -225,7 +227,7 @@ const Profile = () => {
                 </div>
                   
                 <div className=" w-10/12 flex justify-center">
-                  {ProfileInfo.contact}
+                  {userDBInfo.contact}
                 </div>
               </div>
 
@@ -243,7 +245,7 @@ const Profile = () => {
                 </div>
                   
                 <div className=" w-10/12 flex justify-center">
-                  {ProfileInfo.email}
+                  {userDBInfo.email}
                 </div>
               </div>
             </div>
@@ -252,9 +254,21 @@ const Profile = () => {
           <div className="RHS w-9/12 px-10">
               <img src="./assests/img/BelongSociety.svg" alt="" />
               <div className="flex flex-row ">
-                 
-                  <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/>
-                  <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/>
+                  
+                  {
+                    Object.entries(userDBInfo.societies).map((key, v)=>{
+                      
+                      return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
+                    })
+                      
+                    
+                    // userDBInfo.societies.map(soc=>{
+                    //   return(<SocietyCard title={soc}/>)
+                    // })
+                    
+                  }
+                  {/* <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/>
+                  <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/> */}
 
               </div>
               <img src="./assests/img/MsgBoard.svg" alt="" />

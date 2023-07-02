@@ -1,66 +1,86 @@
 
 
-import { useState, useEffect } from "react";
-import { Link,Outlet,useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link,Outlet,useLocation,useNavigate } from "react-router-dom";
 import { auth } from "../utils/firebasefunction";
-import { updateCurrentUser } from "firebase/auth";
 import DropdownComponent from "./dropdown";
+import { useAuth } from "./session";
+
+// from context
+
+
+// from context
 const Nav = () => {
+    console.log("loading Nav")
     const location = useLocation() //get current path
     const [toggleDropdown, setToggleDropdown] = useState(false);
-    const [MySociety, setMySociety] = useState([])
-    const [loggedIn, setLoggedIn] = useState(false);
+    // const [MySociety, setMySociety] = useState([])
+    // const [loggedIn, setLoggedIn] = useState(false);
     
+    const navigate = useNavigate();
     
-    
-    useEffect(() => {
+    // from context
+
+    const {currentUser,userDBInfo} = useAuth()
+    // console.log("load user",currentUser,userDBInfo.societies)
+    if(currentUser && userDBInfo){
+        console.log("Nav status",currentUser,userDBInfo.societies)
+        // setMySociety(Object.keys(userDBInfo.societies))
+    }
+    if(userDBInfo){
+        console.log(true)
+    }
+    // from context
+
+
+    // useEffect(() => {
         
-        auth.onAuthStateChanged((user) => {
-            console.log("AuthStateChanged",user?.email)
-            if (user) {
-                setLoggedIn(true);
-            } else {
-                setLoggedIn(false);
-            }
-        });
-        async function getSocieties(){
-            if (loggedIn){
-                console.log("fetching societies")
-                await auth.currentUser.getIdToken().then(async token=>{
-                    // console.log("token",token)
-                    await fetch ("/api/getusersocieties",
-                    {
-                        method:"POST",
-                        body:JSON.stringify({
-                            user:{
-                                token:token
-                            }
-                        }),
-                        headers: {
-                            "Content-Type": "application/json",
-                            // 'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            mode:'cors'
+    //     auth.onAuthStateChanged((user) => {
+    //         console.log("AuthStateChanged",user?.email)
+    //         if (user) {
+    //             setLoggedIn(true);
+    //         } else {
+    //             setLoggedIn(false);
+    //         }
+    //     });
+        // async function getSocieties(){
+        //     if (loggedIn){
+        //         console.log("fetching societies")
+        //         await auth.currentUser.getIdToken().then(async token=>{
+        //             // console.log("token",token)
+        //             await fetch ("/api/getusersocieties",
+        //             {
+        //                 method:"POST",
+        //                 body:JSON.stringify({
+        //                     user:{
+        //                         token:token
+        //                     }
+        //                 }),
+        //                 headers: {
+        //                     "Content-Type": "application/json",
+        //                     // 'Content-Type': 'application/x-www-form-urlencoded',
+        //                     },
+        //                     mode:'cors'
                         
-                    }).then(async response =>{
-                        if(response.ok){
-                            const data = await response.json()
-                            setMySociety(Object.keys(data.societies))
+        //             }).then(async response =>{
+        //                 if(response.ok){
+        //                     const data = await response.json()
+        //                     setMySociety(Object.keys(data.societies))
                             
-                        }
-                    })}
-                )
-            }
+        //                 }
+        //             })}
+        //         )
+        //     }
             
            
-        }
-        getSocieties()
+        // }
+    //     getSocieties()
         
-        if (loggedIn !== undefined) {
+    //     if (loggedIn !== undefined) {
             
             
-        }
-    }, [ loggedIn]);
+    //     }
+    // }, [ loggedIn]);
 
     console.log(location.pathname)
     if(true){ //location.pathname==="/"
@@ -74,7 +94,7 @@ const Nav = () => {
                             to={"/"}
                             className="flex gap-2 "
                         >
-                            <img src="./assests/img/LingULogoGreen.png" alt="" className="" width="100" height="100" />
+                            <img src="/assests/img/LingULogoGreen.png" alt="" className="" width="100" height="100" />
                             
     
                             {/* <Image 
@@ -103,7 +123,7 @@ const Nav = () => {
                         </Link> */}
                         
                         <div className="">
-                            {auth.currentUser?(
+                            {currentUser?(
                                 
                                 <div className="flex flex-row gap-5">
                                     <Link 
@@ -115,7 +135,7 @@ const Nav = () => {
     
                                 <button onClick={()=>{setToggleDropdown((prev)=>!prev)}}>
                                     <DropdownComponent 
-                                        items={MySociety} 
+                                        items={Object.keys(userDBInfo.societies)} 
                                         title={"My Society"}
                                         show={toggleDropdown} 
                                         className="text-su-green relative w-full lg:max-w-sm"
@@ -132,7 +152,7 @@ const Nav = () => {
                                             auth.signOut()
                                             // alert("'trigggered onclick action'");
                                             console.log('trigggered onclick action');
-                                            
+                                            navigate("/")
     
                                         }}
     
