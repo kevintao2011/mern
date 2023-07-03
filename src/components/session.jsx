@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
 import { auth } from "../utils/firebasefunction"
-import { signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateEmail,updatePassword,updateProfile,sendPasswordResetEmail,sendEmailVerification } from "firebase/auth"
 
 const AuthContext = React.createContext()
 
@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
   const [userDBInfo, setuserDBInfo] = useState()
 
   function signup(email, password) {
-    return auth.createUserWithEmailAndPassword(email, password)
+    return createUserWithEmailAndPassword(auth,email, password)
   }
 
   function login(email, password) {
@@ -22,11 +22,11 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
-    return auth.signOut()
+    return signOut(auth)
   }
 
   function resetPassword(email) {
-    return auth.sendPasswordResetEmail(email)
+    return sendPasswordResetEmail(auth,email)
   }
 
   function updateEmail(email) {
@@ -81,13 +81,20 @@ export function AuthProvider({ children }) {
       
       setCurrentUser(user)
       if(user){
-        await getDBInfo()
+        await getDBInfo().then(()=>{
+          // if(userDBInfo.firstlogin){
+            
+          // }
+          setLoading(false)
+          console.log(loading)
+          
+        })
         
       }else{
         console.log("no user")
-        
+        setLoading(false)
       }
-      setLoading(false)
+      
       
     })
     
@@ -99,6 +106,7 @@ export function AuthProvider({ children }) {
     currentUser,
     userDBInfo,
     loading,
+    setuserDBInfo,
     login,
     signup,
     logout,

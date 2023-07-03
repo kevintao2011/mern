@@ -3,6 +3,7 @@ import { loginfirebase } from '../../utils/firebasefunction';
 import { auth } from '../../utils/firebasefunction';
 import { useNavigate } from 'react-router-dom';
 import { sendEmailVerification } from 'firebase/auth';
+import { useAuth } from '../../components/session';
 const Login = () => {
     
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Login = () => {
     const [Verified, setVerified] = useState(false)
     const [User, setUser] = useState(null)
     const [success, setsuccess] = useState(false);
+    const {login} = useAuth()
     const handleSubmit = async (e) => {
         console.log("Running handleSubmit");
         e.preventDefault();
@@ -30,7 +32,8 @@ const Login = () => {
             navigate("/home" ,false)
         }
         try{
-            const userCredential = await loginfirebase(formObject.email,formObject.password);
+            const userCredential = await login(formObject.email,formObject.password);
+        
             const sessionToken = await userCredential.user.getIdToken()
             
             

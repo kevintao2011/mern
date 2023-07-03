@@ -14,7 +14,7 @@ import Editorialboard from './pages/structure/editorialboard';
 import Manage from './pages/society/manage';
 import './App.css';
 import { AuthProvider } from './components/session';
-
+import SetupAccount from './pages/account/setupAccount';
 
 function App() {
   console.log("load app.jsx")
@@ -35,6 +35,9 @@ function App() {
             
             <Route path="society">
               <Route path="manage" element={<Manage />} />
+            </Route>
+        <Route path="account">
+              <Route path="setup" element={<SetupAccount />} />
             </Route>
             <Route path='login' element={<Login/>}/>
             <Route path="signup" element={<SignUp />} />

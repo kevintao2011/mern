@@ -21,7 +21,7 @@ const Nav = () => {
     
     // from context
 
-    const {currentUser,userDBInfo,loading} = useAuth()
+    const {currentUser,userDBInfo,loading,setuserDBInfo} = useAuth()
     // console.log("loading Nav",currentUser,userDBInfo,loading)
     // console.log("load user",currentUser,userDBInfo.societies)
     if(currentUser && userDBInfo){
@@ -124,23 +124,36 @@ const Nav = () => {
                         </Link> */}
                         
                         <div className="">
-                            {currentUser?(
+                            {currentUser&&userDBInfo?(
                                 
                                 <div className="flex flex-row gap-5">
-                                    <Link 
-                                        to="profile"
-                                        className="flex  selectlink"
-                                    >
-                                        Profile
-                                    </Link>
-    
+                                    {userDBInfo.first_login?(
+                                        <Link 
+                                            to="account/setup"
+                                            className="flex  selectlink"
+                                        >
+                                            Account Setup
+                                        </Link>
+                                    ):(
+                                        <Link 
+                                            to="profile"
+                                            className="flex  selectlink"
+                                        >
+                                            Profile
+                                        </Link>
+                                    )}
+                                    
+                                
                                 <button onClick={()=>{setToggleDropdown((prev)=>!prev)}}>
-                                    <DropdownComponent 
-                                        items={Object.keys(userDBInfo.societies)} 
-                                        title={"My Society"}
-                                        show={toggleDropdown} 
-                                        className="text-su-green relative w-full lg:max-w-sm"
-                                    />
+                                    {userDBInfo.societies?(
+                                        <DropdownComponent 
+                                            items={Object.keys(userDBInfo.societies)} 
+                                            title={"My Society"}
+                                            show={toggleDropdown} 
+                                            className="text-su-green relative w-full lg:max-w-sm"
+                                        />
+                                    ):(<></>)}
+                                    
                                 </button>
     
                                 
@@ -151,6 +164,7 @@ const Nav = () => {
                                         onClick={(e)=>{
                                             e.preventDefault();
                                             auth.signOut()
+                                            setuserDBInfo(null)
                                             // alert("'trigggered onclick action'");
                                             console.log('trigggered onclick action');
                                             navigate("/")

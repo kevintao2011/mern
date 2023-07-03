@@ -139,7 +139,7 @@ const SignUp = () => {
                       Verification has been sent to your email, please check it.
                   </h3>
                   <div className="py-10">
-                      <Link to="home" className='text-white p-5  bg-su-green rounded-md' >
+                      <Link to="/" className='text-white p-5  bg-su-green rounded-md' >
                           back to Home page
                       </Link>
                   </div>
@@ -159,7 +159,7 @@ const SignUp = () => {
                   
                   <form className="space-y-4 md:space-y-6" onSubmit={(e)=>{handleSubmit(e)}} method="post">
                       <div>
-                      <label htmlFor="email" className="block mb-2 text-lg font-medium greentxt">
+                        <label htmlFor="email" className="block mb-2 text-lg font-medium greentxt">
                               Your email
                           </label>
                           <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@ln.hk" required="required"    onChange={(e)=>{/*checkEmail(e)*/}}>

@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from 'react'
 
 const Manage = () => {
-    const [Authrize, setAuthrize] = useState()
+    
     const [tab, settab] = useState('Member')
     const iconsize = 20;
     const soc = "CHINESE"

@@ -7,6 +7,7 @@ import ProductCard from '../components/ProductCard';
 import { useAuth } from '../components/session';
 import * as Info from '../model/info.js'
 import { onAuthStateChanged } from 'firebase/auth';
+import { Navigate } from 'react-router-dom';
 
 const iconsize = 20;
 const Profile = () => {
@@ -153,7 +154,8 @@ const Profile = () => {
                 </div>
                   
                 <div className=" w-10/12 flex justify-center ">
-                  {userDBInfo.cohort}
+                  {"Cohort - "}
+                  {Date(userDBInfo.cohort)}
                 </div>
               </div>
 
@@ -191,7 +193,8 @@ const Profile = () => {
                 </div>
                   
                 <div className=" w-10/12 flex justify-center">
-                  {userDBInfo.registerDay}
+                  {"Join Date - "}
+                  {Date(userDBInfo.created).toString()}
                 </div>
               </div>
 
@@ -253,24 +256,36 @@ const Profile = () => {
           </div> 
           <div className="RHS w-9/12 px-10">
               <img src="./assests/img/BelongSociety.svg" alt="" />
-              <div className="flex flex-row ">
+              {userDBInfo.societies?(
+                <div className="flex flex-row ">
                   
-                  {
-                    Object.entries(userDBInfo.societies).map((key, v)=>{
+                    {
+                      Object.entries(userDBInfo.societies).map((key, v)=>{
+                        
+                        return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
+                      })
+                        
                       
-                      return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
-                    })
+                      // userDBInfo.societies.map(soc=>{
+                      //   return(<SocietyCard title={soc}/>)
+                      // })
                       
-                    
-                    // userDBInfo.societies.map(soc=>{
-                    //   return(<SocietyCard title={soc}/>)
-                    // })
-                    
-                  }
-                  {/* <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/>
-                  <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/> */}
+                    }
+                    {/* <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/>
+                    <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/> */}
 
-              </div>
+                </div>
+              ):(
+                <div className=" flex flex-col bg-su-green items-center rounded-3xl m-10">
+                  <p
+                  className='p-10 text-white'
+                  >You have not join any society yet!</p>
+                  <button className='bg-slate-200 p-3 rounded-full m-5' onClick={()=>{Navigate("/shop")}}>
+                    join now
+                  </button>
+                </div>
+              )}
+              
               <img src="./assests/img/MsgBoard.svg" alt="" />
               <ProductCard />
           </div>
