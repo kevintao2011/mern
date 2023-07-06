@@ -14,13 +14,14 @@ const Profile = () => {
   const [ProfileInfo, setProfileInfo] = useState(new Info.ProfileInfo())
   if (auth.currentUser)(
     
-    console.log(auth.currentUser.accessToken)
+    console.log("accessToken",auth.currentUser.accessToken)
     
   )
   
   const [init, setinit] = useState(false)
-  const {currentUser,userDBInfo} = useAuth()
+  const {currentUser,userDBInfo,Soc} = useAuth()
   const societies = userDBInfo.societies
+  console.log("societies",Soc)
   async function fetchProfileInfo(){
         
         await currentUser.getIdToken().then(async token=>{
@@ -40,7 +41,7 @@ const Profile = () => {
           }).then(async response =>{
             if(response.ok){
                 const data = await response.json()
-                console.log(data)
+                console.log("data",data)
                 setProfileInfo(data)
             }
           })
@@ -78,11 +79,11 @@ const Profile = () => {
                 className = "object-contain rounded-full "
               />
             </div>
-            <div className='flex justify-center pb-5'>
+            {/* <div className='flex justify-center pb-5'>
               <button className="bg-su-green text-white rounded-md px-4 py-2" >
                 Edit Profile
               </button>
-            </div>
+            </div> */}
             <div className="flex flex-row w-full justify-between py-5">
               <button>
                 <img 
@@ -260,19 +261,28 @@ const Profile = () => {
                 <div className="flex flex-row ">
                   
                     {
-                      Object.entries(userDBInfo.societies).map((key, v)=>{
-                        
-                        return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
-                      })
-                        
-                      
-                      // userDBInfo.societies.map(soc=>{
-                      //   return(<SocietyCard title={soc}/>)
+                      // userDBInfo.societies.forEach(soc=>{
+                      //   console.log("soc",soc)
+                      //   Object.entries(soc).map((key, i)=>{
+                      //     console.log(key[0],key[1])
+                      //     // return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
+                      //     return(<SocietyCard title={"key[0]"} type={"key[1]"} managebutton={"key[1]"!=="member"}/>)
+                      //   })
                       // })
+
                       
+                      userDBInfo.societies.map((soc)=>{
+                        console.log("card",soc)
+                  
+                        return(<SocietyCard title={Soc[Object.keys(soc)[0]].society_chinese} type={Object.values(soc)[0]} managebutton={Object.values(soc)[0]!=="member"} code={Soc[Object.keys(soc)[0]].code} />)
+                      })
+                      // Object.entries(userDBInfo.societies).map((key, v)=>{
+                        
+                      //   return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
+                      // })
+
                     }
-                    {/* <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/>
-                    <SocietyCard title={"電影學會"} type={"basic member"} managebutton={true}/> */}
+ 
 
                 </div>
               ):(

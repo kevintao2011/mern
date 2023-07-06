@@ -15,7 +15,9 @@ import Manage from './pages/society/manage';
 import './App.css';
 import { AuthProvider } from './components/session';
 import SetupAccount from './pages/account/setupAccount';
-
+import Society from './pages/society/society';
+import SocietyList from './pages/society/societyList';
+import ActivityForm from './components/ActivityForm';
 function App() {
   console.log("load app.jsx")
   return (
@@ -33,9 +35,13 @@ function App() {
               <Route path="editorialboard" element={<Editorialboard />} />
             </Route>
             
-            <Route path="society">
-              <Route path="manage" element={<Manage />} />
+            <Route exact path="society" element={<SocietyList />} />
+            <Route exact path="society/:id" element={<Society />} >  
+              {/* <Route path="manage" element={<Manage />} /> */}
             </Route>
+            <Route path="/society/:id/manage" element={<Manage />} />
+            <Route exact path="society/:id/createactivity" element={<ActivityForm />} />
+            
         <Route path="account">
               <Route path="setup" element={<SetupAccount />} />
             </Route>

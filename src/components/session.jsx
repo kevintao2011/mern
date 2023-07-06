@@ -12,6 +12,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
   const [userDBInfo, setuserDBInfo] = useState()
+  const [Soc, setSoc] = useState()
 
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth,email, password)
@@ -68,18 +69,48 @@ export function AuthProvider({ children }) {
               console.log("failed fetch user")
             }
         })}
+        
 
     )
+    
     
         
 
   }
+
+  async function getSoc(){
+    if(!Soc){
+      await fetch ("/api/getsocieties",
+      {
+          method:"GET"
+
+      }).then(async response =>{
+          if(response.ok){
+              console.log("fetched societies")
+              const data = await response.json()
+              console.log("societies",data)
+              
+              setSoc(data)
+
+              
+          }else{
+            console.log("failed soc")
+          }
+    })
+    }
+  }
+  
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async user => {
       console.log("session changed",typeof(user),user)
       
       setCurrentUser(user)
+      
+      if(!Soc){
+        console.log("will fetch society")
+        await getSoc()
+      }
       if(user){
         await getDBInfo().then(()=>{
           // if(userDBInfo.firstlogin){
@@ -106,6 +137,7 @@ export function AuthProvider({ children }) {
     currentUser,
     userDBInfo,
     loading,
+    Soc,
     setuserDBInfo,
     login,
     signup,
@@ -113,6 +145,7 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
+    setSoc
     
   }
   

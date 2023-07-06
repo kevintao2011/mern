@@ -83,7 +83,7 @@ const Nav = () => {
     //     }
     // }, [ loggedIn]);
 
-    console.log(location.pathname)
+    console.log("location.pathname",location.pathname)
     if(!loading){ //location.pathname==="/"
         return (
         
@@ -146,8 +146,9 @@ const Nav = () => {
                                 
                                 <button onClick={()=>{setToggleDropdown((prev)=>!prev)}}>
                                     {userDBInfo.societies?(
+                                        
                                         <DropdownComponent 
-                                            items={Object.keys(userDBInfo.societies)} 
+                                            items={userDBInfo.societies} 
                                             title={"My Society"}
                                             show={toggleDropdown} 
                                             className="text-su-green relative w-full lg:max-w-sm"

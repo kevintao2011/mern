@@ -1,10 +1,13 @@
 import React, {useState,useEffect} from 'react'
-
+import { useAuth } from '../../components/session';
+import { useParams,useNavigate } from 'react-router-dom';
 const Manage = () => {
-    
+    const {id} = useParams()
     const [tab, settab] = useState('Member')
     const iconsize = 20;
-    const soc = "CHINESE"
+    const {Soc} = useAuth()
+    const navigate = useNavigate()
+    console.log(id)
     // useEffect(() => {
     //   async function getSocInfo(){
     //     await fetch('/api/soc',{
@@ -51,12 +54,12 @@ const Manage = () => {
                         className = "object-contain rounded-full "
                     />
                 </div>
-                <div className='flex pb-5'>
+                {/* <div className='flex pb-5'>
                     <button className="bg-su-green text-white rounded-md px-4 py-2" >
-                        Edit Profile
+                        
                     </button>
                     
-                </div>
+                </div> */}
                 
                 <div className=" flex flex-row py-5 w-full">
                     <div className=" w-2/12 ">
@@ -72,7 +75,7 @@ const Manage = () => {
                     </div>
                     
                     <div className=" w-10/12 flex justify-center">
-                    中文系籌委會
+                    {Soc[id].society_eng}
                     </div>
                 </div>
 
@@ -90,7 +93,7 @@ const Manage = () => {
                     </div>
                     
                     <div className=" w-10/12 flex justify-center">
-                    Culture Study Society
+                    {Soc[id].society_chinese}
                     </div>
                 </div>
 
@@ -108,10 +111,10 @@ const Manage = () => {
                     </div>
                     <div className="flex flex-col w-full items-center justify-center">
                         <div className=" ">
-                            和光
+                            {Soc[id].exco_name_chinese}
                         </div>
                         <div className="">
-                            Wogwong, The 27th Chinese Society, Association of Art Programme, L.U.S.U.
+                            {Soc[id].exco_name_eng}
                         </div>
                         
                     
@@ -135,7 +138,7 @@ const Manage = () => {
                     </div>
                     
                     <div className=" w-10/12 flex justify-center">
-                    {"32"}
+                    {Soc[id].session}
                     </div>
                 </div>
 
@@ -174,7 +177,7 @@ const Manage = () => {
                         )}
                         {tab==="Activity"&&(
                             <div className="">
-                                <button className="bg-su-green w-full text-white rounded-md p-3" >
+                                <button className="bg-su-green w-full text-white rounded-md p-3" onClick={()=>{console.log(`/society/${id}/creatactivity`); navigate(`/society/${id}/createactivity`)}}>
                                     Create Activity
                                 </button>
                             </div>

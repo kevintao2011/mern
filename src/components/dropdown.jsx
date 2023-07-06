@@ -1,13 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 export default function DropdownComponent(props) {
     const items = props.items
     const title = props.title
     const show = props.show
+    const navigate = useNavigate()
     console.log("show",show)
     return (
-        <div className="w-full  appearance-none  ">
-            <Link 
+        <div className="w-full flex flex-col appearance-none  ">
+            {/* <Link 
                 to="/"
                 className="flex-col  selectlink "
                 onClick={()=>{
@@ -20,10 +21,19 @@ export default function DropdownComponent(props) {
                 {title}
                 
                 
-            </Link>
+            </Link> */}
+            <p className="flex-col  selectlink ">
+                {title}
+            </p>
+            
             {show&&items?.map(item=>{
+                console.log("item",item)
+                    const code = Object.keys(item)[0]
                     return(
-                        <p className="selectlink ">{item}</p>
+                        <button className="selectlink" onClick={()=>{navigate({code})}}>
+                            {code}
+                        </button>
+                        
                     )
                 })
                 
