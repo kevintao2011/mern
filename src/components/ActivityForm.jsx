@@ -8,22 +8,15 @@ const ActivityForm = () => {
     const [Submit, setSubmit] = useState(true)
     const [error, seterror] = useState(null)
     const [jupas, setjupas] = useState(null)
+    const [singleDay, setsingleDay] = useState(false)
     const navigate = useNavigate()
     const {setuserDBInfo,userDBInfo,Soc} = useAuth()
     const {id} = useParams()
     console.log("id",id)
     
     useEffect(() => {
-        async function getJupas(){
-            console.log("get jupas")
-            await fetch("/api/getjupas"
-            ).then(async res=>{
-                await res.json().then(data=>{
-                    console.log("data",data)
-                    setjupas(data)
-                })
-            })
-        }
+        
+        
         // if (userDBInfo.first_login===false){
         //     navigate("/")
         // }else{
@@ -44,15 +37,17 @@ const ActivityForm = () => {
         // Read the form data
         const form = e.target;
         const formData = new FormData(form);
+        console.log("formData.singleDay",formData.singleDay)
         
         
         const data = {};
+        data.code = id // set Society Name
         
         formData.forEach((value, key) => (data[key] = value));
-        const soc = new Map();
-        soc.set(data.major,"member")
-        console.log("societies", Object.fromEntries(soc))
-        data.societies = Object.fromEntries(soc)
+        if (!data.single_date){
+            data.single_date = singleDay
+        }
+        
 
         console.log(data)
         
@@ -64,38 +59,38 @@ const ActivityForm = () => {
         }
         console.log(reqbody)
       //  register in server side
-        // try{
-        //   // await createUserWithEmailAndPassword(auth,data.email,data.password)
-        //   await fetch('/api/editUser', { 
-        //       method: "POST",
-        //       body: JSON.stringify(reqbody),
-        //       headers: {
-        //       "Content-Type": "application/json",
-        //       // 'Content-Type': 'application/x-www-form-urlencoded',
-        //       },
-        //       mode:'cors'
+        try{
+          // await createUserWithEmailAndPassword(auth,data.email,data.password)
+          await fetch('/api/createacticvity', { 
+              method: "POST",
+              body: JSON.stringify(reqbody),
+              headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              mode:'cors'
               
-        //   }).then(async response => {
+          }).then(async response => {
               
-        //       if (response.ok){
-        //           // registered
+              if (response.ok){
+                  // registered
                   
-        //           console.log("registered")
-        //           const data = await response.json()
-        //           setuserDBInfo(data.user)
-        //           navigate("/")
-        //       }else{
-        //           console.log("response.body",response.body)
-        //           const data = await response.json()
-        //           console.log("data.error",data)
-        //           seterror(data.code)
-        //           setSubmit(true)
-        //       }  
-        //   })
-        // }catch(e){
-        //   setSubmit(true)
-        //   console.log(e)
-        // }
+                  console.log("added")
+                  
+                  
+                  
+              }else{
+                  console.log("response.body",await response.json())
+                  const data = await response.json()
+                  console.log("data.error",data)
+                  seterror(data.code)
+                  setSubmit(true)
+              }  
+          })
+        }catch(e){
+          setSubmit(true)
+          console.log(e)
+        }
         
         
       //   try{
@@ -121,7 +116,7 @@ const ActivityForm = () => {
                     Society
                 </label>
                 <span className='px-5'></span>
-              
+                
                 
                 <input 
                     type="text"
@@ -133,37 +128,10 @@ const ActivityForm = () => {
                     className='rounded-md px-5 w-full justify-self-center'
                     disabled={true}
                 />
+
             </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="end_date" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Start Date
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="date"
-                    name="end_date" 
-                    id="end_date"  
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="start_date" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Start Date
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="date"
-                    name="start_date" 
-                    id="start_date"  
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
+
+            
             
             <div className="flex flex-row py-2 justify-between">
                 <label htmlFor="activity_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
@@ -180,6 +148,108 @@ const ActivityForm = () => {
                 
                
             </div>
+
+            <div className="flex flex-row py-2 justify-between">
+                
+                <label htmlFor="single_date" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                    Single Date?
+                </label>
+                <span className='px-5'></span>
+
+                <label className="relative inline-flex w-full items-center cursor-pointer">
+                    <input type="checkbox" id="single_date" name='single_date' value={singleDay} className="sr-only peer" onClick={()=>{setsingleDay(prev=>!prev);console.log("use Effect:",singleDay)}} />
+                    <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-2 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                   
+                </label>
+
+
+            </div>
+            
+            
+            {singleDay?(
+                <div className="">
+                    <div className="flex flex-row py-2 justify-between">
+                        <label htmlFor="start_date" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            Activity Date
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="date"
+                            name="start_date" 
+                            id="start_date"  
+                            required="required" 
+                            className='rounded-md px-5 w-full justify-self-center'
+                        />
+                    </div>
+                    <div className="flex flex-row py-2 justify-between">
+                        <label htmlFor="start_time" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            Start Time
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="time"
+                            name="start_time" 
+                            id="start_time"  
+                            required="required" 
+                            className='rounded-md px-5 w-full justify-self-center'
+                        />
+                    </div>
+                    <div className="flex flex-row py-2 justify-between">
+                        <label htmlFor="end_time" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            End Time
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="time"
+                            name="end_time" 
+                            id="end_time"  
+                            required="required" 
+                            className='rounded-md px-5 w-full justify-self-center'
+                        />
+                    </div>
+                </div>
+                
+
+                
+            ):(
+                <div className="">
+                    <div className="flex flex-row py-2 justify-between">
+                        <label htmlFor="start_date" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            Start Date
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="date"
+                            name="start_date" 
+                            id="start_date"  
+                            required="required" 
+                            className='rounded-md px-5 w-full justify-self-center'
+                        />
+                        
+                    
+                    </div>
+
+                    <div className="flex flex-row py-2 justify-between">
+                        <label htmlFor="end_date" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                        End Date
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="date"
+                            name="end_date" 
+                            id="end_date"  
+                            required="required" 
+                            className='rounded-md px-5 w-full justify-self-center'
+                        />
+                        
+                    
+                    </div>
+                </div>
+            )}
+            
+            
+            
+            
             <div className="flex flex-row py-2 justify-between">
                 <label htmlFor="payment_method" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">   
                     payment method
@@ -198,7 +268,7 @@ const ActivityForm = () => {
                     
                 </select> */}
                 <div className="rounded-md px-5 w-full justify-self-center">
-                    <input type="checkbox" name="" id="" /> Cash
+                    <input type="checkbox" name="payment_method" id="payment_method" value={"Cash"} /> Cash
                 </div>
                 
                 
@@ -225,26 +295,26 @@ const ActivityForm = () => {
                 <div className="">
                     
                 </div>
-                <label htmlFor="gender" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Start Now? 
+                <label htmlFor="status" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                    Release Now? 
                 </label>
                 <span className='px-5'></span>
                 <select 
-                    name="gender" 
-                    id="gender"  
+                    name="status" 
+                    id="status"  
                     defaultValue={'O'} 
                     required="required" 
                     className='rounded-md px-5 w-full justify-self-center'
                 >
-                    <option value="Male">Later</option>
-                    <option value="Female">Now</option>
+                    <option value="Later">Later</option>
+                    <option value="Now">Now</option>
                     
                 </select>
             </div>
             <button 
                 className="flex flex-row py-2 w-full justify-center" 
                 type="submit"
-                disabled={!Submit}
+                // disabled={!Submit}
             >
                 Submit
             </button>

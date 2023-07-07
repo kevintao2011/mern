@@ -1,45 +1,59 @@
 import React, {useState,useEffect} from 'react'
 import { useAuth } from '../../components/session';
 import { useParams,useNavigate } from 'react-router-dom';
+import { auth } from '../../utils/firebasefunction';
 const Manage = () => {
     const {id} = useParams()
     const [tab, settab] = useState('Member')
+    const [Activity, setActivity] = useState()
     const iconsize = 20;
-    const {Soc} = useAuth()
+    const {Soc,currentUser} = useAuth()
     const navigate = useNavigate()
     console.log(id)
-    // useEffect(() => {
-    //   async function getSocInfo(){
-    //     await fetch('/api/soc',{
-    //         method:"POST",
-    //         body:JSON.stringify({
-    //             user:{
-    //                 token:token
-    //             }
-    //         }),
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             // 'Content-Type': 'application/x-www-form-urlencoded',
-    //             },
-    //             mode:'cors'
+    useEffect(() => {
+      async function getSocActivity(){
+        await fetch('/api/getsocactivity', { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken()
+                },
+                id
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
             
-    //     }).then(async response =>{
-    //         if(response.ok){
-    //             console.log("fetched user")
-    //             const data = await response.json()
-    //             console.log("userInfo",data)
-    //             setuserDBInfo(data)
+        }).then(async response => {
+            
+            if (response.ok){
+                // registered
                 
-    //             setLoading(false)
+                console.log("added")
+                const data = await response.json()
+                console.log("Activity",data)
+                setActivity(data)
                 
-    //         }
-    //     })
-    //   }
-    
-    //   return () => {
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("data.error",data)
+                setActivity(data)
+                
+            }  
+        })
         
-    //   }
-    // }, [tab])
+        
+      }
+      getSocActivity()
+      return () => {
+        
+      }
+    }, [])
+    
     
 
     return (
@@ -177,12 +191,31 @@ const Manage = () => {
                         )}
                         {tab==="Activity"&&(
                             <div className="">
-                                <button className="bg-su-green w-full text-white rounded-md p-3" onClick={()=>{console.log(`/society/${id}/creatactivity`); navigate(`/society/${id}/createactivity`)}}>
-                                    Create Activity
-                                </button>
+                                <div className="">
+                                    <button className="bg-su-green w-full text-white rounded-md p-3" onClick={()=>{console.log(`/society/${id}/creatactivity`); navigate(`/society/${id}/createactivity`)}}>
+                                        Create Activity
+                                    </button>
+                                </div>  
+                                {Activity&&(
+                                    <div className="">
+                                        
+                                        {Activity.map(activity => {
+                                            console.log("activity",activity)
+                                            return(
+                                                <div className="w-full">
+                                                    {activity.activity_name}${(Date(activity.start_date))}
+                                                    {/* Name_Date_ */}
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                )}
                             </div>
                             
+                            
+                            
                         )}
+
                         {tab==="Product"&&(
                             <div className="">
                                 <button className="bg-su-green w-full text-white rounded-md p-3" >
