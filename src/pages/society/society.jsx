@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom'
 
 console.log("society Page")
 const Society = () => {
-    const {id} = useParams();
+    const {code} = useParams();
     return (
-        <div>Society {id}</div>
+        <div>Society {code}</div>
     )
 }
 

@@ -18,6 +18,7 @@ import SetupAccount from './pages/account/setupAccount';
 import Society from './pages/society/society';
 import SocietyList from './pages/society/societyList';
 import ActivityForm from './components/ActivityForm';
+import EditActivity from './pages/society/EditActivity';
 function App() {
   console.log("load app.jsx")
   return (
@@ -36,11 +37,12 @@ function App() {
             </Route>
             
             <Route exact path="society" element={<SocietyList />} />
-            <Route exact path="society/:id" element={<Society />} >  
+            <Route exact path="society/:code" element={<Society />} >  
               {/* <Route path="manage" element={<Manage />} /> */}
             </Route>
-            <Route path="/society/:id/manage" element={<Manage />} />
-            <Route exact path="society/:id/createactivity" element={<ActivityForm />} />
+            <Route path="/society/:code/manage" element={<Manage />} />
+            <Route exact path="society/:code/createactivity" element={<ActivityForm />} />
+        <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
             
         <Route path="account">
               <Route path="setup" element={<SetupAccount />} />

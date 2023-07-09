@@ -30,9 +30,12 @@ export default function DropdownComponent(props) {
                 console.log("item",item)
                     const code = Object.keys(item)[0]
                     return(
-                        <button className="selectlink" onClick={()=>{navigate({code})}}>
-                            {code}
-                        </button>
+                        <li key={code}>
+                            <button className="selectlink" onClick={()=>{navigate({code})}} >
+                            
+                            </button>
+                        </li>
+                        
                         
                     )
                 })

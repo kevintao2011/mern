@@ -3,13 +3,13 @@ import { useAuth } from '../../components/session';
 import { useParams,useNavigate } from 'react-router-dom';
 import { auth } from '../../utils/firebasefunction';
 const Manage = () => {
-    const {id} = useParams()
+    const {code} = useParams()
     const [tab, settab] = useState('Member')
     const [Activity, setActivity] = useState()
     const iconsize = 20;
     const {Soc,currentUser} = useAuth()
     const navigate = useNavigate()
-    console.log(id)
+    console.log(code)
     useEffect(() => {
       async function getSocActivity(){
         await fetch('/api/getsocactivity', { 
@@ -18,7 +18,7 @@ const Manage = () => {
                 user:{
                     token:await auth.currentUser.getIdToken()
                 },
-                id
+                id:code
             }),
             headers: {
             "Content-Type": "application/json",
@@ -89,7 +89,7 @@ const Manage = () => {
                     </div>
                     
                     <div className=" w-10/12 flex justify-center">
-                    {Soc[id].society_eng}
+                    {Soc[code].society_eng}
                     </div>
                 </div>
 
@@ -107,7 +107,7 @@ const Manage = () => {
                     </div>
                     
                     <div className=" w-10/12 flex justify-center">
-                    {Soc[id].society_chinese}
+                    {Soc[code].society_chinese}
                     </div>
                 </div>
 
@@ -125,10 +125,10 @@ const Manage = () => {
                     </div>
                     <div className="flex flex-col w-full items-center justify-center">
                         <div className=" ">
-                            {Soc[id].exco_name_chinese}
+                            {Soc[code].exco_name_chinese}
                         </div>
                         <div className="">
-                            {Soc[id].exco_name_eng}
+                            {Soc[code].exco_name_eng}
                         </div>
                         
                     
@@ -152,7 +152,7 @@ const Manage = () => {
                     </div>
                     
                     <div className=" w-10/12 flex justify-center">
-                    {Soc[id].session}
+                    {Soc[code].session}
                     </div>
                 </div>
 
@@ -182,7 +182,7 @@ const Manage = () => {
                     </button>
                 </div>
                 <div className="h-full w-full bg-slate-100 rounded-b-3xl rounded-tr-3xl">
-                    <div className="p-10 ">
+                    <div className="p-5 ">
                         {tab==="Member"&&(
                             <div className="">
 
@@ -190,24 +190,42 @@ const Manage = () => {
                             
                         )}
                         {tab==="Activity"&&(
-                            <div className="">
-                                <div className="">
-                                    <button className="bg-su-green w-full text-white rounded-md p-3" onClick={()=>{console.log(`/society/${id}/creatactivity`); navigate(`/society/${id}/createactivity`)}}>
+                            <div className="flex flex-col ">
+                                <div className="flex justify-center">
+                                    <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/creatactivity`); navigate(`/society/${code}/createactivity`)}}>
                                         Create Activity
                                     </button>
                                 </div>  
                                 {Activity&&(
-                                    <div className="">
-                                        
-                                        {Activity.map(activity => {
-                                            console.log("activity",activity)
-                                            return(
-                                                <div className="w-full">
-                                                    {activity.activity_name}${(Date(activity.start_date))}
-                                                    {/* Name_Date_ */}
-                                                </div>
-                                            )
-                                        })}
+                                    <div className="flex flex-col ">
+                                        <div className="flex flex-row justify-between ">
+                                            <p className='w-1/3 justify-center'>Date</p>
+                                            <p className='w-1/3 flex justify-center'>Activity </p>
+                                            <p className='w-1/3 flex justify-center'> </p>
+                                        </div>
+                                        <ul className='list-none'>             
+                                            {Activity.map(activity => {
+                                                console.log("activity",activity)
+                                                return(
+                                                    <li key={activity._id}>
+                                                        <div className="flex flex-row justify-between" >
+                                                        <p className='w-1/3 justify-center'>{(Date(activity.start_date)).substring(0,15)}</p>
+                                                        <p className='w-1/3 flex justify-center'>{activity.activity_name} </p>
+                                                        <div className="w-1/3 flex justify-center">
+                                                            <button className='w-1/3 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button>
+                                                            <button className='w-1/3 flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={activity._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editactivity`)}}> Manage </button>
+                                                            <button className='w-1/3 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'> Delete </button>
+                                                            
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    </li>
+                                                    
+                                                    
+                                                    
+                                                )
+                                            })}
+                                        </ul>
                                     </div>
                                 )}
                             </div>

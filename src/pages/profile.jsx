@@ -259,30 +259,34 @@ const Profile = () => {
               <img src="./assests/img/BelongSociety.svg" alt="" />
               {userDBInfo.societies?(
                 <div className="flex flex-row ">
-                  
-                    {
-                      // userDBInfo.societies.forEach(soc=>{
-                      //   console.log("soc",soc)
-                      //   Object.entries(soc).map((key, i)=>{
-                      //     console.log(key[0],key[1])
-                      //     // return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
-                      //     return(<SocietyCard title={"key[0]"} type={"key[1]"} managebutton={"key[1]"!=="member"}/>)
-                      //   })
-                      // })
+                    {/* <ul className='list-none flex flex-row w-full'> */}
+                      {
+                        // userDBInfo.societies.forEach(soc=>{
+                        //   console.log("soc",soc)
+                        //   Object.entries(soc).map((key, i)=>{
+                        //     console.log(key[0],key[1])
+                        //     // return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
+                        //     return(<SocietyCard title={"key[0]"} type={"key[1]"} managebutton={"key[1]"!=="member"}/>)
+                        //   })
+                        // })
 
-                      
-                      userDBInfo.societies.map((soc)=>{
-                        console.log("card",soc)
-                  
-                        return(<SocietyCard title={Soc[Object.keys(soc)[0]].society_chinese} type={Object.values(soc)[0]} managebutton={Object.values(soc)[0]!=="member"} code={Soc[Object.keys(soc)[0]].code} />)
-                      })
-                      // Object.entries(userDBInfo.societies).map((key, v)=>{
                         
-                      //   return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
-                      // })
+                        userDBInfo.societies.map((soc)=>{
+                          console.log("card",soc)
+                          
+                          return(
+                            // <li key={Object.keys(soc)[0] }>
+                              <SocietyCard title={Soc[Object.keys(soc)[0]].society_chinese} type={Object.values(soc)[0]} managebutton={Object.values(soc)[0]!=="member"} code={Soc[Object.keys(soc)[0]].code} />
+                            // </li>
+                            )
+                        })
+                        // Object.entries(userDBInfo.societies).map((key, v)=>{
+                          
+                        //   return(<SocietyCard title={key[0]} type={key[1]} managebutton={key[1]!=="member"}/>)
+                        // })
 
-                    }
- 
+                      }
+                    {/* </ul> */}
 
                 </div>
               ):(
