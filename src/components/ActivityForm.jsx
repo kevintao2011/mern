@@ -7,12 +7,12 @@ const ActivityForm = () => {
   
     const [Submit, setSubmit] = useState(true)
     const [error, seterror] = useState(null)
-    const [jupas, setjupas] = useState(null)
+
     const [singleDay, setsingleDay] = useState(false)
     const navigate = useNavigate()
     const {setuserDBInfo,userDBInfo,Soc} = useAuth()
-    const {id} = useParams()
-    console.log("id",id)
+    const {code} = useParams()
+    console.log("code",code)
     
     useEffect(() => {
         
@@ -41,7 +41,7 @@ const ActivityForm = () => {
         
         
         const data = {};
-        data.code = id // set Society Name
+        data.code = code // set Society Name
         
         formData.forEach((value, key) => (data[key] = value));
         if (!data.single_date){
@@ -76,7 +76,8 @@ const ActivityForm = () => {
                   // registered
                   
                   console.log("added")
-                  
+                 
+                  navigate(`/society/${code}/manage`)
                   
                   
               }else{
@@ -85,6 +86,7 @@ const ActivityForm = () => {
                   console.log("data.error",data)
                   seterror(data.code)
                   setSubmit(true)
+                  
               }  
           })
         }catch(e){
@@ -123,8 +125,8 @@ const ActivityForm = () => {
                     name="code" 
                     id="code"  
                     required="required" 
-                    value={id}
-                    placeholder={id}
+                    value={code}
+                    placeholder={code}
                     className='rounded-md px-5 w-full justify-self-center'
                     disabled={true}
                 />
