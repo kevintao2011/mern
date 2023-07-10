@@ -236,7 +236,7 @@ const Manage = () => {
 
                         {tab==="Product"&&(
                             <div className="">
-                                <button className="bg-su-green w-full text-white rounded-md p-3" >
+                                <button className="bg-su-green w-full text-white rounded-md p-3" onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
                                     Create Product
                                 </button>
                             </div>
