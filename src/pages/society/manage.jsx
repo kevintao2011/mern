@@ -184,8 +184,10 @@ const Manage = () => {
                 <div className="h-full w-full bg-slate-100 rounded-b-3xl rounded-tr-3xl">
                     <div className="p-5 ">
                         {tab==="Member"&&(
-                            <div className="">
-
+                            <div className="flex flex-col">
+                                <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/creatactivity`); navigate(`/society/${code}/createactivity`)}}>
+                                        Add member
+                                    </button>
                             </div>
                             
                         )}

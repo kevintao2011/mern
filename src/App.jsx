@@ -20,6 +20,7 @@ import SocietyList from './pages/society/societyList';
 import ActivityForm from './components/ActivityForm';
 import EditActivity from './pages/society/EditActivity';
 import CreateProduct from './pages/society/product/CreateProduct';
+import CounterForm from './components/counterForm';
 function App() {
   console.log("load app.jsx")
   return (
@@ -29,6 +30,7 @@ function App() {
         <Routes>
           < Route path="/" element={<Nav />}>
             <Route index element={<Home />} /> 
+            <Route path="counter" element={<CounterForm />} />
             <Route path="home" element={<Home />} />
             <Route path="structure">
               <Route path="exco" element={<Exco />} />

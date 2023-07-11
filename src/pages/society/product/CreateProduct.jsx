@@ -1,134 +1,159 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useMemo} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { auth } from '../../../utils/firebasefunction'
 import { useAuth } from '../../../components/session'
+
+
+
 const CreateProduct = () => {
   
     const [Submit, setSubmit] = useState(true)
     const [error, seterror] = useState(null)
-    const [productCount, setproductCount] = useState(1)
+    const [productCount, setproductCount] = useState(2)
+
+    
+
+    const Inputblock = (props) => {
+        const index = props.index
+        console.log("index",index)
+
+        return(
+           
+            <div className="" key={index}>
+                <div className="flex flex-row py-2 justify-between">
+                    <label htmlFor="variants" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                        option
+                    </label>
+                    <span className='px-5'></span>
+                    <input 
+                        type="text"
+                        name="variants" 
+                        id="variants"  
+                        required="required" 
+                        className='rounded-md px-5 w-full justify-self-center'
+                    />
+                </div>
+            <div className="flex flex-row py-2 justify-between">
+                <label htmlFor="price" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                    price
+                </label>
+                <span className='px-5'></span>
+                <input 
+                    type="number"
+                    name="price" 
+                    id="price"  
+                    required="required" 
+                    className='rounded-md px-5 w-full justify-self-center'
+                />
+            </div>
+            <div className="flex flex-row py-2 justify-between">
+                <label htmlFor="inventory" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                    Inventory
+                </label>
+                <span className='px-5'></span>
+                <input 
+                    type="number"
+                    name="inventory" 
+                    id="inventory"  
+                    required="required" 
+                    className='rounded-md px-5 w-full justify-self-center'
+                />
+            </div>
+                
+            </div>
+            
+            
+        )
+    }
+    const [productEntries, setproductEntries] = useState([<Inputblock index={productCount} />])
 
     const [noVariant, setnoVariant] = useState(false)
     const navigate = useNavigate()
     const {setuserDBInfo,userDBInfo,Soc} = useAuth()
     const {code} = useParams()
     console.log("code",code)
-    const inputBlocks = [];
-    const inputblock = (
-        <div className="">
-                <div className="flex flex-row py-2 justify-between">
-                    <label htmlFor="variant" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                        option
-                    </label>
-                    <span className='px-5'></span>
-                    <input 
-                        type="text"
-                        name="variant" 
-                        id="variant"  
-                        required="required" 
-                        className='rounded-md px-5 w-full justify-self-center'
-                    />
-                </div>
-                <div className="flex flex-row py-2 justify-between">
-                    <label htmlFor="price" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                        price
-                    </label>
-                    <span className='px-5'></span>
-                    <input 
-                        type="number"
-                        name="price" 
-                        id="price"  
-                        required="required" 
-                        className='rounded-md px-5 w-full justify-self-center'
-                    />
-                </div>
-                <div className="flex flex-row py-2 justify-between">
-                    <label htmlFor="inventory" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                        Inventory
-                    </label>
-                    <span className='px-5'></span>
-                    <input 
-                        type="number"
-                        name="inventory" 
-                        id="inventory"  
-                        required="required" 
-                        className='rounded-md px-5 w-full justify-self-center'
-                    />
-                </div>
-                
-            </div>
-    )
+
     useEffect(() => {
-        console.log(inputBlocks)
-    
+       
+        console.log("productCount",productCount)
+        console.log("productEntries",productEntries)
+       
         return () => {
         
         }
-    }, [inputBlocks])
+    }, [productCount])
     
     const handleSubmit = async (e) => {
-        setSubmit(false)
-        console.log("Submitting signup form");
         e.preventDefault();
-        // Read the form data
+        setSubmit(false)
+        console.log("Submitting signup form",e.target);
+        
+        // // Read the form data
         const form = e.target;
         const formData = new FormData(form);
-        console.log("formData.noVariant",formData.noVariant)
+        console.log("formData",formData)
         
+
         
         const data = {};
         data.code = code // set Society Name
         
-        formData.forEach((value, key) => (data[key] = value));
-        if (!data.no_variants){
-            data.no_variants = noVariant
-        }
+        formData.forEach((value, key) => {
+            
+            if (data[key]){
+                data[key] = [data[key],value]
+            }else{
+                data[key] = value
+                
+            }
+            
+        });
         
-
-        console.log(data)
         
-        const reqbody = {
-            user:{
-                token:await auth.currentUser.getIdToken()
-            },
-            data
-        }
-        console.log(reqbody)
-      //  register in server side
-        try{
-          // await createUserWithEmailAndPassword(auth,data.email,data.password)
-          await fetch('/api/createacticvity', { 
-              method: "POST",
-              body: JSON.stringify(reqbody),
-              headers: {
-              "Content-Type": "application/json",
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              mode:'cors'
+        console.log("data",data)
+        
+        
+        // const reqbody = {
+        //     user:{
+        //         token:await auth.currentUser.getIdToken()
+        //     },
+        //     data
+        // }
+        // console.log("reqbody",reqbody)
+        // try{
+         
+        //   await fetch('/api/createproduct', { 
+        //       method: "POST",
+        //       body: JSON.stringify(reqbody),
+        //       headers: {
+        //       "Content-Type": "application/json",
+        //       // 'Content-Type': 'application/x-www-form-urlencoded',
+        //       },
+        //       mode:'cors'
               
-          }).then(async response => {
+        //   }).then(async response => {
               
-              if (response.ok){
-                  // registered
+        //       if (response.ok){
+        //           // registered
                   
-                  console.log("added")
+        //           console.log("added")
                  
-                  navigate(`/society/${code}/manage`)
+        //           navigate(`/society/${code}/manage`)
                   
                   
-              }else{
-                  console.log("response.body",await response.json())
-                  const data = await response.json()
-                  console.log("data.error",data)
-                  seterror(data.code)
-                  setSubmit(true)
+        //       }else{
+        //           console.log("response.body",await response.json())
+        //           const data = await response.json()
+        //           console.log("data.error",data)
+        //           seterror(data.code)
+        //           setSubmit(true)
                   
-              }  
-          })
-        }catch(e){
-          setSubmit(true)
-          console.log(e)
-        }
+        //       }  
+        //   })
+        // }catch(e){
+        //   setSubmit(true)
+        //   console.log(e)
+        // }
         
         
       //   try{
@@ -188,6 +213,22 @@ const CreateProduct = () => {
             </div>
 
             <div className="flex flex-row py-2 justify-between">
+                <label htmlFor="type" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                    Product Category
+                </label>
+                <span className='px-5'></span>
+                <input 
+                    type="text"
+                    name="type" 
+                    id="type"  
+                    required="required" 
+                    className='rounded-md px-5 w-full justify-self-center'
+                />
+                
+               
+            </div>
+
+            <div className="flex flex-row py-2 justify-between">
                 
                 <label htmlFor="no_variants" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
                     Multiple option?
@@ -203,19 +244,21 @@ const CreateProduct = () => {
 
             </div>
             <button 
-                onClick={()=>{
-                    setproductCount(productCount+1)
-                    console.log(productCount,inputBlocks)
-                    inputBlocks.push(
-                        inputblock
-                    )
+                onClick={(e)=>{
+                    e.preventDefault()
+                    setproductCount(productCount+1);
+                    setproductEntries([...productEntries, <Inputblock index={productCount}/>]);
+                    
                 }}>
                 new 
             </button>
-            {
-                inputBlocks
-            }
+            {/* <ul> */}
+            {productEntries}
+            {/* </ul> */}
             
+            <div className="variants" id='variants'>
+
+            </div>
         
         
             
@@ -257,10 +300,11 @@ const CreateProduct = () => {
                     
                 </select>
             </div>
-            <button 
+            <button  
                 className="flex flex-row py-2 w-full justify-center" 
                 type="submit"
                 // disabled={!Submit}
+                
             >
                 Submit
             </button>
@@ -273,6 +317,7 @@ const CreateProduct = () => {
         
     </div>
     )
+    
 }
 
 export default CreateProduct
