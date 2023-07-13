@@ -6,6 +6,7 @@ const Manage = () => {
     const {code} = useParams()
     const [tab, settab] = useState('Member')
     const [Activity, setActivity] = useState()
+    const [Product, setProduct] = useState()
     const iconsize = 20;
     const {Soc,currentUser} = useAuth()
     const navigate = useNavigate()
@@ -48,7 +49,45 @@ const Manage = () => {
         
         
       }
+      async function getSocProduct(){
+        await fetch('/api/getsocproduct', { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken()
+                },
+                id:code
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
+            
+        }).then(async response => {
+            
+            if (response.ok){
+                // registered
+                
+                console.log("added")
+                const data = await response.json()
+                console.log("Product",data)
+                setProduct(data)
+                
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("data.error",data)
+                setProduct(data)
+                
+            }  
+        })
+        
+        
+      }
       getSocActivity()
+      getSocProduct()
       return () => {
         
       }

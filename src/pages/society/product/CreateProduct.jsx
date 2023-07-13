@@ -21,14 +21,14 @@ const CreateProduct = () => {
            
             <div className="" key={index}>
                 <div className="flex flex-row py-2 justify-between">
-                    <label htmlFor="variants" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                    <label htmlFor="variant" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
                         option
                     </label>
                     <span className='px-5'></span>
                     <input 
                         type="text"
-                        name="variants" 
-                        id="variants"  
+                        name="variant" 
+                        id="variant"  
                         required="required" 
                         className='rounded-md px-5 w-full justify-self-center'
                     />
@@ -99,61 +99,95 @@ const CreateProduct = () => {
         data.code = code // set Society Name
         
         formData.forEach((value, key) => {
-            
+
             if (data[key]){
-                data[key] = [data[key],value]
+                
+                data[key] = [...data[key],value]
             }else{
-                data[key] = value
+                data[key] = [value]
                 
             }
             
+            /* Output
+            inventory: Array(3) [ "3", "3", "1" ]
+​
+            no_variants: Array [ "true" ]
+            ​
+            price: Array(3) [ "33", "22", "11" ]
+            ​
+            product_name: Array [ "Tee" ]
+            ​
+            status: Array [ "Later" ]
+            ​
+            type: Array [ "Clothes" ]
+            ​
+            variants: Array(3) [ "Brown", "Blue", "Red" ]
+            */
+
+
+
+            
         });
+        console.log("form data",data)
+        data.variants=[]
+        data.variant.forEach((v,i)=>{
+        
+            console.log(v,i,data.price[i]);
+            data.variants.push({
+                [v]:{
+                    name:v,price:data.price[i],inventory:data.inventory[i]
+                }
+            })
+            
+            delete data.variant[i]
+    
+        })
         
         
         console.log("data",data)
         
         
-        // const reqbody = {
-        //     user:{
-        //         token:await auth.currentUser.getIdToken()
-        //     },
-        //     data
-        // }
-        // console.log("reqbody",reqbody)
-        // try{
+        const reqbody = {
+            user:{
+                token:await auth.currentUser.getIdToken()
+            },
+            data
+        }
+        console.log("reqbody",reqbody)
+        try{
          
-        //   await fetch('/api/createproduct', { 
-        //       method: "POST",
-        //       body: JSON.stringify(reqbody),
-        //       headers: {
-        //       "Content-Type": "application/json",
-        //       // 'Content-Type': 'application/x-www-form-urlencoded',
-        //       },
-        //       mode:'cors'
+          await fetch('/api/createproduct', { 
+              method: "POST",
+              body: JSON.stringify(reqbody),
+              headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              mode:'cors'
               
-        //   }).then(async response => {
+          }).then(async response => {
               
-        //       if (response.ok){
-        //           // registered
+              if (response.ok){
+                  // registered
                   
-        //           console.log("added")
+                  console.log("added")
                  
-        //           navigate(`/society/${code}/manage`)
+                //   navigate(`/society/${code}/manage`)
                   
                   
-        //       }else{
-        //           console.log("response.body",await response.json())
-        //           const data = await response.json()
-        //           console.log("data.error",data)
-        //           seterror(data.code)
-        //           setSubmit(true)
+              }else{
+                  console.log("response.body",await response.json())
+                  const data = await response.json()
+                  console.log("data.error",data)
+                  seterror(data.code)
+                  setSubmit(true)
                   
-        //       }  
-        //   })
-        // }catch(e){
-        //   setSubmit(true)
-        //   console.log(e)
-        // }
+              }  
+          })
+        }catch(e){
+          setSubmit(true)
+          console.log(e)
+        }
         
         
       //   try{
@@ -228,7 +262,7 @@ const CreateProduct = () => {
                
             </div>
 
-            <div className="flex flex-row py-2 justify-between">
+            {/* <div className="flex flex-row py-2 justify-between">
                 
                 <label htmlFor="no_variants" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
                     Multiple option?
@@ -242,7 +276,7 @@ const CreateProduct = () => {
                 </label>
 
 
-            </div>
+            </div> */}
             <button 
                 onClick={(e)=>{
                     e.preventDefault()
@@ -256,9 +290,7 @@ const CreateProduct = () => {
             {productEntries}
             {/* </ul> */}
             
-            <div className="variants" id='variants'>
-
-            </div>
+            
         
         
             

@@ -28,4 +28,5 @@ function CounterForm() {
     </form>
   );
 }
+export default CounterForm
 
