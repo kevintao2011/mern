@@ -21,6 +21,8 @@ import ActivityForm from './components/ActivityForm';
 import EditActivity from './pages/society/EditActivity';
 import CreateProduct from './pages/society/product/CreateProduct';
 import CounterForm from './components/counterForm';
+import EditProduct from './pages/society/product/EditProduct';
+import Shop from './pages/shop/shop';
 function App() {
   console.log("load app.jsx")
   return (
@@ -38,6 +40,10 @@ function App() {
               <Route path="judicial" element={<Judicial />} />
               <Route path="editorialboard" element={<Editorialboard />} />
             </Route>
+
+            <Route path="shop" element={<Shop/>}>
+            
+            </Route>
             
             <Route exact path="society" element={<SocietyList />} />
             <Route exact path="society/:code" element={<Society />} >  
@@ -47,6 +53,7 @@ function App() {
             <Route path="society/:code/createactivity" element={<ActivityForm />} />
             <Route path="society/:code/createproduct" element={<CreateProduct />} />
         <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
+        <Route exact path="society/:code/manage/:id/editsociety" element={<EditProduct />} />
             
         <Route path="account">
               <Route path="setup" element={<SetupAccount />} />

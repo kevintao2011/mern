@@ -10,11 +10,16 @@ const CreateProduct = () => {
     const [Submit, setSubmit] = useState(true)
     const [error, seterror] = useState(null)
     const [productCount, setproductCount] = useState(2)
-
-    
+    const [Category, setCategory] = useState()
+    const [CatOption, setCatOption] = useState()
 
     const Inputblock = (props) => {
         const index = props.index
+        const value = props.value
+        const [defaultValue, setdefaultValue] = useState()
+        if (props.value){
+            setdefaultValue(value)
+        }
         console.log("index",index)
 
         return(
@@ -25,13 +30,28 @@ const CreateProduct = () => {
                         option
                     </label>
                     <span className='px-5'></span>
-                    <input 
-                        type="text"
-                        name="variant" 
-                        id="variant"  
-                        required="required" 
-                        className='rounded-md px-5 w-full justify-self-center'
-                    />
+                    {
+                        defaultValue?(
+                            <input 
+                                type="text"
+                                name="variant" 
+                                id="variant"  
+                                required="required" 
+                                defaultValue={defaultValue}
+                                className='rounded-md px-5 w-full justify-self-center'
+                            />
+                        ):
+                        (
+                            <input 
+                                type="text"
+                                name="variant" 
+                                id="variant"  
+                                required="required" 
+                                className='rounded-md px-5 w-full justify-self-center'
+                            />
+                        )
+                    }
+                    
                 </div>
             <div className="flex flex-row py-2 justify-between">
                 <label htmlFor="price" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
@@ -74,7 +94,44 @@ const CreateProduct = () => {
     console.log("code",code)
 
     useEffect(() => {
-       
+        async function getCatOption(){
+            await fetch('/api/getcatoption', { 
+                method: "POST",
+                body: JSON.stringify({
+                    user:{
+                        token:await auth.currentUser.getIdToken()
+                    },
+                    id:code
+                }),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                mode:'cors'
+                
+            }).then(async response => {
+                
+                if (response.ok){
+                    // registered
+                    
+                    console.log("added")
+                    var data = await response.json()
+                    data = data[0]
+                    console.log("CatOptions",data)
+                    setCatOption(data.categories)
+                    console.log("CatOptions",CatOption)
+                    
+                }else{
+                    console.log("response.body",await response.json())
+                    const data = await response.json()
+                    console.log("data.error",data)
+                    setCatOption(data)
+                    
+                }  
+            })
+        }
+
+        getCatOption()
         console.log("productCount",productCount)
         console.log("productEntries",productEntries)
        
@@ -202,153 +259,176 @@ const CreateProduct = () => {
         
     }
     return (
-    <div className="mainpage-1 flex flex-col items-center justify-center">
-        <form action="" onSubmit={(e)=>{handleSubmit(e)}}>
-            
-            <div className="flex flex-row py-2 justify-between">
-                <div className="">
-                    
-                </div>
-                <label htmlFor="society" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Society
-                </label>
-                <span className='px-5'></span>
-                
-                
-                <input 
-                    type="text"
-                    name="code" 
-                    id="code"  
-                    required="required" 
-                    value={code}
-                    placeholder={code}
-                    className='rounded-md px-5 w-full justify-self-center'
-                    disabled={true}
-                />
 
-            </div>
-
-            
-            
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="product_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Product Name
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="text"
-                    name="product_name" 
-                    id="product_name"  
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
-
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="type" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Product Category
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="text"
-                    name="type" 
-                    id="type"  
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
-
-            {/* <div className="flex flex-row py-2 justify-between">
-                
-                <label htmlFor="no_variants" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Multiple option?
-                </label>
-                <span className='px-5'></span>
-
-                <label className="relative inline-flex w-full items-center cursor-pointer">
-                    <input type="checkbox" id="no_variants" name='no_variants' value={noVariant} className="sr-only peer" onClick={()=>{setnoVariant(prev=>!prev);console.log("use Effect:",noVariant)}} />
-                    <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-2 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                   
-                </label>
-
-
-            </div> */}
-            <button 
-                onClick={(e)=>{
-                    e.preventDefault()
-                    setproductCount(productCount+1);
-                    setproductEntries([...productEntries, <Inputblock index={productCount}/>]);
-                    
-                }}>
-                new 
-            </button>
-            {/* <ul> */}
-            {productEntries}
-            {/* </ul> */}
-            
-            
+    CatOption&&(
         
-        
-            
-            
-           
-            {/* <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="description" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    description
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="text"
-                    name="description" 
-                    id="description"  
-                    required="required" 
-                    placeholder='Student Number on Your Card'
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
+        <div className="mainpage-1 flex flex-col items-center justify-center">
+            <form action="" onSubmit={(e)=>{handleSubmit(e)}}>
                 
-               
-            </div> */}
-            <div className="flex flex-row py-2 justify-between">
-                <div className="">
+                <div className="flex flex-row py-2 justify-between">
+                    <div className="">
+                        
+                    </div>
+                    <label htmlFor="society" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                        Society
+                    </label>
+                    <span className='px-5'></span>
                     
+                    
+                    <input 
+                        type="text"
+                        name="code" 
+                        id="code"  
+                        required="required" 
+                        value={code}
+                        placeholder={code}
+                        className='rounded-md px-5 w-full justify-self-center'
+                        disabled={true}
+                    />
+
                 </div>
-                <label htmlFor="status" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Release Now? 
-                </label>
-                <span className='px-5'></span>
-                <select 
-                    name="status" 
-                    id="status"  
-                    defaultValue={'Later'} 
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
+
+                
+                
+                <div className="flex flex-row py-2 justify-between">
+                    <label htmlFor="product_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                        Product Name
+                    </label>
+                    <span className='px-5'></span>
+                    <input 
+                        type="text"
+                        name="product_name" 
+                        id="product_name"  
+                        required="required" 
+                        className='rounded-md px-5 w-full justify-self-center'
+                    />
+                    
+                
+                </div>
+
+                <div className="flex flex-row py-2 justify-between">
+                    <label htmlFor="type" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start" >
+                        Product Category
+                    </label>
+                    <span className='px-5'></span>
+                    {/*<input 
+                        type="text"
+                        name="type" 
+                        id="type"  
+                        required="required" 
+                        className='rounded-md px-5 w-full justify-self-center'
+                    /> */}
+                    <select 
+                        name="type" 
+                        id="type"
+                        required="required" 
+                        className='rounded-md px-5 w-full justify-self-center'
+                        onChange={(e)=>{setCategory(e.target.value);/*console.log(productEntries[0].type)*/}}
+                    >
+                        {CatOption.map(option=>{
+                            return(
+                                <option value={option}>{option}</option>
+                            )
+                        })}
+                        
+                        {/* <option value="clothes">clothes</option>
+                        <option value="souvernirs">souvernirs</option>
+                        <option value="membership">membership</option> */}
+                    </select>
+                
+                </div>
+
+                {/* <div className="flex flex-row py-2 justify-between">
+                    
+                    <label htmlFor="no_variants" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                        Multiple option?
+                    </label>
+                    <span className='px-5'></span>
+
+                    <label className="relative inline-flex w-full items-center cursor-pointer">
+                        <input type="checkbox" id="no_variants" name='no_variants' value={noVariant} className="sr-only peer" onClick={()=>{setnoVariant(prev=>!prev);console.log("use Effect:",noVariant)}} />
+                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-2 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    
+                    </label>
+
+
+                </div> */}
+                <button 
+                    onClick={(e)=>{
+                        e.preventDefault()
+                        setproductCount(productCount+1);
+                        setproductEntries([...productEntries, <Inputblock index={productCount}/>]);
+                        
+                    }}>
+                    new 
+                </button>
+                {/* <ul> */}
+                {productEntries}
+                {/* </ul> */}
+                
+                
+            
+            
+                
+                
+            
+                {/* <div className="flex flex-row py-2 justify-between">
+                    <label htmlFor="description" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                        description
+                    </label>
+                    <span className='px-5'></span>
+                    <input 
+                        type="text"
+                        name="description" 
+                        id="description"  
+                        required="required" 
+                        placeholder='Student Number on Your Card'
+                        className='rounded-md px-5 w-full justify-self-center'
+                    />
+                    
+                
+                </div> */}
+                <div className="flex flex-row py-2 justify-between">
+                    <div className="">
+                        
+                    </div>
+                    <label htmlFor="status" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                        Release Now? 
+                    </label>
+                    <span className='px-5'></span>
+                    <select 
+                        name="status" 
+                        id="status"  
+                        defaultValue={'Later'} 
+                        required="required" 
+                        className='rounded-md px-5 w-full justify-self-center'
+                    >
+                        <option value="inactive">Later</option>
+                        <option value="active">Now</option>
+                        
+                    </select>
+                </div>
+                <button  
+                    className="flex flex-row py-2 w-full justify-center" 
+                    type="submit"
+                    // disabled={!Submit}
+                    
                 >
-                    <option value="Later">Later</option>
-                    <option value="Now">Now</option>
-                    
-                </select>
-            </div>
-            <button  
-                className="flex flex-row py-2 w-full justify-center" 
-                type="submit"
-                // disabled={!Submit}
-                
-            >
-                Submit
-            </button>
-            <p
-                className="flex flex-row py-2 w-full justify-center text-red-600" 
-            >
-                {error}
-            </p>
-        </form>
-        
-    </div>
+                    Submit
+                </button>
+                <p
+                    className="flex flex-row py-2 w-full justify-center text-red-600" 
+                >
+                    {error}
+                </p>
+            </form>
+            
+        </div>
+        )
     )
+    
+    
+    
     
 }
 

@@ -4,9 +4,10 @@ import { useParams,useNavigate } from 'react-router-dom';
 import { auth } from '../../utils/firebasefunction';
 const Manage = () => {
     const {code} = useParams()
-    const [tab, settab] = useState('Member')
+    const [tab, settab] = useState('Activity')
     const [Activity, setActivity] = useState()
     const [Product, setProduct] = useState()
+    const [Member, setMember] = useState()
     const iconsize = 20;
     const {Soc,currentUser} = useAuth()
     const navigate = useNavigate()
@@ -69,7 +70,7 @@ const Manage = () => {
             if (response.ok){
                 // registered
                 
-                console.log("added")
+                console.log("recieved")
                 const data = await response.json()
                 console.log("Product",data)
                 setProduct(data)
@@ -86,8 +87,49 @@ const Manage = () => {
         
         
       }
-      getSocActivity()
-      getSocProduct()
+      async function getSocUser(){
+        await fetch('/api/getsocuser', { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken()
+                },
+                id:code
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
+            
+        }).then(async response => {
+            
+            if (response.ok){
+                // registered
+                
+                console.log("recieved")
+                const data = await response.json()
+                console.log("Member",data)
+                setMember(data)
+                
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("data.error",data)
+                setMember(data)
+                
+            }  
+        })
+        
+        
+      }
+      async function fetchAllInfo(){
+        await getSocActivity()
+        await getSocProduct()
+        await getSocUser()
+      }
+      fetchAllInfo()
       return () => {
         
       }
@@ -226,7 +268,33 @@ const Manage = () => {
                             <div className="flex flex-col">
                                 <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/creatactivity`); navigate(`/society/${code}/createactivity`)}}>
                                         Add member
-                                    </button>
+                                </button>
+                                {
+                                    Member&&(
+                                        <div className="flex flex-col">
+                                            <div className="flex flex-row justify-between ">
+                                                <p className='w-1/3 justify-center'>SID</p>
+                                                <p className='w-1/3 flex justify-center'>role </p>
+                                                <p className='w-1/3 flex justify-center'> </p>
+                                            </div>
+                                            {
+                                                Member.map(member=>{
+                                                    console.log(member.sid)
+                                                    return(
+                                                        
+                                                        <div className="flex flex-row w-full">
+                                                            <p className='w-1/3'>{member.sid}</p>
+                                                            <p className='w-1/3'>{member.role}</p>
+                                                        </div>
+                                                        
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                        
+                                        
+                                    )
+                                }
                             </div>
                             
                         )}
@@ -236,6 +304,7 @@ const Manage = () => {
                                     <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/creatactivity`); navigate(`/society/${code}/createactivity`)}}>
                                         Create Activity
                                     </button>
+                                   
                                 </div>  
                                 {Activity&&(
                                     <div className="flex flex-col ">
@@ -276,10 +345,75 @@ const Manage = () => {
                         )}
 
                         {tab==="Product"&&(
-                            <div className="">
-                                <button className="bg-su-green w-full text-white rounded-md p-3" onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
-                                    Create Product
-                                </button>
+                            <div className="w-full flex-col ">
+                                <div className="w-full flex flex-row justify-center">
+                                    <button className="bg-su-green w-2/3 text-white rounded-md p-3 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
+                                        Create Product
+                                    </button>
+                                </div>
+                                
+                                {Product&&(
+                                    <div className="flex flex-col ">
+                                        <div className="flex flex-row justify-start ">
+                                            <p className='w-2/12 justify-center'>Type</p>
+                                            <p className='w-2/12 flex justify-center'>Product </p>
+                                            <p className='w-2/4 flex justify-center'> Options </p>
+                                            <p className='w-1/4 flex justify-center'> Manage </p>
+                                        </div>
+                                        <ul className='list-none'>             
+                                            {Product.map(product => {
+                                                console.log("activity",product)
+                                                return(
+                                                    <li key={product._id}>
+                                                        <div className="flex flex-row justify-between " >
+                                                        <p className='w-2/12 justify-center '>{(product.type)}</p>
+                                                        <p className='w-1/4 flex justify-center'>{product.product_name} </p>
+                                                        <div className="w-2/4 flex flex-col">
+                                                            {
+                                                                product.variants.map((productObj,i)=>{
+                                                                    console.log(i,"productObj",productObj)
+                                                                    return(
+                                                                        <div className="w-full flex flex-col">
+                                                                            <div className="flex flex-row w-full px-2">
+                                                                                <p className='  rounded-md bg-cyan-500'>{Object.keys(productObj)[0]}</p>
+                                                                            </div>
+                                                                            
+                                                                            <div className="flex flex-row w-full">
+                                                                                <div className="px-2 w-1/2 ">
+                                                                                    <p className='rounded-md bg-orange-600'>${productObj[Object.keys(productObj)[0]].price}</p>
+                                                                                </div>
+                                                                                <div className="px-2 w-1/2">
+                                                                                    <p className='px-2 w-1/2 rounded-md bg-blue-700'>{productObj[Object.keys(productObj)[0]].inventory}pcs</p>
+                                                                                </div>
+                                                                                
+                                                                                
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                        
+                                                                        
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                        
+                                                        <div className="w-1/4 flex justify-center">
+                                                            <button className='w-1/3 h-10 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button>
+                                                            <button className='w-1/3  h-10  flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={product._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editsociety`)}}> Manage </button>
+                                                            <button className='w-1/3   h-10 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'> Delete </button>
+                                                            
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    </li>
+                                                    
+                                                    
+                                                    
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

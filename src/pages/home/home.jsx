@@ -64,7 +64,7 @@ const Home = () => {
                           商店 Shop
                         </Link> */}
                         <Link 
-                            to={"shop"}
+                            to={"/shop"}
                             className="dropdown_link text-su-green text-lg font-semibold py-5"
                         >
                             商店 Shop
