@@ -3,6 +3,8 @@ import { useParams , useNavigate} from 'react-router-dom'
 import { auth } from '../../utils/firebasefunction'
 
 import { useAuth } from '../../components/session'
+import { storage,uploadFile } from '../../utils/firebasefunction'
+
 const EditActivity = () => {
     const {code,id} = useParams()
     const [Activity, setActivity] = useState()
@@ -10,12 +12,57 @@ const EditActivity = () => {
     //
     const [Submit, setSubmit] = useState(true)
     const [error, seterror] = useState(null)
+    const [Poster, setPoster] = useState()
 
     const [singleDay, setsingleDay] = useState(false)
+    const [Uploading, setUploading] = useState(false)
     const navigate = useNavigate()
     const {setuserDBInfo,userDBInfo,Soc} = useAuth()
     
     console.log("code",code)
+    
+    async function handleUpload(e){
+        e.preventDefault()
+        setUploading(true)
+      
+        const file = e.target.files[0];
+        // const formData = new FormData(form);
+        // const filename = "test"
+        // const files = Object.entries(Object.fromEntries(formData.entries())) 
+        console.log("file",file)
+        await uploadFile(`${code}/${Activity._id}/`,"Poster",file,storage).then(
+           async ResultURL=>{
+            console.log("PosterURL",ResultURL)
+            await fetch("/api/changeposter",{
+                method: "POST",
+                body: JSON.stringify({
+                    user:{
+                        token:await auth.currentUser.getIdToken()
+                    },
+                    data:{
+                        posterURL:ResultURL,
+                        id:Activity._id
+                    }
+                }),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                mode:'cors'
+                
+            }).then(response=>{
+                if( response.ok) {
+                    setPoster(ResultURL)
+                    
+                }
+            })
+            
+           }
+        ).then(()=>{
+            setUploading(false)
+        })
+        
+    }
 
     //
     async function getActivityDetails(){
@@ -49,7 +96,10 @@ const EditActivity = () => {
                 }
                 
                 setActivity(data)
-                
+                console.log("data.PosterURL",data.posterURL)
+                if(data.posterURL){
+                    setPoster(data.posterURL)
+                }
                 setsingleDay(data.single_date)
                 console.log("data.start_date",data.start_date)
                 
@@ -59,6 +109,7 @@ const EditActivity = () => {
                 const data = await response.json()
                 console.log("data.error",data)
                 setActivity(data)
+                
                 
             }  
         })
@@ -312,11 +363,27 @@ const EditActivity = () => {
                         {error}
                     </p>
                     </form>
-                    <form action="" onSubmit={(e)=>{}} className='m-10'>
-                    <label for="image-upload">Upload an image:</label>
-                        <input type="file" id="image-upload" name="image"/>
-                        <button type="submit" className='p-1 bg-su-green rounded-full' onClick={(e)=>{console.log(e.target.value)}}> Upload</button>
+
+                    <h1 className='selectlink'>Poster</h1>
+                    {
+                        Poster&&(
+                            <img 
+                                src     ={Poster}
+                                alt     = "promptation logo"
+                                width   = {300}
+                                height  = {300}
+                                className = "object-contain "
+                            />
+                         
+                        )
+                    }
+                    <form action="" onSubmit={(e)=>{e.preventDefault()}} className='m-10'>
+                    <label for="image-upload">Upload Poster:</label>
+                        <input type="file" id="image-upload" name="image" onChange={(e)=>{handleUpload(e);}}/>
+                       
                     </form>
+
+
                 </div>
                 
             </div>

@@ -22,6 +22,7 @@ import EditActivity from './pages/society/EditActivity';
 import CreateProduct from './pages/society/product/CreateProduct';
 import CounterForm from './components/counterForm';
 import EditProduct from './pages/society/product/EditProduct';
+import Storage from './pages/storage/Storage';
 import Shop from './pages/shop/shop';
 function App() {
   console.log("load app.jsx")
@@ -34,13 +35,16 @@ function App() {
             <Route index element={<Home />} /> 
             <Route path="counter" element={<CounterForm />} />
             <Route path="home" element={<Home />} />
+            
             <Route path="structure">
               <Route path="exco" element={<Exco />} />
+              <Route path="s" element={<Storage />} />
               <Route path="deputation" element={<Deputation />} />
               <Route path="judicial" element={<Judicial />} />
               <Route path="editorialboard" element={<Editorialboard />} />
             </Route>
-
+            
+            
             <Route path="shop" element={<Shop/>}>
             
             </Route>
