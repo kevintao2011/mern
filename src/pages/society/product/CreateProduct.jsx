@@ -214,13 +214,7 @@ const CreateProduct = () => {
         try{
          
           await fetch('/api/createproduct', { 
-              method: "POST",
-              body: JSON.stringify(reqbody),
-              headers: {
-              "Content-Type": "application/json",
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              mode:'cors'
+              
               
           }).then(async response => {
               
