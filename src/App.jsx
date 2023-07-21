@@ -57,7 +57,7 @@ function App() {
             <Route path="society/:code/createactivity" element={<ActivityForm />} />
             <Route path="society/:code/createproduct" element={<CreateProduct />} />
         <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
-        <Route exact path="society/:code/manage/:id/editsociety" element={<EditProduct />} />
+        <Route exact path="society/:code/manage/:id/editproduct" element={<EditProduct />} />
             
         <Route path="account">
               <Route path="setup" element={<SetupAccount />} />

@@ -2,7 +2,7 @@ import React,{useState,useEffect,useMemo} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { auth } from '../../../utils/firebasefunction'
 import { useAuth } from '../../../components/session'
-
+import { Inputblock } from './productInputBlock'
 
 
 const CreateProduct = () => {
@@ -13,78 +13,78 @@ const CreateProduct = () => {
     const [Category, setCategory] = useState()
     const [CatOption, setCatOption] = useState()
 
-    const Inputblock = (props) => {
-        const index = props.index
-        const value = props.value
-        const [defaultValue, setdefaultValue] = useState()
-        if (props.value){
-            setdefaultValue(value)
-        }
-        console.log("index",index)
+    // const Inputblock = (props) => {
+    //     const index = props.index
+    //     const value = props.value
+    //     const [defaultValue, setdefaultValue] = useState()
+    //     if (props.value){
+    //         setdefaultValue(value)
+    //     }
+    //     console.log("index",index)
 
-        return(
+    //     return(
            
-            <div className="" key={index}>
-                <div className="flex flex-row py-2 justify-between">
-                    <label htmlFor="variant" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                        option
-                    </label>
-                    <span className='px-5'></span>
-                    {
-                        defaultValue?(
-                            <input 
-                                type="text"
-                                name="variant" 
-                                id="variant"  
-                                required="required" 
-                                defaultValue={defaultValue}
-                                className='rounded-md px-5 w-full justify-self-center'
-                            />
-                        ):
-                        (
-                            <input 
-                                type="text"
-                                name="variant" 
-                                id="variant"  
-                                required="required" 
-                                className='rounded-md px-5 w-full justify-self-center'
-                            />
-                        )
-                    }
+    //         <div className="" key={index}>
+    //             <div className="flex flex-row py-2 justify-between">
+    //                 <label htmlFor="variant" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+    //                     option
+    //                 </label>
+    //                 <span className='px-5'></span>
+    //                 {
+    //                     defaultValue?(
+    //                         <input 
+    //                             type="text"
+    //                             name="variant" 
+    //                             id="variant"  
+    //                             required="required" 
+    //                             defaultValue={defaultValue}
+    //                             className='rounded-md px-5 w-full justify-self-center'
+    //                         />
+    //                     ):
+    //                     (
+    //                         <input 
+    //                             type="text"
+    //                             name="variant" 
+    //                             id="variant"  
+    //                             required="required" 
+    //                             className='rounded-md px-5 w-full justify-self-center'
+    //                         />
+    //                     )
+    //                 }
                     
-                </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="price" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    price
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="number"
-                    name="price" 
-                    id="price"  
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-            </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="inventory" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Inventory
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="number"
-                    name="inventory" 
-                    id="inventory"  
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-            </div>
+    //             </div>
+    //         <div className="flex flex-row py-2 justify-between">
+    //             <label htmlFor="price" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+    //                 price
+    //             </label>
+    //             <span className='px-5'></span>
+    //             <input 
+    //                 type="number"
+    //                 name="price" 
+    //                 id="price"  
+    //                 required="required" 
+    //                 className='rounded-md px-5 w-full justify-self-center'
+    //             />
+    //         </div>
+    //         <div className="flex flex-row py-2 justify-between">
+    //             <label htmlFor="inventory" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+    //                 Inventory
+    //             </label>
+    //             <span className='px-5'></span>
+    //             <input 
+    //                 type="number"
+    //                 name="inventory" 
+    //                 id="inventory"  
+    //                 required="required" 
+    //                 className='rounded-md px-5 w-full justify-self-center'
+    //             />
+    //         </div>
                 
-            </div>
+    //         </div>
             
             
-        )
-    }
+    //     )
+    // }
     const [productEntries, setproductEntries] = useState([<Inputblock index={productCount} />])
 
     const [noVariant, setnoVariant] = useState(false)
@@ -213,10 +213,17 @@ const CreateProduct = () => {
         console.log("reqbody",reqbody)
         try{
          
-          await fetch('/api/createproduct', { 
+            await fetch('/api/createproduct', { 
+                method: "POST",
+                body: JSON.stringify(reqbody),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                mode:'cors'
+            }
               
-              
-          }).then(async response => {
+          ).then(async response => {
               
               if (response.ok){
                   // registered
@@ -257,7 +264,8 @@ const CreateProduct = () => {
     CatOption&&(
         
         <div className="mainpage-1 flex flex-col items-center justify-center">
-            <form action="" onSubmit={(e)=>{handleSubmit(e)}}>
+            <h1 className='selectlink'>Create Product</h1>
+            <form action="" onSubmit={(e)=>{handleSubmit(e)}} className='bg-gray-100 p-10 rounded-lg w-10/12'>
                 
                 <div className="flex flex-row py-2 justify-between">
                     <div className="">
@@ -347,15 +355,20 @@ const CreateProduct = () => {
 
 
                 </div> */}
-                <button 
-                    onClick={(e)=>{
-                        e.preventDefault()
-                        setproductCount(productCount+1);
-                        setproductEntries([...productEntries, <Inputblock index={productCount}/>]);
-                        
-                    }}>
-                    new 
-                </button>
+                <div className="w-full flex flex-row justify-end">
+                    <button 
+                        onClick={(e)=>{
+                            e.preventDefault()
+                            setproductCount(productCount+1);
+                            setproductEntries([...productEntries, <Inputblock index={productCount}/>]);
+                            
+                        }}
+                        className='p-3 rounded-md text-white bg-su-green '
+                    >
+                        Add new options 
+                    </button>
+                </div>
+                
                 {/* <ul> */}
                 {productEntries}
                 {/* </ul> */}

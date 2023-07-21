@@ -1,6 +1,6 @@
 import React, {useState,useEffect} from 'react'
 import { useAuth } from '../../components/session';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams,useNavigate,Link } from 'react-router-dom';
 import { auth } from '../../utils/firebasefunction';
 const Manage = () => {
     const {code} = useParams()
@@ -323,7 +323,7 @@ const Manage = () => {
                                                         <p className='w-1/3 flex justify-center'>{activity.activity_name} </p>
                                                         <div className="w-1/3 flex justify-center">
                                                             <button className='w-1/3 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button>
-                                                            <button className='w-1/3 flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={activity._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editactivity`)}}> Manage </button>
+                                                            <button className='w-1/3 flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={activity._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editactivity`,{state:{Product:Product}})}}> Manage </button>
                                                             <button className='w-1/3 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'> Delete </button>
                                                             
                                                         </div>
@@ -399,7 +399,17 @@ const Manage = () => {
                                                         
                                                         <div className="w-1/4 flex justify-center">
                                                             <button className='w-1/3 h-10 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button>
-                                                            <button className='w-1/3  h-10  flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={product._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editsociety`)}}> Manage </button>
+
+                                                            {/* <Link 
+                                                                className='w-1/3  h-10  flex justify-center items-center bg-su-green rounded-full m-2 text-white '
+                                                                to={`/society/${code}/manage/${e.target.value}/editsociety`}
+                                                                
+                                                                state={{product:product}}
+
+                                                            >
+                                                                Manage
+                                                            </Link> */}
+                                                            <button className='w-1/3  h-10  flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={product._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editproduct`,{state:{Product:Product}})}}> Manage</button>
                                                             <button className='w-1/3   h-10 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'> Delete </button>
                                                             
                                                         </div>
