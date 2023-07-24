@@ -375,15 +375,15 @@ const Manage = () => {
                                                                     return(
                                                                         <div className="w-full flex flex-col">
                                                                             <div className="flex flex-row w-full px-2">
-                                                                                <p className='  rounded-md bg-cyan-500'>{Object.keys(productObj)[0]}</p>
+                                                                                <p className='  rounded-md bg-cyan-500'>{productObj.name}</p>
                                                                             </div>
                                                                             
                                                                             <div className="flex flex-row w-full">
                                                                                 <div className="px-2 w-1/2 ">
-                                                                                    <p className='rounded-md bg-orange-600'>${productObj[Object.keys(productObj)[0]].price}</p>
+                                                                                    <p className='rounded-md bg-orange-600'>${productObj.price}</p>
                                                                                 </div>
                                                                                 <div className="px-2 w-1/2">
-                                                                                    <p className='px-2 w-1/2 rounded-md bg-blue-700'>{productObj[Object.keys(productObj)[0]].inventory}pcs</p>
+                                                                                    <p className='px-2 w-1/2 rounded-md bg-blue-700'>{productObj.inventory}pcs</p>
                                                                                 </div>
                                                                                 
                                                                                 

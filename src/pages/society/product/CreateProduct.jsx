@@ -191,9 +191,9 @@ const CreateProduct = () => {
         
             console.log(v,i,data.price[i]);
             data.variants.push({
-                [v]:{
-                    name:v,price:data.price[i],inventory:data.inventory[i]
-                }
+                
+                name:v,price:data.price[i],inventory:data.inventory[i]
+                
             })
             
             delete data.variant[i]
