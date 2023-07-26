@@ -31,7 +31,7 @@ const EditActivity = () => {
         // const filename = "test"
         // const files = Object.entries(Object.fromEntries(formData.entries())) 
         console.log("file type",file.type)
-        await uploadFile(`${code}/${Activity._id}/`,`Poster`,file,storage).then(
+        await uploadFile(`${code}/Activity/${Activity._id}/`,`Poster`,file,storage).then(
            async ResultURL=>{
             console.log("PosterURL",ResultURL)
             await fetch("/api/changeposter",{

@@ -67,6 +67,7 @@ export const Inputblock = (props) => {
                 className='rounded-md px-5 w-full justify-self-center'
             />
         </div>
+        
             
         </div>
         

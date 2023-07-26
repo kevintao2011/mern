@@ -86,8 +86,8 @@ const Nav = () => {
     console.log("location.pathname",location.pathname)
     if(!loading){ //location.pathname==="/"
         return (
-        
-            <>
+            <div className="flex flex-col">
+                  
                 <nav className="flex flex-row w-full px-10 justify-between items-center">
                     
                     <div className="">
@@ -229,7 +229,9 @@ const Nav = () => {
                     
                 </nav>
                 <Outlet />
-            </> 
+            
+            </div>
+          
             
             
         )
