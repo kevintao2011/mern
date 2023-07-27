@@ -165,24 +165,6 @@ const CreateProduct = () => {
                 
             }
             
-            /* Output
-            inventory: Array(3) [ "3", "3", "1" ]
-​
-            no_variants: Array [ "true" ]
-            ​
-            price: Array(3) [ "33", "22", "11" ]
-            ​
-            product_name: Array [ "Tee" ]
-            ​
-            status: Array [ "Later" ]
-            ​
-            type: Array [ "Clothes" ]
-            ​
-            variants: Array(3) [ "Brown", "Blue", "Red" ]
-            */
-
-
-
             
         });
         console.log("form data",data)
@@ -191,9 +173,10 @@ const CreateProduct = () => {
         
             console.log(v,i,data.price[i]);
             data.variants.push({
-                
-                name:v,price:data.price[i],inventory:data.inventory[i]
-                
+                name:v,
+                price:data.price[i],
+                inventory:data.inventory[i],
+                index:i
             })
             
             delete data.variant[i]
@@ -246,17 +229,6 @@ const CreateProduct = () => {
           setSubmit(true)
           console.log(e)
         }
-        
-        
-      //   try{
-      //       //FirebaseError: Firebase: Error (auth/admin-restricted-operation).
-      //       await createUserWithEmailAndPassword(auth,data.email,data.password);
-      //   }catch(e){
-      //       console.log("Error:",e);
-      //   }
-      //   You can pass formData as a fetch body directly:
-        
-  
         
     }
     return (

@@ -8,6 +8,7 @@ const EditProduct = () => {
     const location = useLocation();
     const [Product, setProduct] = useState()
     const [CatOption, setCatOption] = useState()
+    const [addingBlock, setaddingBlock] = useState(false)
 
     const [productVariantsCount, setproductVariantsCount] = useState(0)
     const [productVariants, setproductVariants] = useState([])
@@ -16,64 +17,9 @@ const EditProduct = () => {
     const [Submit, setSubmit] = useState()
     const [IconMap, setIconMap] = useState({})
     const [Edit, setEdit] = useState()
+    
 
-    async function handleUpload(e){
-        console.log("handleUpload - Product",Product.variants)
-        // e.preventDefault()
-        const file = e.target.files[0];
-        
-        console.log("e.target",e.target.id)
-        await uploadFile(`${code}/product/${Product._id}/`,`${e.target.id}_Icon`,file,storage).then(
-           async ResultURL=>{
-            console.log("PosterURL",ResultURL)
-            await fetch("/api/changeproducticon",{
-                method: "POST",
-                body: JSON.stringify({
-                    user:{
-                        token:await auth.currentUser.getIdToken()
-                    },
-                    data:{
-                        iconURL:ResultURL,
-                        product_id:Product._id,
-                        option_name:e.target.id
-                    }
-                }),
-                headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                mode:'cors'
-                
-            }).then(response=>{
-                if( response.ok) {
-                    IconMap[e.target.id]=file
-                    console.log("b4 modify Product",Product.variants)
-                    var newlist = [...Product.variants]
-                    console.log("newlist",newlist)
-                    newlist = newlist.map(variant=>{
-                        if (variant.name===e.target.id){
-                            variant.icon_url=ResultURL
-                            return variant
-                        }
-                        else{
-                            return variant
-                        }
-                    })
-                    console.log("newlist",newlist)
-                    var modifyProduct = Product
-                    modifyProduct.variants = newlist
-                    console.log("modifyProduct",modifyProduct)
-                    setProduct(modifyProduct)
-
-                    setIconMap(IconMap)
-                    console.log("IconMap not yet upload:",IconMap)
-                }
-            })
-            
-           }
-        )
-        
-    }
+    
     
     const Inputblock = (props) => {
         const index = props.index
@@ -82,18 +28,26 @@ const EditProduct = () => {
         console.log("changeOption",typeof modifyHandler)
         const [Status, setStatus] = useState()
         const [defaultValue, setdefaultValue] = useState()
+        const [NewIndex, setNewIndex] = useState()
+        const [NewImgURL, setNewImgURL] = useState()
+        const [NewOptionName, setNewOptionName] = useState()
         useEffect(() => {
             if (props.info){
                 setdefaultValue(props.info)
             }
             console.log("info inside card",props.info)
         }, [])
-        
-        async function UploadSingle(e){
+        var i 
+        if(defaultValue){
+            i = defaultValue.index
+        }else{
+            i = NewIndex
+        }
+        async function UploadSingle(e){ //upload option icon
             e.preventDefault()
-            setStatus("Uploading")
+            setStatus("Uploading to",`${code}/product/${id}/${i}_Icon`)
             const file = e.target.files[0];
-            await uploadFile(`${code}/product/${defaultValue._id}/`,`${e.target.id}_Icon`,file,storage)
+            await uploadFile(`${code}/product/${id}/`,`${i}_Icon`,file,storage)
                 .then(async ResultURL=>{
                     console.log("PosterURL",ResultURL)
                     await fetch("/api/changeproducticon",{
@@ -104,7 +58,7 @@ const EditProduct = () => {
                             },
                             data:{
                                 iconURL:ResultURL,
-                                product_id:defaultValue._id,
+                                product_id:id,
                                 option_name:e.target.id
                             }
                         }),
@@ -117,31 +71,161 @@ const EditProduct = () => {
                     })
                     .then(response=>{
                         if( response.ok){
-                            defaultValue.icon_url = ResultURL
+                            if(defaultValue){
+                                defaultValue.icon_url = ResultURL
+                            }else{
+                                setNewImgURL(ResultURL)
+                            }
+                            
                             setStatus("Uploaded")
                         }
                     })
                 }
             )
         }
+
+        // handle single option
         async function handleEdit(e){
             e.preventDefault()
             setEdit(false)
             // // Read the form data
             const form = e.target;
             const formData = new FormData(form);
-            console.log("formData",formData)
+            console.log("optioninfo formData",formData)
             const data = {};
+            data._id = id
+            data.index = defaultValue.index
             formData.forEach((value, key) => {
-                data[key] = [value]   
+                data[key] = value
             });
             console.log(data)
+            try{
+        
+                await fetch('/api/updateoptioninfo', { 
+                    method: "POST",
+                    body: JSON.stringify({
+                        user:{
+                            token:await auth.currentUser.getIdToken()
+                        },
+                        data
+                    }),
+                    headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    mode:'cors'
+                }
+                
+            ).then(async response => {
+                
+                if (response.ok){
+                    console.log("added")
+                }else{
+                    const data = await response.json()
+                    console.log("data.error",data)
+                    seterror(data.code)
+                    setSubmit(true)
+                }  
+            })
+            }catch(e){
+                setSubmit(false)
+                console.log(e)
+            }
+        }
+        async function addOption(e){
+            e.preventDefault()
+            setEdit(false)
+            // // Read the form data
+            const form = e.target;
+            const formData = new FormData(form);
+            console.log("optioninfo formData",formData)
+            const data = {};
+            data._id = id
+            formData.forEach((value, key) => {
+                data[key] = value
+            });
+            console.log(data)
+            try{
+        
+                await fetch('/api/addproductoption', { 
+                    method: "POST",
+                    body: JSON.stringify({
+                        user:{
+                            token:await auth.currentUser.getIdToken()
+                        },
+                        data
+                    }),
+                    headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    mode:'cors'
+                }
+                
+            ).then(async response => {
+                
+                if (response.ok){
+                    console.log("added")
+                    const data = await response.json()
+                    setNewIndex(data.index)
+                    setNewOptionName(data.name)
+                }else{
+                    const data = await response.json()
+                    console.log("data.error",data)
+                    
+                    seterror(data.code)
+                    setSubmit(true)
+                }  
+            })
+            }catch(e){
+                setSubmit(false)
+                console.log(e)
+            }
+        }
+        async function removeOption(index,id){
+            try{
+                await fetch('/api/removeproductoption', { 
+                    method: "POST",
+                    body: JSON.stringify({
+                        "user":{
+                            token:await auth.currentUser.getIdToken()
+                        },
+                        "data":{
+                            index:index,
+                            _id : id
+                        }
+                    }),
+                    headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    mode:'cors'
+                }
+                
+            ).then(async response => {
+                
+                if (response.ok){
+                    console.log("added")
+                    seterror("removed")
+                    productVariants.splice(index,1)
+                    setproductVariants([...productVariants])
+                    
+                }else{
+                    const data = await response.json()
+                    console.log("data.error",data)
+                    seterror("data.code")
+                    setSubmit(true)
+                }  
+            })
+            }catch(e){
+                setSubmit(false)
+                console.log(e)
+            }
         }
         return(
-            defaultValue&&(
-                
+            defaultValue?(
                     <div className="flex flex-col border-su-green border-dashed border-b-2 my-5">
-                            <div className="  flex flex-row" key={index}>
+                            <div className=" flex flex-row" key={index}>
                                 <div className="LHS w-9/12">
                                     <form action="" onSubmit={(e)=>{handleEdit(e)}}>
                                         <div className="flex flex-row py-2 justify-between">
@@ -210,11 +294,11 @@ const EditProduct = () => {
                                                 modify 
                                             </button>
                                             <button 
-                                                onClick={(e)=>{
-                                                    e.preventDefault()
-                                                    
+                                                onClick={()=>{
+                                                    removeOption(defaultValue.index,id)
                                                 }}
                                                 className='p-3 rounded-md text-white bg-red-700 '
+                                                type='button'
                                             >
                                                 remove 
                                             </button>
@@ -259,131 +343,184 @@ const EditProduct = () => {
                             
                     </div>
                 
+            ):(
+                <div className="flex flex-col border-su-green border-dashed border-b-2 my-5">
+                        <div className=" flex flex-row" key={index}>
+                            <div className="LHS w-9/12">
+                                <form action="" onSubmit={(e)=>{addOption(e)}}>
+                                    <div className="flex flex-row py-2 justify-between">
+                                        <label htmlFor="variant" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                                            option
+                                        </label>
+                                        <span className='px-5'></span>
+                                        
+                                        <input 
+                                            type="text"
+                                            name="variant" 
+                                            id="variant"  
+                                            required="required" 
+                                            className='rounded-md px-5 w-full justify-self-center'
+                                        />
+                                       
+                                    
+                                        
+                                    </div>
+                                    <div className="flex flex-row py-2 justify-between">
+                                        <label htmlFor="price" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                                            price
+                                        </label>
+                                        <span className='px-5'></span>
+                                        <input 
+                                            type="number"
+                                            name="price" 
+                                            id="price"  
+                                            required="required" 
+                                            className='rounded-md px-5 w-full justify-self-center'
+                                            
+                                        />
+                                    </div>
+                                    <div className="flex flex-row py-2 justify-between">
+                                        <label htmlFor="inventory" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                                            Inventory
+                                        </label>
+                                        <span className='px-5'></span>
+                                        <input 
+                                            type="number"
+                                            name="inventory" 
+                                            id="inventory"  
+                                            required="required" 
+                                            className='rounded-md px-5 w-full justify-self-center'
+                                            
+                                        />
+                                        
+                                    </div>
+                                    {
+                                        !NewIndex&&(
+                                            <div className="w-full flex flex-row justify-end my-5">
+                                            <button 
+                                                type='submit'
+                                                className='p-3 rounded-md text-white bg-su-green mx-2'
+                                            >
+                                                upload 
+                                            </button>
+                                        
+                                    </div>
+                                        )
+                                    }
+                                    
+                                    
+                                </form>
+                            </div>
+                            {
+                                NewIndex&&(
+                                    <div className="RHS w-3/12 ml-5">
+                                        {
+                                            NewImgURL&&(
+                                                <img 
+                                                    src     ={NewImgURL}
+                                                    alt     = {"Product_Image"}
+                                                    width   = {200}
+                                                    height  = {200}
+                                                    className = "object-contain rounded-3xl "
+                                                />
+                                            )
+                                        }
+                                        
+                                        <input type="file" id={NewOptionName} name="image" onChange={async (e)=>{await UploadSingle(e);}}/>
+                                        {
+                                            NewOptionName&&(
+                                                <p>Option {NewOptionName}</p>
+                                            )
+                                        }
+                                        
+                                        <p className='text-red-600'>
+                                            {Status}
+                                        </p>
+                                    </div>
+                                )
+                            }
+                            
+                            
+                            
+                        </div> 
+                        
+                </div>
             )
         )
     }
-    function changeOption(add,index){
-        if(add){
-            setproductVariantsCount(productVariantsCount+1);
-            setproductVariants([...productVariants, <Inputblock index={productVariantsCount} modifyHandler={changeOption}/>]);
-        }
-    }
 
 
-    const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmit(false)
-    console.log("Submitting signup form",e.target);
-    
-    // // Read the form data
-    const form = e.target;
-    const formData = new FormData(form);
-    console.log("formData",formData)
-    
-    
-    
-    const data = {};
-    data.code = code // set Society Name
-    
-    formData.forEach((value, key) => {
-
-        if (data[key]){
-            
-            data[key] = [...data[key],value]
-        }else{
-            data[key] = [value]
-            
-        }
+    // handle basic info of product
+    async function handleSubmit (e){
+        e.preventDefault();
+        setSubmit(true)
+        console.log("Submitting signup form",e.target);
         
-        /* Output
-        inventory: Array(3) [ "3", "3", "1" ]
-​
-        no_variants: Array [ "true" ]
-        ​
-        price: Array(3) [ "33", "22", "11" ]
-        ​
-        product_name: Array [ "Tee" ]
-        ​
-        status: Array [ "Later" ]
-        ​
-        type: Array [ "Clothes" ]
-        ​
-        variants: Array(3) [ "Brown", "Blue", "Red" ]
-        */
-
-
-
+        // // Read the form data
+        const form = e.target;
+        const formData = new FormData(form);
+        console.log("formData",formData)
         
-    });
-    console.log("form data",data)
-    data.variants=[]
-    data.variant.forEach((v,i)=>{
-        
-        console.log(v,i,data.price[i]);
-        data.variants.push({
-            
-            name:v,price:data.price[i],inventory:data.inventory[i]
-            
-        })
-        data._id=Product._id
-        delete data.variant[i]
+        const data = {};
+        data.code = code // set Society Name
+        data._id = id
+        formData.forEach((value, key) => {
+            console.log(value)
+            data[key] = value
 
-    })
-    
-    
-    console.log("data",data)
-    
-    
-    const reqbody = {
-        user:{
-            token:await auth.currentUser.getIdToken()
-        },
-        data
-    }
-    console.log("reqbody",reqbody)
-    try{
-     
-        await fetch('/api/updateproduct', { 
-            method: "POST",
-            body: JSON.stringify(reqbody),
-            headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
+        });
+        console.log("form data",data)
+
+        const reqbody = {
+            user:{
+                token:await auth.currentUser.getIdToken()
             },
-            mode:'cors'
+            data
         }
-          
-      ).then(async response => {
-          
-          if (response.ok){
-              // registered
-              
-              console.log("added")
-             
-            //   navigate(`/society/${code}/manage`)
-              
-              
-          }else{
-              console.log("response.body",await response.json())
-              const data = await response.json()
-              console.log("data.error",data)
-              seterror(data.code)
-              setSubmit(true)
-              
-          }  
-      })
-    }catch(e){
-      setSubmit(true)
-      console.log(e)
+        console.log("reqbody",reqbody)
+        try{
+        
+            await fetch('/api/updateproductinfo', { 
+                method: "POST",
+                body: JSON.stringify(reqbody),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                mode:'cors'
+            }
+            
+        ).then(async response => {
+            
+            if (response.ok){
+                // registered
+                var p = Product
+                p.product_name = data.product_name
+                setProduct(p)
+                console.log("added")
+                
+                //   navigate(`/society/${code}/manage`)
+                
+                
+            }else{
+                
+                const data = await response.json()
+                console.log("data.error",data)
+                seterror(data.code)
+                setSubmit(true)
+                
+            }  
+        })
+        }catch(e){
+            setSubmit(false)
+            console.log(e)
+        }
+        
+        
+        
     }
     
-    
-    
-}
-    //Load category
- 
 
-   
     //Load Product
     useEffect(() => {
         // console.log("Product",location.state.Product)
@@ -461,7 +598,7 @@ const EditProduct = () => {
                 setProduct(data);
                 const varaintList = data.variants.map((variant,i)=>{
                     console.log("Product.variants",data.variants)
-                    return(<Inputblock index={productVariantsCount} info={variant} />);
+                    return(<Inputblock index={i} info={variant} />);
                 })
                 
                 console.log("varaintList",varaintList)
@@ -491,9 +628,10 @@ const EditProduct = () => {
             
             <div className=" mainpage-i flex flex-col items-center justify-center">
                 <h1 className='selectlink'>Edit Product</h1>
+                
                 <form action="" onSubmit={(e)=>{handleSubmit(e)}} className='bg-gray-100 p-10 rounded-lg w-10/12'>
                     
-                    <div className="flex flex-row py-2 justify-between">
+                    <div className="flex flex-row py-2 justify-between"> 
                         <div className="">
                             
                         </div>
@@ -501,8 +639,7 @@ const EditProduct = () => {
                             Society
                         </label>
                         <span className='px-5'></span>
-                        
-                        
+
                         <input 
                             type="text"
                             name="code" 
@@ -516,8 +653,6 @@ const EditProduct = () => {
 
                     </div>
 
-                    
-                    
                     <div className="flex flex-row py-2 justify-between">
                         <label htmlFor="product_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
                             Product Name
@@ -587,7 +722,7 @@ const EditProduct = () => {
                             
                         </select>
                     </div>
-                
+            
                     <div className="flex flex-row py-2 w-full justify-end">
                         <button  
                             className="p-3  bg-su-green text-lg text-white rounded-md" 
@@ -598,19 +733,29 @@ const EditProduct = () => {
                             update 
                         </button>
                     </div>
-                    
-                    <div className="flex flex-col">
-                        {productVariants}
-                    </div>
+                </form>    
+                {/* {
+                    addingBlock&&(
+                        <div className="flex flex-col bg-gray-100 p-10 rounded-lg w-10/12">
+                            {productVariants}
+                        </div>
+                    )
+                } */}
+                <div className="flex flex-col bg-gray-100 p-10 rounded-lg w-10/12">
+                    {productVariants}
+                </div>
                     
                 
-                    
-                    <div className="w-full flex flex-row justify-end">
+                <div className="flex flex-col bg-gray-100 p-10 rounded-lg w-10/12">
+                    <div className="w-full flex flex-row justify-end ">
                         <button 
                             onClick={(e)=>{
                                 e.preventDefault()
-                                setproductVariantsCount(productVariantsCount+1);
+                                setaddingBlock(true)
+
                                 setproductVariants([...productVariants, <Inputblock index={productVariantsCount}/>]);
+                                console.log("productVariants",productVariants)
+                                setaddingBlock(false)
                             }}
                             className='p-3 rounded-md text-white bg-su-green my-5'
                         >
@@ -618,70 +763,20 @@ const EditProduct = () => {
                         </button>
                     
                     </div>
-                    
-                    
-                    
                     <p
                         className="flex flex-row py-2 w-full justify-center text-red-600" 
                     >
                         {error}
                     </p>
-                </form>
+                </div>    
                 
-                <div className="">
-                    <p className='selectlink p-5 '>Product Options</p>
-                </div>
+                    
+                    
+                    
+                
+                
+                
                
-                <div className="flex flex-row">
-                    {
-                        Product?.variants.map(variant=>{
-                            console.log("variant + IconMap",variant.name,IconMap[variant.name])
-                            console.log("Productvariant",Product.variants)
-                            return(
-                                <form action="" className='px-5'>
-                                    {
-                                        IconMap[variant.name]?(
-                                            <img 
-                                                src     ={IconMap[variant.name]}
-                                                alt     = {`IconMap_${variant.icon_url}`}
-                                                width   = {300}
-                                                height  = {300}
-                                                className = "object-contain rounded-3xl "
-                                            />
-                                        ):
-                                        variant.icon_url?(
-                                            <img 
-                                                src     ={variant.icon_url}
-                                                alt     = {`IconMap_${variant.icon_url}`}
-                                                width   = {300}
-                                                height  = {300}
-                                                className = "object-contain rounded-3xl"
-                                            />
-                                        ):(
-                                            <img 
-                                                src     ={"/assests/img/cow.png"}
-                                                alt     = {`default`}
-                                                width   = {300}
-                                                height  = {300}
-                                                className = "object-contain rounded-3xl"
-                                            />
-                                        )
-                                    }
-                                    
-                                    
-                                    <input type="file" id={variant.name} name="image" onChange={(e)=>{handleUpload(e);}}/>
-                                    <p>Option {variant.name}</p>
-                                </form>
-                            )
-                        })
-                        
-                            
-                    }
-                    {
-                        console.log("Product.variants after map",Product.variants)
-                    }
-                </div>
-
                 
             </div>
         )

@@ -11,7 +11,7 @@ module.exports = function(app) {
   app.use(
     '/storage',
     createProxyMiddleware({
-      target: 'http://localhost:4001',
+      target: 'http://localhost:4000',
       changeOrigin: true,
     })
   );

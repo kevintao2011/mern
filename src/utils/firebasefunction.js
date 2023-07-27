@@ -2,7 +2,7 @@ import { signInWithEmailAndPassword,getIdToken,createUserWithEmailAndPassword,ge
 import { FirebaseError, initializeApp } from "firebase/app";
 // import { getFirestore,doc, getDoc } from "firebase/firestore";
 import { setPersistence ,browserSessionPersistence, inMemoryPersistence } from "firebase/auth";
-import { getStorage , connectStorageEmulator,ref,uploadBytes,listAll,list ,getDownloadURL} from "firebase/storage";
+import { getStorage , connectStorageEmulator,ref,uploadBytes,listAll,list ,getDownloadURL,deleteObject} from "firebase/storage";
 
 // const firebaseConfig = {
 //     apiKey: process.env.FIREBASE_apikey,
@@ -58,6 +58,16 @@ export async function uploadFile(dir,filename,file,storage){
         console.log(snapshot)
         return await getDownloadURL(snapshot.ref)
     });
+}
+
+export async function deleteFile(dir,filename,storage){
+    const storageRef = ref(storage,`${dir}${filename}`);
+    try{
+        return await deleteObject(storageRef)
+    }catch{
+        console.log("no this file")
+    }
+    
 }
 
 export async function uploadFormImageFiles(e,dir,filename){

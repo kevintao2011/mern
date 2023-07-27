@@ -1,7 +1,9 @@
 import React, {useState,useEffect} from 'react'
 import { useAuth } from '../../components/session';
 import { useParams,useNavigate,Link } from 'react-router-dom';
-import { auth } from '../../utils/firebasefunction';
+import { auth,deleteFile,storage } from '../../utils/firebasefunction';
+
+
 const Manage = () => {
     const {code} = useParams()
     const [tab, settab] = useState('Activity')
@@ -12,7 +14,46 @@ const Manage = () => {
     const {Soc,currentUser} = useAuth()
     const navigate = useNavigate()
     console.log(code)
+    async function removeActivity(id){
+        const reqbody = {
+            "user":{
+                token:await auth.currentUser.getIdToken()
+            },
+            "data":{
+                _id:id
+            }
+        }
+        await fetch('/api/removeactivity', { 
+            method: "POST",
+            body: JSON.stringify(reqbody),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
+            
+        }).then(async response => {
+            
+            if (response.ok){
+                // registered
+                deleteFile(`${code}/Activity/${id}/`,"Poster",storage)
+                console.log("recieved")
+                setActivity(Activity.filter(a=>a._id!==id))
+                const data = await response.json()
+                console.log("Activity",data)
+                
+                
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("data.error",data)
+                
+            }  
+        })
+    }
     useEffect(() => {
+        
       async function getSocActivity(){
         await fetch('/api/getsocactivity', { 
             method: "POST",
@@ -324,7 +365,11 @@ const Manage = () => {
                                                         <div className="w-1/3 flex justify-center">
                                                             <button className='w-1/3 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button>
                                                             <button className='w-1/3 flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={activity._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editactivity`,{state:{Product:Product}})}}> Manage </button>
-                                                            <button className='w-1/3 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'> Delete </button>
+                                                            <button className='w-1/3 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'
+                                                                onClick={()=>{removeActivity(activity._id)}}
+                                                            > 
+                                                                Delete 
+                                                            </button>
                                                             
                                                         </div>
                                                         
