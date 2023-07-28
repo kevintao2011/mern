@@ -17,9 +17,43 @@ const EditProduct = () => {
     const [Submit, setSubmit] = useState()
     const [IconMap, setIconMap] = useState({})
     const [Edit, setEdit] = useState()
+    const [ProductIconURL, setProductIconURL] = useState()
     
 
-    
+    async function changeProductMainIcon(e){ //upload option icon
+        e.preventDefault()
+        console.log("Uploading to",`${code}/product/${id}/ProductIcon`)
+        const file = e.target.files[0];
+        await uploadFile(`${code}/product/${id}/`,`ProductIcon`,file,storage)
+            .then(async ResultURL=>{
+                console.log("PosterURL",ResultURL)
+                await fetch("/api/changeproductmainicon",{
+                    method: "POST",
+                    body: JSON.stringify({
+                        user:{
+                            token:await auth.currentUser.getIdToken()
+                        },
+                        data:{
+                            product_icon:ResultURL,
+                            product_id:id,
+                        }
+                    }),
+                    headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    mode:'cors'
+                    
+                })
+                .then(response=>{
+                    if( response.ok){
+                        setProductIconURL(ResultURL)
+                        
+                    }
+                })
+            }
+        )
+    }
     
     const Inputblock = (props) => {
         const index = props.index
@@ -83,6 +117,8 @@ const EditProduct = () => {
                 }
             )
         }
+
+       
 
         // handle single option
         async function handleEdit(e){
@@ -328,8 +364,8 @@ const EditProduct = () => {
                                         )
                                     }
                                     
-                                    <input type="file" id={defaultValue.name} name="image" onChange={(e)=>{UploadSingle(e);}}/>
-                                    <p>Option {defaultValue.name}</p>
+                                    <input type="file" id={defaultValue.index} name="image" onChange={(e)=>{UploadSingle(e);}}/>
+                                    <p>Option Image</p>
                                     <p className='text-red-600'>
                                         {Status}
                                     </p>
@@ -572,7 +608,7 @@ const EditProduct = () => {
         // setProduct(product)
         async function fetchProductInfo(){
             console.log("fetching activity: ", id)
-            await fetch('/api/product', { 
+            await fetch('/api/getproduct', { 
             method: "POST",
             body: JSON.stringify({
                 user:{
@@ -600,6 +636,7 @@ const EditProduct = () => {
                     console.log("Product.variants",data.variants)
                     return(<Inputblock index={i} info={variant} />);
                 })
+                setProductIconURL(data.product_icon)
                 
                 console.log("varaintList",varaintList)
                 setproductVariants(varaintList)
@@ -626,114 +663,141 @@ const EditProduct = () => {
     return (
         Product&&CatOption&&(
             
-            <div className=" mainpage-i flex flex-col items-center justify-center">
+            <div className=" mainpage-i flex flex-col items-center justify-center ">
                 <h1 className='selectlink'>Edit Product</h1>
                 
-                <form action="" onSubmit={(e)=>{handleSubmit(e)}} className='bg-gray-100 p-10 rounded-lg w-10/12'>
-                    
-                    <div className="flex flex-row py-2 justify-between"> 
-                        <div className="">
-                            
-                        </div>
-                        <label htmlFor="society" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                            Society
-                        </label>
-                        <span className='px-5'></span>
-
-                        <input 
-                            type="text"
-                            name="code" 
-                            id="code"  
-                            required="required" 
-                            value={code}
-                            placeholder={code}
-                            className='rounded-md px-5 w-full justify-self-center'
-                            disabled={true}
-                        />
-
-                    </div>
-
-                    <div className="flex flex-row py-2 justify-between">
-                        <label htmlFor="product_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                            Product Name
-                        </label>
-                        <span className='px-5'></span>
-                        <input 
-                            type="text"
-                            name="product_name" 
-                            id="product_name"  
-                            required="required" 
-                            className='rounded-md px-5 w-full justify-self-center'
-                            defaultValue={Product.product_name}
-                        />
+                <div className="flex flex-row bg-gray-100 p-10 rounded-lg w-10/12">
+                    <form action="" onSubmit={(e)=>{handleSubmit(e)}} className='w-3/4'>
                         
-                    
-                    </div>
+                        <div className="flex flex-row py-2 justify-between"> 
+                            <div className="">
+                                
+                            </div>
+                            <label htmlFor="society" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                                Society
+                            </label>
+                            <span className='px-5'></span>
 
-                    <div className="flex flex-row py-2 justify-between">
-                        <label htmlFor="type" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start" >
-                            Product Category
-                        </label>
-                        <span className='px-5'></span>
-                        {/*<input 
-                            type="text"
-                            name="type" 
-                            id="type"  
-                            required="required" 
-                            className='rounded-md px-5 w-full justify-self-center'
-                        /> */}
-                        <select 
-                            name="type" 
-                            id="type"
-                            required="required" 
-                            className='rounded-md px-5 w-full justify-self-center'
-                            defaultValue={Product.type}
-                            onChange={(e)=>{setCategory(e.target.value);/*console.log(productVariants[0].type)*/}}
-                        >
-                            {CatOption.map(option=>{
-                                return(
-                                    <option value={option}>{option}</option>
-                                )
-                            })}
-                            
-                            {/* <option value="clothes">clothes</option>
-                            <option value="souvernirs">souvernirs</option>
-                            <option value="membership">membership</option> */}
-                        </select>
-                    
-                    </div>
-                    <div className="flex flex-row py-2 justify-between">
-                        <div className="">
-                            
+                            <input 
+                                type="text"
+                                name="code" 
+                                id="code"  
+                                required="required" 
+                                value={code}
+                                placeholder={code}
+                                className='rounded-md px-5 w-full justify-self-center'
+                                disabled={true}
+                            />
+
                         </div>
-                        <label htmlFor="status" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                            Release Now? 
-                        </label>
-                        <span className='px-5'></span>
-                        <select 
-                            name="status" 
-                            id="status"  
-                            defaultValue={Product.status} 
-                            required="required" 
-                            className='rounded-md px-5 w-full justify-self-center'
-                        >
-                            <option value="inactive">Later</option>
-                            <option value="active">Now</option>
+
+                        <div className="flex flex-row py-2 justify-between">
+                            <label htmlFor="product_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                                Product Name
+                            </label>
+                            <span className='px-5'></span>
+                            <input 
+                                type="text"
+                                name="product_name" 
+                                id="product_name"  
+                                required="required" 
+                                className='rounded-md px-5 w-full justify-self-center'
+                                defaultValue={Product.product_name}
+                            />
                             
-                        </select>
+                        
+                        </div>
+
+                        <div className="flex flex-row py-2 justify-between">
+                            <label htmlFor="type" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start" >
+                                Product Category
+                            </label>
+                            <span className='px-5'></span>
+                            {/*<input 
+                                type="text"
+                                name="type" 
+                                id="type"  
+                                required="required" 
+                                className='rounded-md px-5 w-full justify-self-center'
+                            /> */}
+                            <select 
+                                name="type" 
+                                id="type"
+                                required="required" 
+                                className='rounded-md px-5 w-full justify-self-center'
+                                defaultValue={Product.type}
+                                onChange={(e)=>{setCategory(e.target.value);/*console.log(productVariants[0].type)*/}}
+                            >
+                                {CatOption.map(option=>{
+                                    return(
+                                        <option value={option}>{option}</option>
+                                    )
+                                })}
+                                
+                                {/* <option value="clothes">clothes</option>
+                                <option value="souvernirs">souvernirs</option>
+                                <option value="membership">membership</option> */}
+                            </select>
+                        
+                        </div>
+                        <div className="flex flex-row py-2 justify-between">
+                            <div className="">
+                                
+                            </div>
+                            <label htmlFor="status" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                                Release Now? 
+                            </label>
+                            <span className='px-5'></span>
+                            <select 
+                                name="status" 
+                                id="status"  
+                                defaultValue={Product.status} 
+                                required="required" 
+                                className='rounded-md px-5 w-full justify-self-center'
+                            >
+                                <option value="inactive">Later</option>
+                                <option value="active">Now</option>
+                                
+                            </select>
+                        </div>
+                
+                        <div className="flex flex-row py-2 w-full justify-end">
+                            <button  
+                                className="p-3  bg-su-green text-lg text-white rounded-md" 
+                                type="submit"
+                                // disabled={!Submit}
+                                
+                            >
+                                update 
+                            </button>
+                        </div>
+                    </form>
+                    <div className="flex flex-col w-1/4 px-5">
+                        <p className='selectlink '>Product Icon</p>
+                        {
+                            ProductIconURL&&(
+                                <img 
+                                    src     ={ProductIconURL}
+                                    alt     = {`Product Icon`}
+                                    width   = {200}
+                                    height  = {200}
+                                    className = "object-contain rounded-3xl "
+                                />
+                            )
+                        }
+                        <input 
+                            type="file" 
+                            name="" 
+                            id="" 
+                            onChange={(e)=>{
+                                changeProductMainIcon(e)
+                            }}
+                        />
                     </div>
-            
-                    <div className="flex flex-row py-2 w-full justify-end">
-                        <button  
-                            className="p-3  bg-su-green text-lg text-white rounded-md" 
-                            type="submit"
-                            // disabled={!Submit}
-                            
-                        >
-                            update 
-                        </button>
-                    </div>
-                </form>    
+                </div>
+                    
+                
+
                 {/* {
                     addingBlock&&(
                         <div className="flex flex-col bg-gray-100 p-10 rounded-lg w-10/12">

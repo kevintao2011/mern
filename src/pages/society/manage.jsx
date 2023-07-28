@@ -350,20 +350,32 @@ const Manage = () => {
                                 {Activity&&(
                                     <div className="flex flex-col ">
                                         <div className="flex flex-row justify-between ">
-                                            <p className='w-1/3 justify-center'>Date</p>
+                                            <p className='w-1/6 justify-center'>Date</p>
+                                            <p className='w-1/6 justify-center'>Single Date</p>
                                             <p className='w-1/3 flex justify-center'>Activity </p>
-                                            <p className='w-1/3 flex justify-center'> </p>
+                                            <p className='w-1/3 flex justify-center'> Action </p>
                                         </div>
                                         <ul className='list-none'>             
                                             {Activity.map(activity => {
+                                                activity.start_date = new Date(activity.start_date);
+                                                
                                                 console.log("activity",activity)
                                                 return(
                                                     <li key={activity._id}>
                                                         <div className="flex flex-row justify-between" >
-                                                        <p className='w-1/3 justify-center'>{(Date(activity.start_date)).substring(0,15)}</p>
+                                                        <p className='w-1/6 justify-center'>{(activity.start_date.toISOString().substring(0, 10))}</p>
+                                                        {
+                                                            activity.single_date?(
+                                                                <p className='w-1/6 justify-center'>Yes</p>
+                                                            ):(
+                                                                <p className='w-1/6 justify-center'>No</p>
+                                                            )
+                                                        }
+                                                        
+                                                        
                                                         <p className='w-1/3 flex justify-center'>{activity.activity_name} </p>
                                                         <div className="w-1/3 flex justify-center">
-                                                            <button className='w-1/3 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button>
+                                                            {/* <button className='w-1/3 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button> */}
                                                             <button className='w-1/3 flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={activity._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editactivity`,{state:{Product:Product}})}}> Manage </button>
                                                             <button className='w-1/3 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'
                                                                 onClick={()=>{removeActivity(activity._id)}}

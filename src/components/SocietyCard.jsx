@@ -27,7 +27,7 @@ const SocietyCard = (props) => {
         
         <div className="flex-row-reverse flex p-2 justify-center">
             {managebutton?(
-                <button onClick={()=>{navigate(`/society/${code}/manage`)}} className=' rounded-full p-2  bg-slate-300 w-3/12 text-base'> manage </button>)
+                <button onClick={()=>{navigate(`/society/${code}/manage`)}} className=' rounded-full p-2  bg-slate-300 w-3/12 text-base'> manage society </button>)
                 :
                 (<></>)
             }
