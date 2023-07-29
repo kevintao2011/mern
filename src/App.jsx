@@ -24,6 +24,7 @@ import CounterForm from './components/counterForm';
 import EditProduct from './pages/society/product/EditProduct';
 import Storage from './pages/storage/Storage';
 import Shop from './pages/shop/shop';
+import Product from './pages/shop/Product';
 function App() {
   console.log("load app.jsx")
   return (
@@ -45,9 +46,11 @@ function App() {
             </Route>
             
             
-            <Route path="shop" element={<Shop/>}>
-            
+            <Route path="shop" >
+              <Route exact path="product" element={<Shop/>}/>
+              <Route exact path="product/:id" element={<Product />} />
             </Route>
+            
             
             <Route exact path="society" element={<SocietyList />} />
             <Route exact path="society/:code" element={<Society />} >  

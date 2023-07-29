@@ -1,6 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import { useAuth } from '../../components/session'
 import { auth } from '../../utils/firebasefunction'
+import { useNavigate } from 'react-router-dom'
 const Shop = () => {
   const {userDBInfo} = useAuth()
   console.log(userDBInfo)
@@ -9,6 +10,7 @@ const Shop = () => {
   const [Products, setProducts] = useState([])
   const [displayProduct, setdisplayProduct] = useState()
   const {currentUser} = useAuth()
+  const navigate = useNavigate()
   async function getCategory(){
     await fetch('/api/getcatoption', { 
         method: "POST",
@@ -135,9 +137,12 @@ const Shop = () => {
                   {
                     product.product_icon?(
                       <div className="ProductCard p-2 flex flex-col justify-center items-center">
+                        <button
+                          onClick={(e)=>{navigate(`${product._id}`)}}
+                        >
                           <img 
                             src     = {product.product_icon}
-                            alt     = "promptation logo"
+                            alt     = {product.product_name}
                             width   = {200}
                             height  = {200}
                             className = "object-contain rounded-xl"
@@ -145,9 +150,14 @@ const Shop = () => {
                           <div className="justify-center">
                             <p>{product.product_name}</p>
                           </div>
+                        </button>
+                          
                       </div>
                     ):(
                       <div className="ProductCard p-2 flex flex-col justify-center items-center">
+                        <button
+                          onClick={(e)=>{navigate(`${product._id}`)}}
+                        >
                           <img 
                             src     = "/assests/img/imgplaceholder.jpg"
                             alt     = "promptation logo"
@@ -158,6 +168,8 @@ const Shop = () => {
                           <div className="flex flex-row justify-center">
                             <p>{product.product_name}</p>
                           </div>
+                        </button>
+                          
                       </div>
                     )
                     
