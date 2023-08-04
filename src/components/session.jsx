@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [userDBInfo, setuserDBInfo] = useState()
   const [Soc, setSoc] = useState()
+  const [Cart, setCart] = useState()
 
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth,email, password)
@@ -62,6 +63,12 @@ export function AuthProvider({ children }) {
                 const data = await response.json()
                 console.log("userInfo",data)
                 setuserDBInfo(data)
+                if(!Cart){
+                  console.log("Cart in first load",Cart)
+                  setCart(data.cart)
+                  sessionStorage.setItem("Cart",JSON.stringify({[auth.currentUser.email]:data.cart}))
+                }
+                
                 
                 
                 
@@ -145,7 +152,9 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
-    setSoc
+    setSoc,
+    Cart,
+    setCart
     
   }
   

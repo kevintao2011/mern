@@ -25,6 +25,9 @@ import EditProduct from './pages/society/product/EditProduct';
 import Storage from './pages/storage/Storage';
 import Shop from './pages/shop/shop';
 import Product from './pages/shop/Product';
+import Cart from './pages/shop/Cart';
+import CheckOut from './pages/shop/CheckOut';
+
 function App() {
   console.log("load app.jsx")
   return (
@@ -48,6 +51,8 @@ function App() {
             
             <Route path="shop" >
               <Route exact path="product" element={<Shop/>}/>
+              <Route exact path="cart" element={<Cart/>}/>
+              <Route exact path="checkout" element={<CheckOut/>}/>
               <Route exact path="product/:id" element={<Product />} />
             </Route>
             

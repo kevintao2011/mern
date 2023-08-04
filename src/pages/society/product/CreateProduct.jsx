@@ -312,6 +312,43 @@ const CreateProduct = () => {
                 
                 </div>
 
+                <div className="flex flex-row py-2 justify-between">
+                    
+                    <label htmlFor="description_chi" className="w-full block  text-lg font-medium greentxt justify-self-start">
+                        Desciption (Chinese)
+                    </label>
+                    <span className='px-5'></span>
+                    
+                    <textarea id="description_chi" name='description_chi' className="w-full" rows="4" cols="50">
+
+</textarea>
+               
+
+                </div>
+
+                <div className="flex flex-row py-2 justify-between">
+                    
+                    <label htmlFor="description_eng" className="w-full block  text-lg font-medium greentxt justify-self-start">
+                        Desciption (English)
+                    </label>
+                    <span className='px-5'></span>
+                    
+                    <textarea id="description_eng" name='description_eng' className="w-full" rows="4" cols="50">
+
+</textarea>
+               
+
+                </div>
+                
+                     {/* <input 
+                        type="text"
+                        name="description_chi" 
+                        id="description_chi"  
+                        required="required" 
+                        placeholder="description"
+                        className='rounded-md px-5 w-full justify-self-center'
+                        
+                    /> */}
                 {/* <div className="flex flex-row py-2 justify-between">
                     
                     <label htmlFor="no_variants" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">

@@ -20,16 +20,28 @@
   width: 100vw;
   
 }
-.mainpage-1{
+.mainpage-new{
   width: 100vw;
   height: 100vh;
-  background-image: url("../public/assests/img/background.png");
+  background-image: url("../public/assests/img/newBackgroundHigh.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   
   /* make the background consistent or in samge */
   /* background-attachment: fixed;  */
 }
+
+.mainpage-1{
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../public/assests/img/background.png");
+  background-repeat: no-repeat;
+  background-size:auto;
+  
+  /* make the background consistent or in samge */
+  /* background-attachment: fixed;  */
+}
+
 .description{
   font-size: 12px;
 }
@@ -58,6 +70,16 @@ body {
   .red_btn {
     @apply rounded-full border-red-600 bg-red-600 py-5 px-5 text-white transition-all hover:bg-white hover:text-red-600  
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
 
   .selectlink{
     font-family: 'Tensentype RuiHei GB18030';

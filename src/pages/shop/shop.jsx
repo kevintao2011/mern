@@ -95,7 +95,8 @@ const Shop = () => {
 
   useEffect(()=>{
     if(ProductReference!=="all"){
-      setdisplayProduct(Products.filter(p=>p.type===ProductReference))
+      setdisplayProduct(Products.filter(p=>(p.type===ProductReference&&p.status==="active")))
+      console.log("displayProduct",displayProduct)
     }else{
       setdisplayProduct(Products)
     }
@@ -129,7 +130,7 @@ const Shop = () => {
         <div className="flex flex-row  justify-center">
           <p className='selectlink text-3xl p-5'>Product</p>
         </div>
-        <div className="grid grid-cols-4 grid-flow-row">
+        <div className="grid grid-cols-4 grid-flow-row ">
           {
             displayProduct?.map(product=>{
               return(
@@ -157,6 +158,7 @@ const Shop = () => {
                       <div className="ProductCard p-2 flex flex-col justify-center items-center">
                         <button
                           onClick={(e)=>{navigate(`${product._id}`)}}
+                          className=''
                         >
                           <img 
                             src     = "/assests/img/imgplaceholder.jpg"
@@ -165,9 +167,10 @@ const Shop = () => {
                             height  = {200}
                             className = "object-contain rounded-xl"
                           />
-                          <div className="flex flex-row justify-center">
-                            <p>{product.product_name}</p>
+                          <div className=" justify-center">
+                            <p className="text-ellipsis w-48 h-10 overflow-auto hover:overflow-x-scroll no-scrollbar">{product.product_name}</p>
                           </div>
+                          
                         </button>
                           
                       </div>

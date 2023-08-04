@@ -760,6 +760,34 @@ const EditProduct = () => {
                                 
                             </select>
                         </div>
+
+                        <div className="flex flex-row py-2 justify-between">
+                    
+                            <label htmlFor="description_chi" className="w-full block  text-lg font-medium greentxt justify-self-start">
+                                Desciption (Chinese)
+                            </label>
+                            <span className='px-5'></span>
+                            
+                            <textarea id="description_chi" name='description_chi' className="w-full" rows="4" cols="50" defaultValue={Product.description_chi}>
+
+        </textarea>
+                    
+
+                        </div>
+
+                        <div className="flex flex-row py-2 justify-between">
+                    
+                            <label htmlFor="description_eng" className="w-full block  text-lg font-medium greentxt justify-self-start">
+                                Desciption (English)
+                            </label>
+                            <span className='px-5'></span>
+                            
+                            <textarea id="description_eng" name='description_eng' className="w-full" rows="4" cols="50" defaultValue={Product.description_eng}>
+
+        </textarea>
+                    
+
+                        </div>
                 
                         <div className="flex flex-row py-2 w-full justify-end">
                             <button  

@@ -14,10 +14,10 @@ const SocietyCard = (props) => {
 
   
   return (
-    <div className="w-1/2 h-full bg-su-green  rounded-full m-5   ">
+    <div className="w-1/2 h-full bg-su-green  rounded-3xl m-5   ">
         
-    <div className="flex flex-row p-5">
-            <p className=' rounded-full text-white px-5 text-base '> 
+        <div className="flex flex-row p-5">
+            <p className=' rounded-3xl text-white px-5 text-base '> 
                 {title}-{type}
             </p>
             {/* <p className=' rounded-full m-2 px-5 bg-slate-300 w-3/12'> 
@@ -27,7 +27,7 @@ const SocietyCard = (props) => {
         
         <div className="flex-row-reverse flex p-2 justify-center">
             {managebutton?(
-                <button onClick={()=>{navigate(`/society/${code}/manage`)}} className=' rounded-full p-2  bg-slate-300 w-3/12 text-base'> manage society </button>)
+                <button onClick={()=>{navigate(`/society/${code}/manage`)}} className=' rounded-xl p-1 text-white'> manage society </button>)
                 :
                 (<></>)
             }

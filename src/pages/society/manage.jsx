@@ -277,6 +277,33 @@ const Manage = () => {
                     {Soc[code].session}
                     </div>
                 </div>
+                <div className=" flex flex-col py-5 w-full">
+                    <div className=" w-full ">
+                        <p>payme link</p>
+                    </div>
+                    
+                    <div className=" w-10/12 justify-center">
+                    
+                        
+                            <form action="" className='flex flex-row '>
+                            {   Soc[code].payme?(
+                                    <input type="text" name="payme" id="payme" defaultValue={Soc[code].payme}/>
+                                    
+                                ):(
+                                    <input type="text" name="payme" id="payme" />
+                                )
+                            }
+                                <button type='submit'>update</button>
+                            </form>
+                            
+                        
+                        
+                    
+                    
+                    </div>
+                </div>
+                
+                
 
                 
                 
@@ -432,15 +459,18 @@ const Manage = () => {
                                                                     return(
                                                                         <div className="w-full flex flex-col">
                                                                             <div className="flex flex-row w-full px-2">
-                                                                                <p className='  rounded-md bg-cyan-500'>{productObj.name}</p>
+                                                                                {/* <p className='  rounded-md bg-cyan-500'>{productObj.name}</p> */}
+                                                                                <p className='  rounded-md'>{productObj.name}</p>
                                                                             </div>
                                                                             
                                                                             <div className="flex flex-row w-full">
                                                                                 <div className="px-2 w-1/2 ">
-                                                                                    <p className='rounded-md bg-orange-600'>${productObj.price}</p>
+                                                                                    {/* <p className='rounded-md bg-orange-600'>${productObj.price}</p> */}
+                                                                                    <p className='rounded-md'>${productObj.price}</p>
                                                                                 </div>
                                                                                 <div className="px-2 w-1/2">
-                                                                                    <p className='px-2 w-1/2 rounded-md bg-blue-700'>{productObj.inventory}pcs</p>
+                                                                                    {/* <p className='px-2 w-1/2 rounded-md bg-blue-700'>{productObj.inventory}pcs</p> */}
+                                                                                    <p className='px-2 w-1/2 rounded-md '>{productObj.inventory}pcs</p>
                                                                                 </div>
                                                                                 
                                                                                 

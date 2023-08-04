@@ -14,7 +14,7 @@ const Home = () => {
     <div className=''>
         
         <div 
-          className="mainpage-1 flex flex-col justify-center "
+          className="mainpage-new flex flex-col justify-center "
         >
           <div className="flex flex-row ">
             <div className="w-1/2 flex flex-col">
@@ -64,7 +64,7 @@ const Home = () => {
                           商店 Shop
                         </Link> */}
                         <Link 
-                            to={"/shop"}
+                            to={"/shop/product"}
                             className="dropdown_link text-su-green text-lg font-semibold py-5"
                         >
                             商店 Shop
