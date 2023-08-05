@@ -164,7 +164,17 @@ const Cart = () => {
                           </div>
                         )
                       }
-                      <button className='selectlink text-white px-5'> cash </button>
+                      <button 
+                        className='selectlink text-white px-5'
+                        onClick={()=>{
+                          if (!(userDBInfo.includes(b)||productsByBrand[b].filter(o=>o.type==='membership'))){
+                            // need to be member first 
+                          }
+                          navigate("../checkout",{state:{code:b,products:productsByBrand[b],payment:"Cash"}}
+                          )
+                        }}
+                      
+                      > cash </button>
                     </div>
 
                     
@@ -178,7 +188,7 @@ const Cart = () => {
         }
       
       </div>
-      <div className="">
+      {/* <div className="">
         <div className="">
           <p
             className='selectlink text-4xl'
@@ -191,7 +201,7 @@ const Cart = () => {
             </li>
           </ol>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
