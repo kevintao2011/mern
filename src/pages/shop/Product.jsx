@@ -274,6 +274,7 @@ const Product = () => {
                                             _id:ProductInfo._id,
                                             product_name:ProductInfo.product_name,
                                             code:ProductInfo.code,
+                                            type:ProductInfo.type,
                                             option:Variants[SelectedOption].name,
                                             price:Variants[SelectedOption].price,
                                             quantity:Quantity

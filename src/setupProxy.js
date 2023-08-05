@@ -4,14 +4,14 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://localhost:3001',
+      target: process.env.EXPRESS_SERVER_IP,
       changeOrigin: true,
     })
   );
   app.use(
     '/storage',
     createProxyMiddleware({
-      target: 'http://localhost:4000',
+      target: process.env.FIREBASE_STORAGE_SERVER_IP,
       changeOrigin: true,
     })
   );

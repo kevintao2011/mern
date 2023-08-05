@@ -22,7 +22,50 @@ const Profile = () => {
   const {currentUser,userDBInfo,Soc} = useAuth()
   const [Societies, setSocieties] = useState([])
   const navigate = useNavigate()
+  const [Orders, setOrders] = useState([])
   console.log("societies",Soc)
+  useEffect(() => {
+    
+    async function fetchOrder(){
+      await fetch(
+        "/api/getorders",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            user:{
+              token:await auth.currentUser.getIdToken()
+            },
+            sid:userDBInfo.sid
+          }),
+          headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          mode:'cors'
+        }
+      ).then(async response =>{
+        
+        if (response.ok){     
+          const data = await response.json()
+          setOrders(data)
+          
+        }else {
+          
+        }
+      })
+    }
+    
+    fetchOrder()
+    // .then(l=>{
+    //   console.log(l)
+    //   setOrders(l)
+    // })
+
+    return () => {
+      
+    }
+  }, [])
+  
   async function fetchProfileInfo(){
         
         await currentUser.getIdToken().then(async token=>{
@@ -51,26 +94,12 @@ const Profile = () => {
       
         
   }
-  // useEffect(() => {
-  //   // window.onbeforeunload = function() {
-  //   //     setinit((prev)=>!prev);
-  //   //     console.log("use-effect fetchProfileInfo")
-  //   //     fetchProfileInfo()
-  //   // };
-  //   if(auth.currentUser){fetchProfileInfo()}
-    
-  //   return () => {
-  //     // window.onbeforeunload = null;
-  //   }
-    
-  // }, [])
+  
   useEffect(() => {
     console.log("userDBInfo.societies",typeof(userDBInfo))
     if(userDBInfo.societies!==""){
       setSocieties(userDBInfo.societies)
     }
-    
-  
     return () => {
       
     }
@@ -317,7 +346,17 @@ const Profile = () => {
                 )}
                 
                 <img src="./assests/img/MsgBoard.svg" alt="" />
-                <ProductCard />
+                <div className="w-full bg-su-green rounded-3xl flex flex-col p-5">
+                  {
+                    Orders?.map(order=>{
+                      return(
+                        <div className=" bg-slate-100 p-1 rounded-md my-2">
+                          <p>訂單編號 {order._id}</p>
+                        </div>
+                      )
+                    })
+                  }
+                </div>
             </div>
           </div>
           )

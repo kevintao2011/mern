@@ -53,6 +53,8 @@
   background-size:cover
 }
 
+
+
 body {
   color: black;
 }
@@ -70,7 +72,11 @@ body {
   .red_btn {
     @apply rounded-full border-red-600 bg-red-600 py-5 px-5 text-white transition-all hover:bg-white hover:text-red-600  
   }
-
+  .billbg{
+    background-image: url("../public/assests/img/cart/paperlow.jpg");
+    background-repeat: repeat;
+    background-size:cover;
+  }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -90,6 +96,18 @@ body {
     letter-spacing: 0.2em;
     @apply  text-su-green transition-all hover:bg-white hover:text-su-green font-bold
   }
+
+  .formtext{
+    color: #000;
+    font-family: 'tensentype-ruihei', 'sans-serif';
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 3px; 
+  }
+
+ 
 
   .greentxt{
     font-family: 'Tensentype RuiHei GB18030';
