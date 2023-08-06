@@ -200,16 +200,19 @@ const Product = () => {
                             
                             <div className="py-10 flex-flex-col">
                                 <div className="max-w-screen-sm">
-                                    <div className="flex flex-row justify-end max-w-screen-sm">
+                                    <div className="flex flex-row justify-start max-w-screen-sm">
                                         <p className='flex text-3xl font-bold'>{ProductInfo.product_name}</p>
                                         
                                     </div>
                                 </div>
                                 <div className="py-10 max-w-screen-sm">
-                                    {ProductInfo.description_chi}
+                                    <textarea name="" id="" cols="80" rows="20" disabled={true} readonly={true}>
+                                        {ProductInfo.description_chi}
+                                    </textarea>
+                              
                                 </div>
                                 <div className="py-10 max-w-screen-sm">
-                                    {ProductInfo.description_eng}
+                                    <p>{ProductInfo.description_eng}</p>
                                 </div>
                                
                                 <div className="flex flex-row">

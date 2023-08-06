@@ -351,7 +351,32 @@ const Profile = () => {
                     Orders?.map(order=>{
                       return(
                         <div className=" bg-slate-100 p-1 rounded-md my-2">
-                          <p>訂單編號 {order._id}</p>
+                          <div className="flex flex-row">
+                            <p>訂單編號 {order._id}</p>
+                            <p className='mx-10'>付款方式 {order.payment_method}</p>
+                          </div>
+
+                          <div className="flex flex-row">
+                            {
+                              Soc[order.code]['society_chinese']?(
+                                <p>學會 {Soc[order.code]['society_chinese']}</p>
+                              ):(
+                                <p>學會 {Soc[order.code]['society_eng']}</p>
+                              )
+                            }
+                            <p className='mx-10'>狀態 {order.status}</p>
+                          </div>
+                        
+                          
+                          
+                          <p>訂單物品</p>
+                          {
+                            order.products.map(item=>{
+                              return(
+                                <p>{item.product_name}-{item.option} x {item.quantity}</p>
+                              )
+                            })
+                          }
                         </div>
                       )
                     })

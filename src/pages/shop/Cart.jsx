@@ -11,6 +11,7 @@ const Cart = () => {
   const [Brands, setBrands] = useState([])
   const navigate = useNavigate()
   const [Chaning, setChaning] = useState()
+  const [Error, setError] = useState()
   const SocCart = () => {
     return (
       <div>Cart</div>
@@ -36,7 +37,7 @@ const Cart = () => {
     setBrands(Object.keys(tempProducts))
     setproductsByBrand(tempProducts)
 
-    
+    console.log("Cart",Cart)
     
     return () => {
       
@@ -167,14 +168,50 @@ const Cart = () => {
                       <button 
                         className='selectlink text-white px-5'
                         onClick={()=>{
-                          if (!(userDBInfo.includes(b)||productsByBrand[b].filter(o=>o.type==='membership'))){
-                            // need to be member first 
+                          var isSocMember = false
+                          var isSUmember = false
+
+                          if(productsByBrand["EXCO"]){
+                            if(productsByBrand["EXCO"].filter(o=>o.type==='membership').length>0){
+                              isSUmember = true
+                            }
+                            userDBInfo.societies.forEach(o=>{
+                              console.log("Check:",Object.keys(o),"==","SU")
+                              if(Object.keys(o).includes("SU")){
+                                isSocMember=true
+                              }
+                            })
+                            if((userDBInfo.order.filter(o=>(o.type==='membership')&&o.code==="EXCO")).length>0){ //order hv member                         
+                              isSocMember=true
+                            }
                           }
-                          navigate("../checkout",{state:{code:b,products:productsByBrand[b],payment:"Cash"}}
-                          )
+                          console.log(productsByBrand[b].filter(o=>(o.type==='membership')&&o.code===b))
+                          if ((productsByBrand[b].filter(o=>(o.type==='membership')&&o.code===b)).length>0){ //have membership in cart
+                            isSocMember=true
+                          }
+                          userDBInfo.societies.forEach(o=>{
+                            console.log("Check:",Object.keys(o),"==",[b])
+                            if(Object.keys(o).includes(b)){
+                              isSocMember=true
+                            }
+                          })
+                          if((userDBInfo.order.filter(o=>o.type==='membership')).length>0){ //order hv member                         
+                            isSocMember=true
+                          }
+
+                          console.log("isSUmember",isSUmember)
+                          console.log("isSocMember",isSocMember)
+                          
+
+                          if (isSocMember && isSUmember){
+                            navigate("../checkout",{state:{code:b,products:productsByBrand[b],payment:"Cash"}})
+                          }else{
+                            setError(`No Membership item in cart or You are not member of SU or society!`)
+                          }
                         }}
-                      
-                      > cash </button>
+                      >
+                       cash 
+                      </button>
                     </div>
 
                     
@@ -186,22 +223,31 @@ const Cart = () => {
             )
           })   
         }
-      
+
       </div>
-      {/* <div className="">
+      {
+        Error&&(
+          <p className='text-red-600'>{Error}</p>
+        )
+      }
+      <div className="">
         <div className="">
           <p
             className='selectlink text-4xl'
-          >Reminder</p>
+          >注意事項</p>
         </div>
         <div className="p-5 bg-slate-100 rounded-2xl">
           <ol>
             <li className='selectlink '>
-              This
+              <p>1. 此購物系統將以學會為付款單位。</p>
+              <p>2. 參加任何活動或購買任何物品前必須成為學生會之會員以及該學會之成員,因此請先購買會籍或連同會籍付款,否則將不能進行結算。如未購買學生會會籍,請先購買學生會會籍。</p>
+              <p>3. 如果會員被取消物品之購買資格，例如瞞稱為該學系的學生以購買該學系之迎新營,那麼該會員在該學會所購買的之任何訂單將會被取消。</p>
+              <p>4. 如選擇網上付款，請在結算時將交易截圖上載到系統。</p>
+            
             </li>
           </ol>
         </div>
-      </div> */}
+      </div>
     </div>
   )
 }

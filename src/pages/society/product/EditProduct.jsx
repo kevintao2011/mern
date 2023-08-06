@@ -727,6 +727,7 @@ const EditProduct = () => {
                                 className='rounded-md px-5 w-full justify-self-center'
                                 defaultValue={Product.type}
                                 onChange={(e)=>{setCategory(e.target.value);/*console.log(productVariants[0].type)*/}}
+                                disabled={true}
                             >
                                 {CatOption.map(option=>{
                                     return(

@@ -169,20 +169,31 @@ const CreateProduct = () => {
         });
         console.log("form data",data)
         data.variants=[]
-        data.variant.forEach((v,i)=>{
         
-            console.log(v,i,data.price[i]);
-            data.variants.push({
-                name:v,
-                price:data.price[i],
-                inventory:data.inventory[i],
-                index:i
+        if(data.type[0]==="membership"){
+            data.variants=[
+                {
+                    name:"basic member",
+                    price:data.price[0],
+                    inventory:999,
+                    index:0
+                }
+            ]
+        }else{
+            data.variant.forEach((v,i)=>{
+        
+                console.log(v,i,data.price[i]);
+                data.variants.push({
+                    name:v,
+                    price:data.price[i],
+                    inventory:data.inventory[i],
+                    index:i
+                })
+                
+                delete data.variant[i]
+        
             })
-            
-            delete data.variant[i]
-    
-        })
-        
+        }
         
         console.log("data",data)
         
