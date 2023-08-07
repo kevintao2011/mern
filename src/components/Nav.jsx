@@ -65,20 +65,21 @@ const Nav = () => {
         return (
             <div className="w-full bg-transparent">
                   
-                <nav className="flex flex-row w-full px-10 justify-between items-center">
+                <nav className="flex flex-row w-full  justify-between items-center">
                     
-                    <div className=" w-1/3">
+                    <div className=" w-1/3 ">
                         <Link  //home
                             to={"/"}
-                            className="flex gap-2 "
+                            className="flex justify-start"
+
                         >
-                            <img src="/assests/img/NavBanner/LinguSuLogo.png" alt="" className="" width="100" height="100" />
+                            <img src="/assests/img/NavBanner/LinguSuLogo.png" alt="" className="" width="50rem" height="50rem" />
                             
                             
                         </Link>
                     </div>
                     
-                    <div className="flex flex-row w-1/3 justify-center">
+                <div className="md:flex md:flex-row w-1/3 justify-center hidden">
                     
                         <div className="">
 
@@ -113,15 +114,15 @@ const Nav = () => {
                         
 
                     </div>
-                    <div className="flex flex-row gap-5  w-1/3 justify-end">             
-                        <div className="absolute">
+                    <div className="flex flex-row gap-x-5  w-2/3 md:w-1/3 justify-end">             
+                    <div className="absolute top-5 right-5 ">
                             {currentUser&&userDBInfo&&Cart?(
                                 
                                 <div className="flex flex-col gap-5">
                                     
                                     {
                                         toggleDropdown?(
-                                            <div className="w-full flex-col z-0 origin-top-right">
+                                            <div className="w-full flex-col z-0 origin-top-right ">
                                                 <div className="flex flex-row w-full ">
                                                     <button
                                                         className="justify-end items-end"
@@ -138,7 +139,7 @@ const Nav = () => {
                                                     
                                                 </div>
                                                 
-                                                <div className="absolute right-12 w-32 ">
+                                                <div className="absolute right-2 w-32 ">
                                                     
                                                     <Link 
                                                         to="shop/cart"
@@ -201,13 +202,13 @@ const Nav = () => {
                                             
                                             
                                         ):(
-                                            <button>
+                                            <button className="">
                                                 <img 
                                                     src="/assests/img/NavBanner/dot.svg" 
                                                     alt     = "promptation logo"
                                                     width   = {5}
                                                     height  = {5}
-                                                    className = "object-contain justify-end"
+                                                    className = "object-contain justify-end "
                                                     onClick={()=>{setToggleDropdown(prev=>!prev)}}
                                                 />
                                             </button>
@@ -220,7 +221,7 @@ const Nav = () => {
                                 
                                 
                             ):(
-                                <div className="flex flex-row px-0 gap-5">
+                                <div className="flex flex-row  gap-x-5 top-10 text-xs">
                                     <Link 
                                         to={"/signup"}
                                         className="flex  selectlink"
@@ -228,20 +229,9 @@ const Nav = () => {
                                         Sign Up
                                     </Link>
                                     
-                                    {/* <button 
-                                        className="flex gap-2 selectlink"
-                                        onClick={(e)=>{
-                                            e.preventDefault();
-                                            // alert("'trigggered onclick action'");
-                                            console.log('trigggered onclick action');
-                                        
-                                        }}
-                                    >
-                                        Login
-                                    </button> */}
                                     <Link 
                                         to={"/login"}
-                                        className="flex gap-2 selectlink"
+                                        className="flex gap-2 selectlink top-10"
                                     >
                                         Sign In
                                     </Link>

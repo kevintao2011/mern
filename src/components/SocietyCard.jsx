@@ -14,7 +14,7 @@ const SocietyCard = (props) => {
 
   
   return (
-    <div className="w-1/2 h-full bg-su-green  rounded-3xl m-5   ">
+    <div className="md:m-5 md:m-5  h-full bg-su-green  rounded-3xl   my-10 ">
         
         <div className="flex flex-row p-5">
             <p className=' rounded-3xl text-white px-5 text-base '> 

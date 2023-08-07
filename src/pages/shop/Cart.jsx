@@ -57,7 +57,7 @@ const Cart = () => {
   return (
     
     
-    <div className="w-full flex flex-col p-20">
+    <div className="w-full flex flex-col md:p-20 p-5">
       
       <div className="">
         <p
@@ -72,14 +72,14 @@ const Cart = () => {
               <div className="flex flex-col w-full bg-su-green rounded-3xl p-5 my-10">
                 <div className="w-full flex flex-row ">
                   <p className='selectlink text-white w-8/12'>{b}</p>
-                  <p className='selectlink text-white'>Payment Method</p>
+                  {/* <p className='selectlink text-white'>Payment Method</p> */}
                 </div>
-                <div className="flex flex-row w-full">
-                  <div className="items w-8/12">
+              <div className="flex md:flex-row flex-col w-full ">
+                  <div className="items md:w-8/12 w-ful">
                     {
                       productsByBrand[b]?.map((product,i)=>{
                         return(
-                          <div className="flex flex-row justify-between">
+                          <div className="flex md:flex-row flex-col justify-between">
                             <p className='selectlink text-white'>{product.product_name} {product.option}</p>
                             <div className="flex flex-row">
                               <button
@@ -135,12 +135,14 @@ const Cart = () => {
                                   sessionStorage.setItem("Cart",JSON.stringify({[currentUser.email]:temp}))
                                   
                                 }}
+
+                                
                               >
                                 <p className='selectlink text-white '>{">"}</p>
                               </button>
-                              
+                              <p className='selectlink text-white px-10'>{`$ ${parseInt(product.quantity)*parseInt(product.price)}`}</p>
                             </div>
-                            <p className='selectlink text-white px-10'>{`$ ${parseInt(product.quantity)*parseInt(product.price)}`}</p>
+                            
                             
                           </div>
                         )
@@ -148,7 +150,7 @@ const Cart = () => {
                     }
                   </div>
                   
-                  <div className="payment method spaceline w-4/12 border-l-2 border-l-white flex flex-col justify-between ">
+                  <div className="payment method spaceline md:w-4/12 md:border-l-2 md:border-t-0 border-l-white w-full border-t-2 flex flex-col justify-between ">
                     <p className=' selectlink text-white px-5 text-lg'> Please choose a payment method to check out</p>
                     <p className=' selectlink text-white px-5 text-lg'>請按下以下一種付款方式以付款</p>
                     <div className="">
@@ -172,16 +174,16 @@ const Cart = () => {
                           var isSUmember = false
 
                           if(productsByBrand["EXCO"]){
-                            if(productsByBrand["EXCO"].filter(o=>o.type==='membership').length>0){
+                            if(productsByBrand["EXCO"].filter(o=>o.type==='membership').length>0){ //Cart hv SU member 
                               isSUmember = true
                             }
-                            userDBInfo.societies.forEach(o=>{
+                            userDBInfo.societies.forEach(o=>{ // confirmed membership list  have SU member
                               console.log("Check:",Object.keys(o),"==","SU")
                               if(Object.keys(o).includes("SU")){
                                 isSocMember=true
                               }
                             })
-                            if((userDBInfo.order.filter(o=>(o.type==='membership')&&o.code==="EXCO")).length>0){ //order hv member                         
+                            if((userDBInfo.order.filter(o=>(o.type==='membership')&&o.code==="EXCO")).length>0){ //bought order hv member                         
                               isSocMember=true
                             }
                           }
@@ -217,7 +219,7 @@ const Cart = () => {
                     
                   </div>
                   
-                </div>
+              </div>
                 
               </div>
             )

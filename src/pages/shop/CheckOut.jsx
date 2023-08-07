@@ -140,20 +140,20 @@ const CheckOut = () => {
   
   
   return (
-    <div className="">
+    <div className="md:p-10 p-5">
       {
         Product&&Code&&Payment&&(
           <div className=" flex flex-col  w-full items-center">
-            <div className="max-w-screen-lg w-full py-10">
+            <div className="max-w-screen-lg w-full md:py-10">
               <p className='selectlink'>CheckOut 結算</p>
             </div>
-            <div className="billbg  rounded-lg p-10 max-w-screen-lg  w-full  my-10">
+            <div className="billbg  rounded-lg md:p-10 p-2 max-w-screen-lg  w-full  my-10">
               <p className='w-full flex flex-row justify-center p-5 font-bold underline'>Order Details 訂單資料</p>
               <div className="">
                 <div className="w-full flex flex-row justify-start py-5">
                   <p className='font-bold'>Purchase Item 購買物品</p>
                 </div>
-                <div className="p-5">
+                <div className="md:p-5 p-2">
                   <div className="w-full flex flex-row justify-start">
                     <p className=''>{Soc[Code]['exco_name_chinese']}{Soc[Code]['exco_name_eng']}</p>
                   </div>
@@ -194,7 +194,7 @@ const CheckOut = () => {
                 <div className="py-5">
                   <p className='w-full flex flex-row justify-start font-bold '>Detail Information 詳細資料</p>
                 </div>
-                <div className="w-full grid grid-cols-2 row-auto  ">
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 row-auto  ">
                   <div className="flex flex-col">
                     <p className='underline'> Payment Method </p>
                     <div className="flex flex-row">

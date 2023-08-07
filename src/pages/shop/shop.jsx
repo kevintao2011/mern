@@ -105,24 +105,28 @@ const Shop = () => {
   return (
     
     
-    <div className="flex flex-row mainpage-1">
-
-      <div className="LHS flex flex-col p-10">
-        <img 
+    <div className="flex flex-col  md:flex-row mainpage-1">
+      
+      <div className="LHS flex flex-col  md:p-10 ">
+        {/* <img 
           src="assests\img\shop\sorting.png" 
           alt="" 
-        />
-        <button className='selectlink pt-2 pl-2 self-start' value="all" onClick={()=>{setProductReference("all")}}>
+        /> */}
+        <p className='selectlink'>Category</p>
+        <div className="grid md:grid-cols-1 grid-cols-2 grid-flow-row">
+        <button className='selectlink md:pt-2 md:pl-2 self-start' value="all" onClick={()=>{setProductReference("all")}}>
           all
         </button>
         {Category?.map(cat=>{
           return(
-            <button className='selectlink pt-2 pl-2 self-start' value={cat} onClick={()=>{setProductReference(cat)}}>
+            <button className='selectlink md:pt-2 md:pl-2 self-start' value={cat} onClick={()=>{setProductReference(cat)}}>
               {cat}
             </button>
           
           )
-      })}
+          
+        })}
+        </div>  
       
 
       </div>
@@ -130,7 +134,7 @@ const Shop = () => {
         <div className="flex flex-row  justify-center">
           <p className='selectlink text-3xl p-5'>Product</p>
         </div>
-        <div className="grid grid-cols-4 grid-flow-row ">
+        <div className="grid md:grid-cols-4 grid-cols-2 grid-flow-row ">
           {
             displayProduct?.map(product=>{
               return(

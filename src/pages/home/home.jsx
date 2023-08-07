@@ -16,18 +16,10 @@ const Home = () => {
         <div 
           className="mainpage-new flex flex-col justify-center "
         >
-          <div className="flex flex-row ">
+          <div className="flex  flex-col items-center md:flex-row ">
             <div className="w-1/2 flex flex-col">
               <div className=" flex flex-row justify-center">
-                {/* <Image
-                  src="/assests/img/LingULabel.svg"
-                  alt="SuLogo Logo"
-                  className=""
-                  width={480}
-                  height={180}
-
-                  priority 
-                /> */}
+                
                 <img src="./assests/img/LingULabel.png" alt="" className="" width="400" height="400" />
                 
               </div>

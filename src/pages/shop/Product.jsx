@@ -96,13 +96,13 @@ const Product = () => {
     }, [])
     
     return (
-        <div className="m-20">
+        <div className="w-full md:m-20">
            
             {
                 ProductInfo&&Variants&&(
                     
-                    <div className="flex flex-row justify-between items-center">
-                        <div className="L w-2/4  flex flex-col h-full justify-between">
+                    <div className="flex md:flex-row flex-col md:justify-between items-center">
+                        <div className="L md:w-2/4  flex flex-col h-auto md:h-full md:justify-between w-full p-5">
                         {
                             Soc[ProductInfo.code]&&(
                                     <div className="flex flex-col h-full ">
@@ -132,15 +132,18 @@ const Product = () => {
                         }
                         </div>
                     
-                        <div className="M px-10 flex flex-row w-4/8 h-full">
-                            <div className="flex flex-row items-center">
-                                <button>
+                        <div className="M md:px-10 px-5 flex flex-row md:w-4/8  ">
+                            {/* <div className="flex flex-row items-center h-full">
+                                
+                            </div> */}
+
+                            <button>
                                     <img 
                                         src     ="\assests\img\shop\product\cheveronLeft.png"
                                         alt     = "promptation logo"
                                         width   = {50}
                                         height  = {50}
-                                        className = "object-contain rounded-full  h-full"
+                                        className = "object-contain rounded-lg "
                                         onClick={()=>{
                                             setSelectedOption(prev=>{
                                                 
@@ -156,7 +159,6 @@ const Product = () => {
                                         }}
                                     /> 
                                 </button>
-                            </div>
                           
                             <div >
                                 {
@@ -196,7 +198,7 @@ const Product = () => {
                                 /> 
                             </button>
                         </div>
-                        <div className="R w-2/4 flex flex-col justify-between h-full">
+                    <div className="R md:w-2/4 w-full px-5 md:p-0 flex flex-col md:justify-between md:h-full">
                             
                             <div className="py-10 flex-flex-col">
                                 <div className="max-w-screen-sm">
@@ -205,16 +207,44 @@ const Product = () => {
                                         
                                     </div>
                                 </div>
-                                <div className="py-10 max-w-screen-sm">
-                                    <textarea name="" id="" cols="80" rows="20" disabled={true} readonly={true}>
-                                        {ProductInfo.description_chi}
-                                    </textarea>
-                              
-                                </div>
-                                <div className="py-10 max-w-screen-sm">
-                                    <p>{ProductInfo.description_eng}</p>
-                                </div>
-                               
+                                {ProductInfo.description_chi&&(
+                                    <>
+                                        <div className="py-10 max-w-screen-sm hidden md:block">
+                                            <textarea name="" id="" cols="80" rows="20" disabled={true} readonly={true}>
+                                                {ProductInfo.description_chi}
+                                            </textarea>
+                                        
+                                        </div>
+                                                
+                                        <div className="py-10 max-w-screen-sm md:hidden">
+                                            <textarea name="" id="" cols="35" rows="20" disabled={true} readonly={true}>
+                                                {ProductInfo.description_chi}
+                                            </textarea>
+                                        
+                                        </div>
+                                    </>
+                                )}
+
+                                {ProductInfo.description_eng&&(
+                                    <>
+                                        <div className="py-10 max-w-screen-sm hidden md:block">
+                                            <textarea name="" id="" cols="80" rows="20" disabled={true} readonly={true}>
+                                                {ProductInfo.description_eng}
+                                            </textarea>
+                                        
+                                        </div>
+                                                
+                                        <div className="py-10 max-w-screen-sm md:hidden">
+                                            <textarea name="" id="" cols="35" rows="20" disabled={true} readonly={true}>
+                                                {ProductInfo.description_eng}
+                                            </textarea>
+                                        
+                                        </div>
+                                    </>
+                                )}
+
+                                
+                                
                                 <div className="flex flex-row">
                                     {
                                         Variants.map((v,i)=>{
@@ -256,42 +286,45 @@ const Product = () => {
                                     }
                                 </div>
 
-                                <img 
+                                {/* <img 
                                     src     ="\assests\img\shop\product\clickToSelectQuantity.png"
                                     alt     = "promptation logo"
                                     width   = {300}
                                     height  = {300}
                                     className = "object-contain  py-10 "
-                                /> 
-                                
-                                <input type="number" name="" id="" 
-                                    min={0}
-                                    max={Variants[SelectedOption]["inventory"]}
-                                    className='border-su-green border-2'
-                                    onChange={(e)=>{setQuantity(e.target.value);console.log(e.target.value)}}
-                                />
+                                />  */}
+                                <p className='selectlink text-2xl'>Please select your quantity</p>
+                                <div className="flex flex-col">
+                                    <input type="number" name="" id="" 
+                                        min={0}
+                                        max={Variants[SelectedOption]["inventory"]}
+                                        className='border-su-green border-2 w-1/2'
+                                        onChange={(e)=>{setQuantity(e.target.value);console.log(e.target.value)}}
+                                    />
 
-                                <button
-                                    onClick={async ()=>{
-                                        await addToCart({
-                                            _id:ProductInfo._id,
-                                            product_name:ProductInfo.product_name,
-                                            code:ProductInfo.code,
-                                            type:ProductInfo.type,
-                                            option:Variants[SelectedOption].name,
-                                            price:Variants[SelectedOption].price,
-                                            quantity:Quantity
-                                        })
-                                    }}
-                                >
-                                    <img 
-                                        src     ="\assests\img\shop\product\Buy.png"
-                                        alt     = "promptation logo"
-                                        width   = {100}
-                                        height  = {100}
-                                        className = "object-contain  py-10 "
-                                    /> 
-                                </button>
+                                    <button
+                                        onClick={async ()=>{
+                                            await addToCart({
+                                                _id:ProductInfo._id,
+                                                product_name:ProductInfo.product_name,
+                                                code:ProductInfo.code,
+                                                type:ProductInfo.type,
+                                                option:Variants[SelectedOption].name,
+                                                price:Variants[SelectedOption].price,
+                                                quantity:Quantity
+                                            })
+                                        }}
+                                    >
+                                        <img 
+                                            src     ="\assests\img\shop\product\Buy.png"
+                                            alt     = "promptation logo"
+                                            width   = {100}
+                                            height  = {100}
+                                            className = "object-contain  py-10 "
+                                        /> 
+                                    </button>
+                                </div>
+                                
 
                             </div>
                             
