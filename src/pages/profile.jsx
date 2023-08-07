@@ -19,11 +19,43 @@ const Profile = () => {
   )
   
   const [init, setinit] = useState(false)
-  const {currentUser,userDBInfo,Soc} = useAuth()
+  const {currentUser,userDBInfo,setuserDBInfo,Soc} = useAuth()
   const [Societies, setSocieties] = useState([])
   const navigate = useNavigate()
   const [Orders, setOrders] = useState([])
   console.log("societies",Soc)
+  
+  
+  async function fetchProfileInfo(){
+        
+        await currentUser.getIdToken().then(async token=>{
+          console.log("function fetchProfileInfo",token)
+          await fetch('/api/getuser'
+          ,{
+            method:"POST",
+            body:JSON.stringify({
+              user:{
+                token:token
+              }}),
+              headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+              mode:'cors'
+          }).then(async response =>{
+            if(response.ok){
+                const data = await response.json()
+                console.log("data",data)
+                setuserDBInfo(userDBInfo)
+                setSocieties(data.societies)
+            }
+          })
+        })
+        
+      
+        
+  }
+
   useEffect(() => {
     
     async function fetchOrder(){
@@ -54,56 +86,21 @@ const Profile = () => {
         }
       })
     }
+    async function doALL(){
+      await fetchOrder()
+      await fetchProfileInfo()
+    }
     
-    fetchOrder()
     // .then(l=>{
     //   console.log(l)
     //   setOrders(l)
     // })
-
+    doALL()
     return () => {
       
     }
   }, [])
   
-  async function fetchProfileInfo(){
-        
-        await currentUser.getIdToken().then(async token=>{
-          console.log("function fetchProfileInfo",token)
-          await fetch('/api/getuser'
-          ,{
-            method:"POST",
-            body:JSON.stringify({
-              user:{
-                token:token
-              }}),
-              headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-              mode:'cors'
-          }).then(async response =>{
-            if(response.ok){
-                const data = await response.json()
-                console.log("data",data)
-                setProfileInfo(data)
-            }
-          })
-        })
-        
-      
-        
-  }
-  
-  useEffect(() => {
-    console.log("userDBInfo.societies",typeof(userDBInfo))
-    if(userDBInfo.societies!==""){
-      setSocieties(userDBInfo.societies)
-    }
-    return () => {
-      
-    }
-  }, [])
   
   
   
@@ -111,7 +108,7 @@ const Profile = () => {
     
     <div className="mainpage-1">
         {
-          currentUser&&(
+          Societies&&userDBInfo&&currentUser&&(
             <div className="flex flex-col md:flex-row ">
               <div className="flex flex-col md:px-10 md:w-3/12 w-full  items-center p-5">
                 <div className="py-10">
@@ -302,7 +299,7 @@ const Profile = () => {
               </div> 
               <div className="RHS w-full md:w-9/12 md:px-10 px-2">
                   <img src="./assests/img/BelongSociety.svg" alt="" />
-                  {Societies.length!==0?(
+                  {Societies?.length!==0?(
                     <div className="flex flex-row w-full ">
                       <div className="flex md:flex-row flex-col w-full md:w-full my-20"> 
                       {
@@ -313,7 +310,7 @@ const Profile = () => {
                           return(
                             // <li key={Object.keys(soc)[0] }>
                             <div className="w-full my-5 md:my-0">
-                              <SocietyCard title={Soc[Object.keys(soc)[0]].society_chinese} type={Object.values(soc)[0]} managebutton={Object.values(soc)[0]!=="member"} code={Soc[Object.keys(soc)[0]].code} />
+                              <SocietyCard title={Soc[Object.keys(soc)[0]].society_chinese} type={Object.values(soc)[0]} managebutton={Object.values(soc)[0]!=="member"&&Object.values(soc)[0]!=="pending"} code={Soc[Object.keys(soc)[0]].code} />
                             </div>
                               
                             // </li>

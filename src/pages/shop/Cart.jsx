@@ -170,46 +170,46 @@ const Cart = () => {
                       <button 
                         className='selectlink text-white px-5'
                         onClick={()=>{
-                          var isSocMember = false
-                          var isSUmember = false
+                        //   var isSocMember = false
+                        //   var isSUmember = false
 
-                          if(productsByBrand["EXCO"]){
-                            if(productsByBrand["EXCO"].filter(o=>o.type==='membership').length>0){ //Cart hv SU member 
-                              isSUmember = true
-                            }
-                            userDBInfo.societies.forEach(o=>{ // confirmed membership list  have SU member
-                              console.log("Check:",Object.keys(o),"==","SU")
-                              if(Object.keys(o).includes("SU")){
-                                isSocMember=true
-                              }
-                            })
-                            if((userDBInfo.order.filter(o=>(o.type==='membership')&&o.code==="EXCO")).length>0){ //bought order hv member                         
-                              isSocMember=true
-                            }
-                          }
-                          console.log(productsByBrand[b].filter(o=>(o.type==='membership')&&o.code===b))
-                          if ((productsByBrand[b].filter(o=>(o.type==='membership')&&o.code===b)).length>0){ //have membership in cart
-                            isSocMember=true
-                          }
-                          userDBInfo.societies.forEach(o=>{
-                            console.log("Check:",Object.keys(o),"==",[b])
-                            if(Object.keys(o).includes(b)){
-                              isSocMember=true
-                            }
-                          })
-                          if((userDBInfo.order.filter(o=>o.type==='membership')).length>0){ //order hv member                         
-                            isSocMember=true
-                          }
+                        //   if(productsByBrand["EXCO"]){
+                        //     if(productsByBrand["EXCO"].filter(o=>o.type==='membership').length>0){ //Cart hv SU member 
+                        //       isSUmember = true
+                        //     }
+                        //     userDBInfo.societies.forEach(o=>{ // confirmed membership list  have SU member
+                        //       console.log("Check:",Object.keys(o),"==","SU")
+                        //       if(Object.keys(o).includes("SU")){
+                        //         isSocMember=true
+                        //       }
+                        //     })
+                        // if(userDBInfo.societies.filter(s=>s[Object.keys(s)[0]]==="pending")!==[]){ //bought order hv member                         
+                        //       isSocMember=true
+                        //     }
+                        //   }
+                        //   console.log(productsByBrand[b].filter(o=>(o.type==='membership')&&o.code===b))
+                        //   if ((productsByBrand[b].filter(o=>(o.type==='membership')&&o.code===b)).length>0){ //have membership in cart
+                        //     isSocMember=true
+                        //   }
+                        //   userDBInfo.societies.forEach(o=>{
+                        //     console.log("Check:",Object.keys(o),"==",[b])
+                        //     if(Object.keys(o).includes(b)){
+                        //       isSocMember=true
+                        //     }
+                        //   })
+                        //   if((userDBInfo.order.filter(o=>o.type==='membership')).length>0){ //order hv member                         
+                        //     isSocMember=true
+                        //   }
 
-                          console.log("isSUmember",isSUmember)
-                          console.log("isSocMember",isSocMember)
+                        //   console.log("isSUmember",isSUmember)
+                        //   console.log("isSocMember",isSocMember)
                           
 
-                          if (isSocMember && isSUmember){
+                        //   if (isSocMember && isSUmember){
                             navigate("../checkout",{state:{code:b,products:productsByBrand[b],payment:"Cash"}})
-                          }else{
-                            setError(`No Membership item in cart or You are not member of SU or society!`)
-                          }
+                        //   }else{
+                        //     setError(`No Membership item in cart or You are not member of SU or society!`)
+                        //   }
                         }}
                       >
                        cash 

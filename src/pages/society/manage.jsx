@@ -10,6 +10,7 @@ const Manage = () => {
     const [Activity, setActivity] = useState()
     const [Product, setProduct] = useState()
     const [Member, setMember] = useState()
+    const [Order, setOrder] = useState()
     const iconsize = 20;
     const {Soc,currentUser} = useAuth()
     const navigate = useNavigate()
@@ -51,6 +52,43 @@ const Manage = () => {
                 
             }  
         })
+    }
+    async function updateOrderStatus(order,val){
+        order.status=val
+        await fetch('/api/updateorderstatus', { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken()
+                },
+                order:order
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
+            
+        }).then(async response => {
+            
+            if (response.ok){
+                // registered
+                
+                console.log("updated")
+                const data = await response.json()
+                console.log("Activity",data)
+                setActivity(data)
+                
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("data.error",data)
+                setActivity(data)
+                
+            }  
+        })
+        
     }
     useEffect(() => {
         
@@ -164,11 +202,50 @@ const Manage = () => {
         })
         
         
+        
       }
+
+      async function getSocOrder(){
+        await fetch('/api/getordersbysoc', { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken()
+                },
+                code:code
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
+            
+        }).then(async response => {
+            
+            if (response.ok){
+                // registered
+                
+                console.log("recieved")
+                const data = await response.json()
+                console.log("order",data)
+                setOrder(data)
+                
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("order",data)
+                setOrder(data)
+                
+            }  
+        })
+    }
+
       async function fetchAllInfo(){
         await getSocActivity()
         await getSocProduct()
         await getSocUser()
+        await getSocOrder()
       }
       fetchAllInfo()
       return () => {
@@ -328,6 +405,9 @@ const Manage = () => {
                     </button>
                     <button onClick={()=>{settab("Member")}} className='rounded-t-md  text-2xl bg-slate-200 px-5 mr-1'>
                         Member 
+                    </button>
+                    <button onClick={()=>{settab("Order")}} className='rounded-t-md  text-2xl bg-slate-200 px-5 mr-1'>
+                        Order 
                     </button>
                 </div>
                 <div className="h-full w-full bg-slate-100 rounded-b-3xl rounded-tr-3xl">
@@ -513,6 +593,48 @@ const Manage = () => {
                                 )}
                             </div>
                         )}
+
+                        {
+                            Order&&tab==="Order"&&(
+                                Order?.map(order=>{
+                                    return(
+                                      <div className=" bg-white p-1 rounded-md my-2">
+                                        <div className="flex flex-col md:flex-row">
+                                          <p className='overflow-x-auto'>訂單編號 {order._id}</p>
+                                          <p className='md:mx-10'>付款方式 {order.payment_method}</p>
+                                        </div>
+            
+                                        <div className="flex flex-col md:flex-row">
+                                          
+                                          <p className='md:mx-10'>狀態 </p>
+                                          <select name="" id="" defaultValue={order.status} onChange={(e)=>{updateOrderStatus(order,e.target.value)}}>
+                                            <option value="Confirmed">已確認付款</option>
+                                            <option value="To be confirmed">等待確認付款</option>
+                                            <option value="Processing">處理中</option>
+                                            <option value="Delivering">運送中</option>
+                                            <option value="Delivered">已運送</option>
+                                            <option value="Cancelled">已取消</option>
+                                          </select>
+                                        </div>
+                                        <p className='md:mx-10'>學生編號 {order.sid}</p>
+                                        <p className='md:mx-10'>學生姓名 {order.chi_name}</p>
+                                        <p className='md:mx-10'>聯絡電話 {order.contact}</p>
+                                        <p className='md:mx-10'>建立日期 {Date(order.create_at).substring(0,24)}</p>
+                                        
+                                        
+                                        <p className='py-2'>訂單物品</p>
+                                        {
+                                          order.products.map((item,i)=>{
+                                            return(
+                                              <p>{i+1}.{item.product_name}-{item.option} x {item.quantity}</p>
+                                            )
+                                          })
+                                        }
+                                      </div>
+                                    )
+                                  })
+                            )
+                        }
                     </div>
                     
                 </div>

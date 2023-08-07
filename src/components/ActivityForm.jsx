@@ -251,12 +251,12 @@ const ActivityForm = () => {
             
             
             
-            
+{/*             
             <div className="flex flex-row py-2 justify-between">
                 <label htmlFor="payment_method" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">   
                     payment method
                 </label>
-                <span className='px-5'></span>
+                <span className='px-5'></span> */}
                 {/* <select 
                     
                     type="text"
@@ -269,14 +269,14 @@ const ActivityForm = () => {
                     <option value="FPS" >FPS</option>
                     
                 </select> */}
-                <div className="rounded-md px-5 w-full justify-self-center">
+                {/* <div className="rounded-md px-5 w-full justify-self-center">
                     <input type="checkbox" name="payment_method" id="payment_method" value={"Cash"} /> Cash
                 </div>
                 
                 
                 
                
-            </div>
+            </div> */}
             {/* <div className="flex flex-row py-2 justify-between">
                 <label htmlFor="description" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
                     description

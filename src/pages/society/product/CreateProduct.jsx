@@ -173,7 +173,7 @@ const CreateProduct = () => {
         if(data.type[0]==="membership"){
             data.variants=[
                 {
-                    name:"basic member",
+                    name:"member",
                     price:data.price[0],
                     inventory:999,
                     index:0
@@ -223,7 +223,7 @@ const CreateProduct = () => {
                   // registered
                   
                   console.log("added")
-                 
+                  navigate("/profile")
                 //   navigate(`/society/${code}/manage`)
                   
                   
@@ -233,6 +233,7 @@ const CreateProduct = () => {
                   console.log("data.error",data)
                   seterror(data.code)
                   setSubmit(true)
+                  
                   
               }  
           })

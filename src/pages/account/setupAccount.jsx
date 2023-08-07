@@ -50,7 +50,7 @@ const SetupAccount = () => {
         const soc = new Map();
         soc.set(data.major,"member")
         console.log("societies", Object.fromEntries(soc))
-        data.societies = Object.fromEntries(soc)
+        
 
         console.log(data)
         
@@ -181,6 +181,38 @@ const SetupAccount = () => {
                     type="text"
                     name="username" 
                     id="username"  
+                    required="required" 
+                    placeholder='Will be display in website'
+                    className='rounded-md px-5 w-full justify-self-center'
+                />
+                
+               
+            </div>
+            <div className="flex flex-row py-2 justify-between">
+                <label htmlFor="chi_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                    中文姓名
+                </label>
+                <span className='px-5'></span>
+                <input 
+                    type="text"
+                    name="chi_name" 
+                    id="chi_name"  
+                    required="required" 
+                    placeholder='Will be display in website'
+                    className='rounded-md px-5 w-full justify-self-center'
+                />
+                
+               
+            </div>
+            <div className="flex flex-row py-2 justify-between">
+                <label htmlFor="eng_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                    English Name
+                </label>
+                <span className='px-5'></span>
+                <input 
+                    type="text"
+                    name="eng_name" 
+                    id="eng_name"  
                     required="required" 
                     placeholder='Will be display in website'
                     className='rounded-md px-5 w-full justify-self-center'

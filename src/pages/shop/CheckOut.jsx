@@ -42,6 +42,8 @@ const CheckOut = () => {
           products:Product,
           sid:userDBInfo.sid,
           email:userDBInfo.email,
+          chi_name:userDBInfo.chi_name,
+          eng_name:userDBInfo.eng_name,
           contact:userDBInfo.contact,
           code:Code,
         }
@@ -94,9 +96,7 @@ const CheckOut = () => {
               console.log(a)
               setCart(a)
               sessionStorage.setItem("Cart",JSON.stringify({[currentUser.email]:a}))
-              
               setCheckingOut(false)
-
               navigate("/profile")
               
               
@@ -221,12 +221,12 @@ const CheckOut = () => {
                             
                           </div>
                           <input type="file" accept=".jpg, .jpeg, .png" name="image" id="image-upload" onChange={(e)=>{
-                            if((e.target.files[0].size)/1024 < 1024){
+                            if((e.target.files[0].size)/1024 < 2048){
                               setFile(e.target.files[0])
                               setError(false)
                             }else{
                               
-                              setError("File Size is too large! (>1mb)")
+                              setError("File Size is too large! (>2mb)")
                             }
                             
                           }}/>
