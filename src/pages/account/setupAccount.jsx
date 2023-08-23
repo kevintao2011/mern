@@ -9,9 +9,22 @@ const SetupAccount = () => {
     const [jupas, setjupas] = useState(null)
     const navigate = useNavigate()
     const {setuserDBInfo,userDBInfo} = useAuth()
+    const [CohortYears, setCohortYears] = useState([])
+    const [samePhoneNumber, setsamePhoneNumber] = useState("")
+    const [sameSID, setsameSID] = useState("")
+    
     console.log(userDBInfo)
     
     useEffect(() => {
+        var currentYear = new Date()
+        var dateList = []
+        for (let index = currentYear.getFullYear(); index > currentYear.getFullYear()-8; index--) {
+            dateList.push(index)
+            
+        }
+        setCohortYears(dateList)
+        console.log(dateList)
+
         async function getJupas(){
             console.log("get jupas")
             await fetch("/api/getjupas"
@@ -94,183 +107,235 @@ const SetupAccount = () => {
           setSubmit(true)
           console.log(e)
         }
-        
-        
-      //   try{
-      //       //FirebaseError: Firebase: Error (auth/admin-restricted-operation).
-      //       await createUserWithEmailAndPassword(auth,data.email,data.password);
-      //   }catch(e){
-      //       console.log("Error:",e);
-      //   }
-      //   You can pass formData as a fetch body directly:
-        
-  
-        
+
     }
     return (
-    <div className="mainpage-1 flex flex-col items-center justify-center">
-        <form action="" onSubmit={(e)=>{handleSubmit(e)}}>
+        <div className="flex flex-col  items-center justify-center h-screen" >
+            <div className="w-6/12 py-10">
+                <img 
+                    src="/assests/img/signUp/PersonalInfo.png" 
+                    alt="" 
+                    className='self-start'
+                />
+            </div>
             
-            <div className="flex flex-row py-2 justify-between">
-                <div className="">
+            <form className="w-6/12" action="" onSubmit={(e)=>{handleSubmit(e)}}>
+                <div className="grid grid-cols-2 gap-10">
+                    <div className="flex flex-col py-2 justify-between">
+                        <label htmlFor="chi_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            中文姓名
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="text"
+                            name="chi_name" 
+                            id="chi_name"  
+                            required="required" 
+                            placeholder='與學生證一致'
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        />
+                        
+                    
+                    </div>
+                    <div className="flex flex-col py-2 justify-between">
+                        <label htmlFor="eng_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            English Name
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="text"
+                            name="eng_name" 
+                            id="eng_name"  
+                            required="required" 
+                            placeholder='Same as Student ID'
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        />
+                        
+                    
+                    </div>
+                    <div className="flex flex-col py-2 justify-between">
+                        <div className="">
+                            
+                        </div>
+                        <label htmlFor="gender" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            Gender
+                        </label>
+                        <span className='px-5'></span>
+                        <select 
+                            name="gender" 
+                            id="gender"  
+                            defaultValue={'O'} 
+                            required="required" 
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        >
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-col py-2 justify-between">
+                        <label htmlFor="username" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            Username
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="text"
+                            name="username" 
+                            id="username"  
+                            required="required" 
+                            placeholder='Will be display in website'
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        />
+                        
+                    
+                    </div>
+                    <div className="flex flex-col py-2 justify-between">
+                        <label htmlFor="sid" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            Student ID
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="text"
+                            name="sid" 
+                            id="sid"  
+                            required="required" 
+                            placeholder='Student Number on Your Card'
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        />
+                        
+                    
+                    </div>
+                    <div className="flex flex-col py-2 justify-between">
+                        <label htmlFor="sid" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            Confirm Student ID
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="text"
+                            name="confirmsid" 
+                            id="confirmsid"  
+                            required="required" 
+                            placeholder='Student Number on Your Card'
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        />
+                        
+                    
+                    </div>
+                    <div className="flex flex-col py-2 justify-between">
+                    
+                        <label htmlFor="major" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            Major
+                        </label>
+                        
+                        <select 
+                            name="major" 
+                            id="major"  
+                            defaultValue={'Please Select your Major'} 
+                            required="required" 
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        >
+                            {/* <option value="default" disabled="disabled">Please Select your Major</option> */}
+                            {/* <option value="BA (Hons) Chinese">BA (Hons) Chinese</option> */}
+                            {
+                                jupas&&jupas.map(info=>{
+                                    return(<option value={info.code}> {info.jupas_code}-{info.short_name} </option>)
+                                })
+                                // jupas&&jupas.forEach(major=>{
+                                //     console.log("major",major)
+                                //     major.map(info=>{
+                                //     return(<option> {info.jupas_code}{info.short_name} </option>)
+                                //     })
+                                // })
+                            }
+                        </select>
+                    </div>
+                    <div className="flex flex-col py-2 justify-between">
+                        <label htmlFor="cohort" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            Cohort
+                        </label>
+                        {/* <span className='px-5'></span>
+                        <input 
+                            type="date"
+                            name="cohort" 
+                            id="cohort"  
+                            required="required" 
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        /> */}
+                        <select name="cohort" id="cohort" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
+                            {
+                                CohortYears.map(year=>{
+                                    return(
+                                        <option value={year} className=''>
+                                            {year}
+                                        </option>
+                                    )
+                                })
+                            }
+                            
+                        </select>
+                        
+                    
+                    </div>
+                    <div className="flex flex-col py-2 justify-between">
+                        <label htmlFor="contact" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            電話 phone number
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="tel"
+                            name="contact" 
+                            id="contact"  
+                            required="required" 
+                            placeholder='Please Enter Your Phone Number'
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        />
+                        
+                    
+                    </div>
+                    <div className="flex flex-col py-2 justify-between">
+                        <label htmlFor="confirmcontact" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
+                            確認電話 Confirm phone number
+                        </label>
+                        <span className='px-5'></span>
+                        <input 
+                            type="tel"
+                            name="confirmcontact" 
+                            id="confirmcontact"  
+                            required="required" 
+                            placeholder='Please Enter Your Phone Number'
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                        />
+                        
+                    
+                    </div>
+                    
+                    
+                    
+                    
                     
                 </div>
-                <label htmlFor="major" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Major
-                </label>
-                <span className='px-5'></span>
-                <select 
-                    name="major" 
-                    id="major"  
-                    defaultValue={'Please Select your Major'} 
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
-                >
-                    {/* <option value="default" disabled="disabled">Please Select your Major</option> */}
-                    {/* <option value="BA (Hons) Chinese">BA (Hons) Chinese</option> */}
-                    {
-                        jupas&&jupas.map(info=>{
-                            return(<option value={info.code}> {info.jupas_code}-{info.short_name} </option>)
-                        })
-                        // jupas&&jupas.forEach(major=>{
-                        //     console.log("major",major)
-                        //     major.map(info=>{
-                        //     return(<option> {info.jupas_code}{info.short_name} </option>)
-                        //     })
-                        // })
-                    }
-                </select>
-            </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="contact" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Contact
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="tel"
-                    name="contact" 
-                    id="contact"  
-                    required="required" 
-                    placeholder='Please Enter Your Phone Number'
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="cohort" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Cohort
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="date"
-                    name="cohort" 
-                    id="cohort"  
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="username" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Username
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="text"
-                    name="username" 
-                    id="username"  
-                    required="required" 
-                    placeholder='Will be display in website'
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="chi_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    中文姓名
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="text"
-                    name="chi_name" 
-                    id="chi_name"  
-                    required="required" 
-                    placeholder='Will be display in website'
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="eng_name" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    English Name
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="text"
-                    name="eng_name" 
-                    id="eng_name"  
-                    required="required" 
-                    placeholder='Will be display in website'
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
-            <div className="flex flex-row py-2 justify-between">
-                <label htmlFor="sid" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Student ID
-                </label>
-                <span className='px-5'></span>
-                <input 
-                    type="text"
-                    name="sid" 
-                    id="sid"  
-                    required="required" 
-                    placeholder='Student Number on Your Card'
-                    className='rounded-md px-5 w-full justify-self-center'
-                />
-                
-               
-            </div>
-            <div className="flex flex-row py-2 justify-between">
-                <div className="">
-                    
+                <div className="w-full flex flex-row justify-end py-10">
+                    <button 
+                        className="flex flex-row  " 
+                        type="submit"
+                        disabled={!Submit}
+                    >
+                        <img 
+                            src="/assests/img/signUp/NextButton.png" 
+                            alt="" 
+                            className='self-start'
+                        />
+                    </button>   
                 </div>
-                <label htmlFor="gender" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
-                    Gender
-                </label>
-                <span className='px-5'></span>
-                <select 
-                    name="gender" 
-                    id="gender"  
-                    defaultValue={'O'} 
-                    required="required" 
-                    className='rounded-md px-5 w-full justify-self-center'
+                
+                <p
+                    className="flex flex-row py-2 w-full justify-center text-red-600" 
                 >
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <button 
-                className="flex flex-row py-2 w-full justify-center" 
-                type="submit"
-                disabled={!Submit}
-            >
-                Submit
-            </button>
-            <p
-                className="flex flex-row py-2 w-full justify-center text-red-600" 
-            >
-                {error}
-            </p>
-        </form>
-        
-    </div>
+                    {error}
+                </p>
+            </form>
+            
+        </div>
     )
 }
 

@@ -113,7 +113,7 @@ body {
     font-family: 'Tensentype RuiHei GB18030';
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    
     line-height: 50px;
     letter-spacing: 0.2em;
     @apply  text-su-green
