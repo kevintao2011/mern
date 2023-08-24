@@ -139,8 +139,13 @@ const Nav = () => {
                                                     
                                                 </div>
                                                 
-                                                <div className="absolute right-2 w-32 ">
-                                                    
+                                                <div className="absolute right-2 w-48 ">
+                                                    <Link 
+                                                        to={"/soclist"}
+                                                        className="flex  selectlink text-black"
+                                                    >
+                                                        組織列表 Society List
+                                                    </Link>
                                                     <Link 
                                                         to="shop/cart"
                                                         className="flex  selectlink text-black "
@@ -221,19 +226,26 @@ const Nav = () => {
                                 
                                 
                             ):(
+                                    
                                 <div className="flex flex-row  gap-x-5 top-10 text-xs">
+                                    <Link 
+                                        to={"/soclist"}
+                                        className="flex  selectlink"
+                                    >
+                                        組織列表 Society List
+                                    </Link>
                                     <Link 
                                         to={"/signup"}
                                         className="flex  selectlink"
                                     >
-                                        Sign Up
+                                        註冊 Sign Up
                                     </Link>
                                     
                                     <Link 
                                         to={"/login"}
                                         className="flex gap-2 selectlink top-10"
                                     >
-                                        Sign In
+                                        登入 Sign In
                                     </Link>
                                     
                                 </div>

@@ -111,7 +111,7 @@ const Profile = () => {
           Societies&&userDBInfo&&currentUser&&(
             <div className="flex flex-col md:flex-row ">
               <div className="flex flex-col md:px-10 md:w-3/12 w-full  items-center p-5">
-                <div className="py-10">
+                {/* <div className="py-10">
                   <img 
                     src     ="/assests/img/cow.png" 
                     alt     = "promptation logo"
@@ -119,13 +119,13 @@ const Profile = () => {
                     height  = {300}
                     className = "object-contain rounded-full "
                   />
-                </div>
+                </div> */}
                 {/* <div className='flex justify-center pb-5'>
                   <button className="bg-su-green text-white rounded-md px-4 py-2" >
                     Edit Profile
                   </button>
                 </div> */}
-                <div className="flex flex-row w-full justify-between py-5">
+                {/* <div className="flex flex-row w-full justify-between py-5">
                   <button>
                     <img 
                       src     ="/assests/img/icon/icon_notifications.svg" 
@@ -162,7 +162,7 @@ const Profile = () => {
                       className = "object-contain rounded-full"
                     />
                   </button>
-                </div>
+                </div> */}
                 <div className="w-full">
                   <div className=" flex flex-row py-5">
                     <div className=" w-2/12 ">
@@ -197,7 +197,7 @@ const Profile = () => {
                       
                     <div className=" w-10/12 flex justify-center ">
                       {"Cohort - "}
-                      {Date(userDBInfo.cohort)}
+                      {userDBInfo.cohort}
                     </div>
                   </div>
 

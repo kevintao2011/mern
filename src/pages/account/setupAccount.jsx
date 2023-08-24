@@ -10,12 +10,34 @@ const SetupAccount = () => {
     const navigate = useNavigate()
     const {setuserDBInfo,userDBInfo} = useAuth()
     const [CohortYears, setCohortYears] = useState([])
-    const [samePhoneNumber, setsamePhoneNumber] = useState("")
-    const [sameSID, setsameSID] = useState("")
+    const [PhoneNumberError, setPhoneNumberError] = useState("")
+    const [SID, setSID] = useState("")
+    const [SIDError, setSIDError] = useState("")
+    const [PhoneNumber, setPhoneNumber] = useState("")
     
-    console.log(userDBInfo)
+    
+    function checkSameSID(e){
+        const val = e.target.value
+        if (val === SID){
+            setSIDError("")
+            console.log("same")
+        }else{
+            setSIDError("password is not consistent")
+        }
+    }
+
+    function checkSamePhoneNumber(e){
+        const val = e.target.value
+        if (val === PhoneNumber){
+            setPhoneNumberError("")
+            console.log("same")
+        }else{
+            setPhoneNumberError("Phone Number is not consistent")
+        }
+    }
     
     useEffect(() => {
+        console.log(userDBInfo)
         var currentYear = new Date()
         var dateList = []
         for (let index = currentYear.getFullYear(); index > currentYear.getFullYear()-8; index--) {
@@ -201,6 +223,7 @@ const SetupAccount = () => {
                             required="required" 
                             placeholder='Student Number on Your Card'
                             className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                            onChange={e=>setSID(e.target.value)}
                         />
                         
                     
@@ -209,7 +232,7 @@ const SetupAccount = () => {
                         <label htmlFor="sid" className="w-full block mb-2 text-lg font-medium greentxt justify-self-start">
                             Confirm Student ID
                         </label>
-                        <span className='px-5'></span>
+                        
                         <input 
                             type="text"
                             name="confirmsid" 
@@ -217,7 +240,11 @@ const SetupAccount = () => {
                             required="required" 
                             placeholder='Student Number on Your Card'
                             className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                            onChange={(e)=>checkSameSID(e)}
                         />
+                        <p>
+                            {SIDError}
+                        </p>
                         
                     
                     </div>
@@ -288,6 +315,7 @@ const SetupAccount = () => {
                             required="required" 
                             placeholder='Please Enter Your Phone Number'
                             className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                            onChange={e=>setPhoneNumber(e.target.value)}
                         />
                         
                     
@@ -304,7 +332,9 @@ const SetupAccount = () => {
                             required="required" 
                             placeholder='Please Enter Your Phone Number'
                             className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 '
+                            onChange={e=>checkSamePhoneNumber(e)}
                         />
+                        <p> {PhoneNumberError} </p>
                         
                     
                     </div>
