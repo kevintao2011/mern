@@ -24,7 +24,7 @@ import CounterForm from './components/counterForm';
 import EditProduct from './pages/society/product/EditProduct';
 import Storage from './pages/storage/Storage';
 import Shop from './pages/shop/shop';
-import SocList from './pages/socList';
+import SocList from './pages/socList'
 
 import Cart from './pages/shop/Cart';
 import CheckOut from './pages/shop/CheckOut';

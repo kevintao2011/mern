@@ -150,7 +150,7 @@ const Login = () => {
         ):(
            
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                <p>Log in page</p>
+                {/* <p>Log in page</p> */}
                 {/* <Image 
                     src     ="/assests/img/LingULogoGreen.svg"
                     alt     = "profile"
@@ -165,7 +165,7 @@ const Login = () => {
                     <label htmlFor="email" className="block mb-2 text-lg font-medium greentxt">
                             Your email
                         </label>
-                        <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 md:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@ln.hk" required="required"    onChange={(e)=>{/*checkEmail(e)*/}}>
+                        <input type="email" name="email" id="email" className="bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 " placeholder="name@ln.hk" required="required"    onChange={(e)=>{/*checkEmail(e)*/}}>
 
                         </input>
                         
@@ -182,7 +182,7 @@ const Login = () => {
 
                     <div>
                         <label htmlFor="password" className="block mb-2 text-lg font-medium greentxt">Password</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 md:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="required" onChange={(e)=>{/*checkPassword(e)*/}} >
+                        <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400 " required="required" onChange={(e)=>{/*checkPassword(e)*/}} >
                         </input>
                     </div>
                     

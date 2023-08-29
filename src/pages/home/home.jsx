@@ -13,92 +13,88 @@ const Home = () => {
   return (
     <div className=''>
         
-        <div 
-          className="mainpage-new flex flex-col justify-center "
-        >
-          <div className="flex  flex-col items-center md:flex-row ">
-            <div className="w-1/2 flex flex-col">
-              <div className=" flex flex-row justify-center">
-                
-                <img src="./assests/img/LingULabel.png" alt="" className="" width="400" height="400" />
-                
-              </div>
-
-              
-              <div className="flex flex-row justify-center">
-                <p className='description '>
-                  學生會為嶺南大學唯一代表全體全日制學生的學生組織。
-                </p>
-
-              </div>
-              
-
-              <div className="flex flex-row py-10 justify-center">
-                <div className='flex flex-col items-center'>
-                  <button 
-                    className=" w-0 red_btn "
-                    onClick={()=>setredbtn((prev)=>!prev)}
-                  > 
-                  </button>
+        <div className="m-10 mt-2">
+          <div 
+            className="mainpage-new flex flex-col justify-center rounded-3xl"
+          >
+            <div className="flex  flex-col items-center md:flex-row ">
+              <div className="w-1/2 flex flex-col">
+                <div className=" flex flex-row justify-center ">
                   
-                  {redbtn && (
-                      // <ul className="hover-list selectlink ">
-                      //   <li>商店 Shop</li>
-                      //   <li>活動 Event</li>
-                      //   {/* <li>Cart</li> */}
-                      // </ul>
-                      <div className='dropdown flex flex-col'>
-                        {/* <Link
-                          href='/shop'
-                          className='dropdown_link text-su-green text-lg font-semibold py-5'
-                          onClick={() => {}}
-                        >
-                          商店 Shop
-                        </Link> */}
-                        <Link 
-                            to={"/shop/product"}
-                            className="dropdown_link text-su-green text-lg font-semibold py-5"
-                        >
-                            商店 Shop
-                        </Link>
+
+                  <img src="./assests/img/mainpage/LingUTitle.png" alt="" className="backdrop-blur bg-gray-100/10 rounded-xl" width="600" height="600" />
+                  
+                </div>
+
+                
+                <div className="flex flex-row justify-center py-10">
+                  <p className='description backdrop-blur bg-gray-100/10 rounded-xl text-xl text-white p-2'>
+                    學生會為嶺南大學唯一代表全體全日制學生的學生組織。
+                  </p>
+
+                </div>
+                
+
+                <div className="flex flex-row py-10 justify-center">
+                  <div className='flex flex-col items-center'>
+                    {/* <button 
+                      className=" w-0 red_btn "
+                      onClick={()=>setredbtn((prev)=>!prev)}
+                    > 
+                    </button> */}
+                    
+                    {
+                      redbtn && (
                         
-                        <Link 
-                            to={"events"}
-                            className="dropdown_link text-su-green text-lg font-semibold py-5"
-                        >
-                            活動 Event
-                        </Link>
-                        
-                      </div>
-                  )}
+                        <div className='dropdown flex flex-col'>
+                          
+                          {/* <Link 
+                              to={"/shop/product"}
+                              className="dropdown_link text-su-green text-lg font-semibold py-5"
+                          >
+                              商店 Shop
+                          </Link> */}
+                          
+                          {/* <Link 
+                              to={"events"}
+                              className="dropdown_link text-su-green text-lg font-semibold py-5"
+                          >
+                              活動 Event
+                          </Link> */}
+                          
+                        </div>
+                      )
+                    }
+                    
+                  </div>
                   
                 </div>
                 
               </div>
-              
-            </div>
 
 
-            <div className="w-1/2" >
-              <div className="flex flex-row justify-center">
-                {/* <Image
-                  src="/assests/img/Events.svg"
-                  alt="SuLogo Logo"
-                  className=""
-                  width={360}
-                  height={120}
-                  priority 
-                /> */}
-                <img src="./assests/img/Events.png" alt="" className="" width="300" height="300" />
+              <div className="w-1/2" >
+                <div className="flex flex-row justify-center">
+                  {/* <Image
+                    src="/assests/img/Events.svg"
+                    alt="SuLogo Logo"
+                    className=""
+                    width={360}
+                    height={120}
+                    priority 
+                  /> */}
+                  <img src="./assests/img/Events.png" alt="" className="" width="300" height="300" />
 
+                </div>
               </div>
+              
+            
             </div>
             
-           
-          </div>
           
-        
+          </div>
         </div>
+
 
         <div 
           className="mainpage flex flex-col items-center "

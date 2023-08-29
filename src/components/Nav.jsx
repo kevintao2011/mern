@@ -115,43 +115,44 @@ const Nav = () => {
 
                     </div>
                     <div className="flex flex-row gap-x-5  w-2/3 md:w-1/3 justify-end">             
-                    <div className="absolute top-5 right-5 ">
-                            {currentUser&&userDBInfo&&Cart?(
-                                
-                                <div className="flex flex-col gap-5">
-                                    
+                    <div className="absolute top-1 right-5 ">
+                            {currentUser&&userDBInfo&&Cart?(      // logged in               
+                                <div className="flex flex-col mt-4 mr-4 ">   
                                     {
                                         toggleDropdown?(
-                                            <div className="w-full flex-col z-0 origin-top-right ">
-                                                <div className="flex flex-row w-full ">
-                                                    <button
-                                                        className="justify-end items-end"
-                                                    >
-                                                        <img 
-                                                            src="/assests/img/NavBanner/dot.svg" 
-                                                            alt     = "promptation logo"
-                                                            width   = {5}
-                                                        
-                                                            className = " object-contain "
-                                                            onClick={()=>{setToggleDropdown(prev=>!prev)}}
-                                                        />
-                                                    </button>
+                                            <div className="w-full flex-col  ">
+                                                <button
+                                                    className="justify-end items-end "
+                                                >
+                                                    <img 
+                                                        src="/assests/img/NavBanner/dot.svg" 
+                                                        alt     = "promptation logo"
+                                                        width   = {6}
                                                     
-                                                </div>
+                                                        className = " object-contain "
+                                                        onClick={()=>{setToggleDropdown(prev=>!prev)}}
+                                                    />
+                                                </button>
                                                 
-                                                <div className="absolute right-2 w-48 ">
+                                                <div className="absolute right-2 w-60 text-base bg-white rounded-md">
                                                     <Link 
                                                         to={"/soclist"}
-                                                        className="flex  selectlink text-black"
+                                                        className="flex   text-black"
                                                     >
                                                         組織列表 Society List
                                                     </Link>
                                                     <Link 
+                                                        to={"/shop/product"}
+                                                        className="flex   text-black"
+                                                    >
+                                                        商店 Shop
+                                                    </Link>
+                                                    <Link 
                                                         to="shop/cart"
-                                                        className="flex  selectlink text-black "
+                                                        className="flex   text-black "
                                                         onClick={async ()=>{setToggleDropdown(prev=>!prev);await uploadCart();}}
                                                     >
-                                                        <p>Cart</p>
+                                                        <p>購物車 Cart</p>
                                                         <div className="px-5">
 
                                                         
@@ -163,13 +164,14 @@ const Nav = () => {
                                                         </div>
                                                     </Link>
                                                     
+                                                    
                                                     {/* <button className="p-1 bg-green-500 rounded-md">
                                                         checkout
                                                     </button> */}
                                                     {userDBInfo.first_login?(
                                                         <Link 
                                                             to="account/setup"
-                                                            className="flex  selectlink text-black "
+                                                            className="flex   text-black "
                                                             onClick={()=>{setToggleDropdown(prev=>!prev)}}
                                                         >
                                                             Account Setup
@@ -177,15 +179,15 @@ const Nav = () => {
                                                     ):(
                                                         <Link 
                                                             to="profile"
-                                                            className="flex  selectlink text-black"
+                                                            className="flex   text-black"
                                                             onClick={()=>{setToggleDropdown(prev=>!prev)}}
                                                         >
-                                                            Profile
+                                                            個人資料 Profile
                                                         </Link>
                                                         
                                                     )}
                                                     <button 
-                                                        className="fle "
+                                                        className=" "
                                                         onClick={(e)=>{
                                                             e.preventDefault();
                                                             auth.signOut()
@@ -197,22 +199,24 @@ const Nav = () => {
                                                         }}
                     
                                                     >
-                                                        <p className="selectlink text-black">
-                                                            Log out
+                                                        <p className=" text-base">
+                                                            登出 Log out
                                                         </p>
                                                     </button>
+
+                                                    
                                         
                                                 </div>
                                             </div>
                                             
                                             
                                         ):(
-                                            <button className="">
+                                            <button className=" ">
                                                 <img 
                                                     src="/assests/img/NavBanner/dot.svg" 
                                                     alt     = "promptation logo"
-                                                    width   = {5}
-                                                    height  = {5}
+                                                    width   = {6}
+                                                    height  = {6}
                                                     className = "object-contain justify-end "
                                                     onClick={()=>{setToggleDropdown(prev=>!prev)}}
                                                 />
@@ -225,15 +229,14 @@ const Nav = () => {
                                     
                                 
                                 
-                            ):(
-                                    
-                                <div className="flex flex-row  gap-x-5 top-10 text-xs">
-                                    <Link 
+                            ):(   // not logged in 
+                                <div className="flex flex-row  gap-x-5 text-xs">
+                                    {/* <Link 
                                         to={"/soclist"}
                                         className="flex  selectlink"
                                     >
                                         組織列表 Society List
-                                    </Link>
+                                    </Link> */}
                                     <Link 
                                         to={"/signup"}
                                         className="flex  selectlink"
@@ -243,18 +246,13 @@ const Nav = () => {
                                     
                                     <Link 
                                         to={"/login"}
-                                        className="flex gap-2 selectlink top-10"
+                                        className="flex gap-2 selectlink "
                                     >
                                         登入 Sign In
                                     </Link>
                                     
                                 </div>
-                                    
-                            
-                                
-                                
                             )
-    
                             }
                         </div>
                         

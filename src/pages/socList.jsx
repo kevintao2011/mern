@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from 'react'
 
-const socList = () => {
-    const [Soclist, setSoclist] = useState([])
+const SocList = () => {
+    const [SocietyList, setSocietyList] = useState([])
     async function getSocList(){
         await fetch('/api/soclist'
         ,{
@@ -14,20 +14,48 @@ const socList = () => {
         }).then(async response =>{
         if(response.ok){
             const data = await response.json()
-            console.log("data",data)
-            setSoclist(data)
+            console.log("soclist",data)
+            setSocietyList(data)
         }
         })
     }
     useEffect(() => {
             
         getSocList()
-        
+       
     }, [])
     
     return (
-        <div>socList</div>
+    <div className="">
+            <p className='text-xl'>學會列表</p>
+            <ul>
+                <li className='py-5'>
+                    <div className="p-5 mx-5 rounded-lg bg-slate-400">
+                        <p>學會 Society: society_chinese l.society_eng</p>
+                        
+                        <p>幹事會名稱 Name of Executive Committee: l.exco_name_chinese l.exco_name_eng</p>
+                        
+                    </div>
+                </li>
+                {
+                    SocietyList.map(l=>{
+                        return(
+                            <li className='py-5'>
+                                <div className="p-5 mx-5 rounded-lg bg-slate-400">
+                                    <p>學會 Society: {l.society_chinese} {l.society_eng}</p>
+                                    
+                                    <p>幹事會名稱 Name of Executive Committee: {l.exco_name_chinese} {l.exco_name_eng}</p>
+                                    
+                                </div>
+                            </li>
+                        )
+                    })
+                }
+            </ul>
+        </div>
+        
+        
     )
 }
 
-export default socList
+export default SocList
