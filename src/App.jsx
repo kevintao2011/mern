@@ -29,6 +29,7 @@ import SocList from './pages/socList'
 import Cart from './pages/shop/Cart';
 import CheckOut from './pages/shop/CheckOut';
 import Product from './pages/shop/Product';
+import NewCreateProduct from './pages/society/product/NewCreateProduct';
 
 function App() {
   console.log("load app.jsx")
@@ -65,7 +66,7 @@ function App() {
             </Route>
             <Route path="/society/:code/manage" element={<Manage />} />
             <Route path="society/:code/createactivity" element={<ActivityForm />} />
-            <Route path="society/:code/createproduct" element={<CreateProduct />} />
+            <Route path="society/:code/createproduct" element={<NewCreateProduct/>} />
         <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
         <Route exact path="society/:code/manage/:id/editproduct" element={<EditProduct />} />
             
