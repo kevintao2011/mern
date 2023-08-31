@@ -1,17 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../../components/session'
 const NewCreateProduct = (props) => {
+    
     const {code} = useParams()
     const {currentUser} = useAuth()
-    
+    // const first = useRef(second)
     const [productType, setproductType] = useState([])
     const [isLimited, setisLimited] = useState(true)
     const [hasVariant, sethasVariant] = useState(false)
     const [HideContent, setHideContent] = useState()
     const [serialNumber, setserialNumber] = useState()
+    const [Inherited, setInherited] = useState(false)
+    const [ProductOptions, setProductOptions] = useState([])
+    const [Category, setCategory] = useState()
+    const [Parent, setParent] = useState()
+    const [DeleteButton, setDeleteButton] = useState(false)
+    const [CSS, setCSS] = useState(
+        "grid lg:grid-cols-2 md:grid-cols-1 gap-5"
+    )
+    
+    
+    
     useEffect(() => {
-        setserialNumber(`${code}-${crypto.randomUUID()}`)
+        const serial = `${code}-${crypto.randomUUID()}`
+        if (props.parant) {
+            setParent(props.parant);
+            console.log("set to ",props.parant);
+            setCSS("grid grid-cols-1 gap-5")
+        }
+        setserialNumber(serial)
         async function getproductType(){
             await fetch('/api/getcatoption', { 
                 method: "POST",
@@ -37,7 +55,13 @@ const NewCreateProduct = (props) => {
                     data = data[0]
                     console.log("CatOptions",data)
                     setproductType(data.categories)
-                   
+                    if(props.defaultType){
+                        setCategory(props.defaultType)
+                        console.log("has default Type",props.defaultType)
+                    }else{
+                        setCategory(data.categories[0])
+                    }
+                    
                     
                 }else{
                     console.log("response.body",await response.json())
@@ -62,17 +86,19 @@ const NewCreateProduct = (props) => {
       }
     }, [hasVariant])
     
+    useEffect(() => {
+      console.log(ProductOptions)
+    }, [ProductOptions])
     
     
     return (
-        <div className="">
-            <div>{code}newCreateProduct</div>
+        <div className="border border-gray-500 border-1 m-10 p-1">
+            {/* <div>{code}newCreateProduct</div> */}
             <form action="" className='' id='createActivity'>
-                <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-5">
-                    <div className="flex flex-col ">
-                        <label htmlFor="text" className='w-full'>
-                            學會名稱 Society Name
-                        </label>
+                <p>產品編號{serialNumber}</p>
+                <div className={CSS}>
+                    {/* <div className="flex flex-col ">
+                        
                         <input 
                             value={code}
                             placeholder={code}
@@ -82,27 +108,52 @@ const NewCreateProduct = (props) => {
                             form=''
                            
                         />
-                    </div>
-                    <div className="flex flex-col ">
-                        <label htmlFor="product_type" className='w-full'>
-                            產品類型 Product Type {serialNumber}
-                        </label>
-                        <select name="" id="" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
-                            {
-                                productType.map(type=>{
-                                    return(
-                                        <option 
-                                            value={type}
-                                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
-                                            {type}
+                    </div> */}
+                    <div className=""></div>
+                    {
+                        !Parent&&(
+                            <div className="flex flex-col ">
+                                <label htmlFor="product_type" className='w-full'>
+                                    產品類型 Product Type 
+                                </label>
+                                <select 
+                                    name="" 
+                                    id="product_type" 
+                                    className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' 
+                                    disabled={Parent}
+                                    value={props.defaultType}
+                                    onChange={(e)=>{setCategory(e.currentTarget.value);console.log(e.currentTarget.value)}}
+                                >
+                                    {
+                                        productType.map((type,i)=>{
+                                            
+                                            return(
+                                            
+                                                <option  
+                                                    id={`product_type-${i}`}
+                                                    value={type}
+                                                    className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
+                                                    {type}
+                                                    
+                                                    
+                                                </option>
+                                            
+                                                
+                                            )
+                                        })
+                                    }
+                                </select>
+                                
+                            </div>
+                        )
+                    }
+                    
+                    
+                    
+                    
 
-                                        </option>
-                                    )
-                                })
-                            }
-                        </select>
-                        
-                    </div>
+                    
+
                     <div className="flex flex-col ">
                         <label htmlFor="product_name_chi" className='w-full'>
                             產品名稱
@@ -195,13 +246,13 @@ const NewCreateProduct = (props) => {
                         <label htmlFor="product_name_chi" className='w-full'>
                             附屬於產品 Parent product
                         </label>
-                        <select name="" id="" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' defaultValue={"None"} onChange={(e)=>{}}>
+                        <select name="" id="" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' defaultValue={Parent} disabled={!Inherited} >
 
                             <option 
                                 
-                                value={"None"}
+                                value={Parent}
                                 className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
-                                None
+                                {Parent}
 
                             </option>
                             <option 
@@ -220,35 +271,60 @@ const NewCreateProduct = (props) => {
                         </select>
                     </div>
 
-                    <div className="flex flex-col ">
-                        <label htmlFor="product_name_chi" className='w-full'>
-                            設有不同選項? Has various Options?
-                        </label>
-                        <select name="" id="" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' defaultValue={"None"} onChange={(e)=>{sethasVariant(e.target.value);console.log("sethasVariant"+e.target.value)}}>
-
-                            <option 
-                               
-                                value={true}
-                                className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
-                                是 Yes
-
-                            </option>
-                            <option 
-                                value={false}
-                                className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
-                                否 No
-
-                            </option>
-
+                    <div className="flex flex-col">
+                        <div className="flex flex-row ">
+                            <label htmlFor="has_options" className=''>
+                                設有不同選項? Has various Options?
+                            </label>
                             
-                        </select>
+                            <input 
+                                type="checkbox" 
+                                name="" 
+                                id="has_options" 
+                                defaultChecked={false} 
+                                onClick={()=>{
+                                    sethasVariant(!hasVariant);
+                                    setInherited(!Inherited);
+                                    console.log(hasVariant);
+                                }}
+                            />
+                        </div>
+                        {/* <input 
+                            type="number" 
+                            name="" 
+                            id="options" 
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' defaultValue={ProductOptions.length}
+                            
+                            disabled={!hasVariant}
+                        /> */}
+                        <div className="flex flex-row bg-gray-50 border w-full p-2.5  rounded-lg shadow shadow-gray-400  justify-between">
+                            <p className='text-base'>{ProductOptions.length} </p>
+                            <button
+                                onClick={(e)=>{
+                                    e.preventDefault()
+                                    setProductOptions([...ProductOptions,<NewCreateProduct parant={serialNumber} defaultType={Category}  />])
+                                    
+                                }}
+                                disabled={!hasVariant}
+                            >
+                                增加選項 Add New Options
+                            </button>
+                            
+                        </div>
                     </div>
 
+                    
+                    
+                    {/* <div className="">
+                        <label htmlFor="Number of Variants"></label>
+                        <input type="number" name="" id="" />
+                    </div> */}
+                    
                     
 
                 </div>
                 {
-                    (hasVariant==="false")&&(
+                    (!hasVariant)&&(
                         <div className="grid grid-cols-2 gap-4">
                             
                             <div className="flex flex-col ">
@@ -312,9 +388,36 @@ const NewCreateProduct = (props) => {
                         </div>
                     )
                 }
+                {
+                    Parent &&(
+                        <button 
+                            className='bg-red-600 p-2 rounded-md'
+                            onClick={()=>{
+                                // let q = confirm("Are You Sure to Delete? All subproduct will be lost");
+                                // if(q){
+                                //   console.log("hi")  
+                                // )else{
+                                //     console.log("bye")  
+                                // }
+                            }}
+                        
+                        >
+                            delete
+                        </button>
+                    )
+                }
                 
                 
             </form> 
+
+            {
+                hasVariant && (
+                    <div className="grid grid-cols-2">
+                        {ProductOptions}
+                    </div>
+                    
+                )
+            }
             
         </div>
         
