@@ -1,6 +1,7 @@
 import React, { useEffect, useState,useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../../components/session'
+
 const NewCreateProduct = (props) => {
     
     const {code} = useParams()
@@ -16,20 +17,39 @@ const NewCreateProduct = (props) => {
     const [Category, setCategory] = useState()
     const [Parent, setParent] = useState()
     const [DeleteButton, setDeleteButton] = useState(false)
+    const FormRef = useRef()
     const [CSS, setCSS] = useState(
         "grid lg:grid-cols-2 md:grid-cols-1 gap-5"
     )
     
     
+    useEffect(() => {
+        if(props.Category){
+            console.log("Triggered by props",props.Category)
+            setCategory(props.Category)
+        }
+    }, [props.Category])
+
+    // useEffect(() => {
+    //     console.log(ProductOptions)
+    // }, [ProductOptions])
+
+    
+    
     
     useEffect(() => {
+        // Generate Product ID
         const serial = `${code}-${crypto.randomUUID()}`
+
+        // Set Parent for child product
         if (props.parant) {
             setParent(props.parant);
-            console.log("set to ",props.parant);
+            console.log("set parent to ",props.parant);
             setCSS("grid grid-cols-1 gap-5")
         }
         setserialNumber(serial)
+        
+        // fetch Product Type Options from database 
         async function getproductType(){
             await fetch('/api/getcatoption', { 
                 method: "POST",
@@ -55,10 +75,11 @@ const NewCreateProduct = (props) => {
                     data = data[0]
                     console.log("CatOptions",data)
                     setproductType(data.categories)
-                    if(props.defaultType){
-                        setCategory(props.defaultType)
-                        console.log("has default Type",props.defaultType)
-                    }else{
+                    //if have inherited type
+                    if(props.Category){
+                        setCategory(props.Category)
+                        console.log("has default Type",props.Category)
+                    }else{//else set to default first
                         setCategory(data.categories[0])
                     }
                     
@@ -78,23 +99,28 @@ const NewCreateProduct = (props) => {
         
         }
     }, [])
-    useEffect(() => {
-      if( hasVariant) {
-        setHideContent(true)
-      }else{
-        setHideContent(false)
-      }
-    }, [hasVariant])
+
+
+    // useEffect(() => {
+    //   if( hasVariant) {
+    //     setHideContent(true)
+    //   }else{
+    //     setHideContent(false)
+    //   }
+    // }, [hasVariant])
     
-    useEffect(() => {
-      console.log(ProductOptions)
-    }, [ProductOptions])
     
+    
+    async function handleParentFormSubmit(e){
+        e.preventDefault()
+        console.log("Triggered Submission!")
+        
+    }
     
     return (
         <div className="border border-gray-500 border-1 m-10 p-1">
             {/* <div>{code}newCreateProduct</div> */}
-            <form action="" className='' id='createActivity'>
+            <form action="" className='' id='createActivity' ref={FormRef} onSubmit={handleParentFormSubmit}>
                 <p>產品編號{serialNumber}</p>
                 <div className={CSS}>
                     {/* <div className="flex flex-col ">
@@ -111,18 +137,19 @@ const NewCreateProduct = (props) => {
                     </div> */}
                     <div className=""></div>
                     {
-                        !Parent&&(
+                        (
                             <div className="flex flex-col ">
                                 <label htmlFor="product_type" className='w-full'>
                                     產品類型 Product Type 
                                 </label>
+                                <p>{Category}</p>
                                 <select 
                                     name="" 
                                     id="product_type" 
                                     className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' 
                                     disabled={Parent}
-                                    value={props.defaultType}
-                                    onChange={(e)=>{setCategory(e.currentTarget.value);console.log(e.currentTarget.value)}}
+                                    value={Category}
+                                    onChange={(e)=>{setCategory(e.currentTarget.value);console.log("Chosen Type: "+e.currentTarget.value)}}
                                 >
                                     {
                                         productType.map((type,i)=>{
@@ -302,7 +329,7 @@ const NewCreateProduct = (props) => {
                             <button
                                 onClick={(e)=>{
                                     e.preventDefault()
-                                    setProductOptions([...ProductOptions,<NewCreateProduct parant={serialNumber} defaultType={Category}  />])
+                                    setProductOptions([...ProductOptions,<NewCreateProduct parant={serialNumber} Category={Category} setCategory={setCategory} />])
                                     
                                 }}
                                 disabled={!hasVariant}
@@ -408,8 +435,17 @@ const NewCreateProduct = (props) => {
                 }
                 
                 
+                
             </form> 
-
+            <div className="w-full flex flex-row justify-center">
+                    <button 
+                        className='bg-su-green p-2 rounded-md m-2 text-white'
+                        onClick={()=>{FormRef.current.requestSubmit()}}
+                    >
+                        創建 Create
+                    </button>
+                </div>
+            {/* for Variants */}
             {
                 hasVariant && (
                     <div className="grid grid-cols-2">
