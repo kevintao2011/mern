@@ -73,7 +73,7 @@ const Nav = () => {
                             className="flex justify-start"
 
                         >
-                            <img src="/assests/img/NavBanner/LinguSuLogo.png" alt="" className="" width="60rem" height="60rem" />
+                            <img src="/assests/img/NavBanner/LinguSuLogo2.png" alt="" className="" width="60rem" height="60rem" />
                             
                             
                         </Link>
