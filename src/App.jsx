@@ -30,6 +30,7 @@ import Cart from './pages/shop/Cart';
 import CheckOut from './pages/shop/CheckOut';
 import Product from './pages/shop/Product';
 import NewCreateProduct from './pages/society/product/NewCreateProduct';
+import AdminPage from './pages/admin/AdminPage';
 
 function App() {
   console.log("load app.jsx")
@@ -50,7 +51,7 @@ function App() {
               <Route path="judicial" element={<Judicial />} />
               <Route path="editorialboard" element={<Editorialboard />} />
             </Route>
-            
+            <Route path="admin" element={<AdminPage />} />
             
             <Route path="shop" >
               <Route exact path="product" element={<Shop/>}/>
