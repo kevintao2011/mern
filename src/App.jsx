@@ -32,6 +32,9 @@ import Product from './pages/shop/Product';
 import NewCreateProduct from './pages/society/product/NewCreateProduct';
 import AdminPage from './pages/admin/AdminPage';
 
+
+import FuntionalParentComponent from './pages/Test/FuntionalParentComponent';
+
 function App() {
   console.log("load app.jsx")
   return (
@@ -52,6 +55,8 @@ function App() {
               <Route path="editorialboard" element={<Editorialboard />} />
             </Route>
             <Route path="admin" element={<AdminPage />} />
+            
+            <Route path="test" element={<FuntionalParentComponent />} />
             
             <Route path="shop" >
               <Route exact path="product" element={<Shop/>}/>

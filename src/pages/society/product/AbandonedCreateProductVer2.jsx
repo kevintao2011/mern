@@ -3,15 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../../components/session'
 
 
-export default function NewCreateProduct ({parentCategory,parentSKU,action="create",inheritedCategories,childIndex}){
-    
-    //action can be create or edit
+export default function NewCreateProduct ({hasVariantCategory,hasVariantSKU}){
     const {code} = useParams()
     const {currentUser} = useAuth()
     // const first = useRef(second)
     const [SubProductDatas, setSubProductDatas] = useState([])
     //form data 
-    const [Category, setCategory] = useState()
     const [ProductNameChi, setProductNameChi] = useState()
     const [ProductNameEng, setProductNameEng] = useState()
     const [ProductDescriptionChi, setProductDescriptionChi] = useState()
@@ -26,61 +23,78 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
     const [productType, setproductType] = useState([])
     // if the component is various option 
     const [hasVariant, sethasVariant] = useState(false)
-    
-   
-    //Childeren's state
+
     const [DeleteButton, setDeleteButton] = useState(false)
+   
+    //Childeren's Data
     const [ProductOptions, setProductOptions] = useState([])
-    const [childrenCount, setchildrenCount] = useState(0)
-    const [childrenData, setchildrenData] = useState([])
+    const [Category, setCategory] = useState()
+    
+    const FormRef = useRef()
     const [CSS, setCSS] = useState(
         "grid lg:grid-cols-2 md:grid-cols-1 gap-5"
     )
     
-    //Init for parent child exclusively
+    
+    useEffect(() => {
+        console.log("hasVariant Changed")
+    }, [hasVariantCategory])
+    
+    //Init run once
     useEffect(() => {
         // Generate Product ID
-        const serial = `${code}-${crypto.randomUUID().split('-')[4]}`
-        setserialNumber(serial)
+        const serial = `${code}-${crypto.randomUUID()}`
 
+        // Set Parent for child product
+        if (hasVariantSKU) {
+            setParent(hasVariantSKU);
+            console.log("set parent to ",hasVariantSKU);
+            setCSS("grid grid-cols-1 gap-5")
+        }
+        setserialNumber(serial)
+        
         // fetch Product Type Options from database 
         async function getproductType(){
-            if(parentCategory){
-                await fetch('/api/getcatoption', { 
-                    method: "POST",
-                    body: JSON.stringify({
-                        user:{
-                            token:await currentUser.getIdToken()
-                        },
-                        id:code
-                    }),
-                    headers: {
-                    "Content-Type": "application/json",
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
+            await fetch('/api/getcatoption', { 
+                method: "POST",
+                body: JSON.stringify({
+                    user:{
+                        token:await currentUser.getIdToken()
                     },
-                    mode:'cors'
+                    id:code
+                }),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                mode:'cors'
+                
+            }).then(async response => {
+                
+                if (response.ok){
+                    // registered
                     
-                }).then(async response => {
-                    
-                    if (response.ok){
-                        // registered
-                        
-                        console.log("added")
-                        var data = await response.json()
-                        data = data[0]
-                        console.log("CatOptions",data)
-                        setproductType(data.categories)
+                    console.log("added")
+                    var data = await response.json()
+                    data = data[0]
+                    console.log("CatOptions",data)
+                    setproductType(data.categories)
+                    //if have hasVariant type
+                    if(hasVariantCategory){
+                        setCategory(hasVariantCategory)
+                        console.log("has default Type",hasVariantCategory)
+                    }else{//else set to default first
                         setCategory(data.categories[0])
-                        //if have hasVariant type  
-                    }else{
-                        console.log("response.body",await response.json())
-                        const data = await response.json()
-                        console.log("data.error",data)
-                        
-                    }  
-                })
-            }
-            
+                    }
+                    
+                    
+                }else{
+                    console.log("response.body",await response.json())
+                    const data = await response.json()
+                    console.log("data.error",data)
+                    
+                }  
+            })
         }
         
         
@@ -90,19 +104,6 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
         
         }
     }, [])
-
-    // init for child exclusively
-    useEffect(() => {
-      // Set child product default activity
-        if (parentSKU) {
-            setParent(parentSKU);
-            console.log("set parent to ",parentSKU);
-            setCSS("grid grid-cols-1 gap-5")
-            setproductType(inheritedCategories)
-            setCategory(parentCategory)
-        }
-    }, [])
-    
     
     
     async function handleParentFormSubmit(e){
@@ -114,8 +115,8 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
     return (
         <div className="border border-gray-500 border-1 m-10 p-1">
             
-            
-                
+            <form action="" className='' id='createActivity' ref={FormRef} onSubmit={handleParentFormSubmit}>
+                <p>產品編號{serialNumber}</p>
                 <div className={CSS}>
                     {/* <div className="flex flex-col ">
                         
@@ -129,26 +130,14 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                            
                         />
                     </div> */}
-                    <div className="flex flex-col ">
-                        <label htmlFor="product_id" className='w-full'>
-                            產品編號
-                        </label>
-                        <input 
-                            
-                            value={serialNumber}
-                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
-                            type="text" 
-                            id="product_id" 
-                            disabled={true}
-                        />
-                    </div>
+                    <div className=""></div>
                     {
                         (
                             <div className="flex flex-col ">
                                 <label htmlFor="product_type" className='w-full'>
                                     產品類型 Product Type 
                                 </label>
-                                
+                                <p>{Category}</p>
                                 <select 
                                     name="" 
                                     id="product_type" 
@@ -182,6 +171,12 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                             </div>
                         )
                     }
+                    
+                    
+                    
+                    
+
+                    
 
                     <div className="flex flex-col ">
                         <label htmlFor="product_name_chi" className='w-full'>
@@ -331,7 +326,7 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                             <button
                                 onClick={(e)=>{
                                     e.preventDefault()
-                                    setProductOptions([...ProductOptions,<NewCreateProduct parentSKU={serialNumber} parentCategory={Category} />])
+                                    setProductOptions([...ProductOptions,<NewCreateProduct hasVariantSKU={serialNumber} hasVariantCategory={Category} />])
                                     
                                 }}
                                 disabled={!hasVariant}
@@ -438,10 +433,11 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                 
                 
                 
-         
+            </form> 
             <div className="w-full flex flex-row justify-center">
                     <button 
                         className='bg-su-green p-2 rounded-md m-2 text-white'
+                        onClick={()=>{FormRef.current.requestSubmit()}}
                     >
                         創建 Create
                     </button>
