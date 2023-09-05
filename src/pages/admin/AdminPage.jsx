@@ -6,7 +6,7 @@ export default function AdminPage() {
         <div className="flex flex-col">
             <button className='bg-su-green p-1 rounded-lg'> Edit Products/Activities </button>
             <EditLastestnews/>
-            <button> Edit Products </button>
+            <button> End of Admin Page </button>
         </div>
     </div>
     

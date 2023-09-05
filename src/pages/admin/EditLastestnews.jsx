@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Field from '../../components/FormComponents/Field'
 
 export default function EditLastestnews() {
+  const [StaticData, setStaticData] = useState()
   const [News, setNews] = useState([])
   function handleChildData (data){
     setNews(data)
@@ -9,41 +10,79 @@ export default function EditLastestnews() {
   useEffect(() => {
     async function fetchData(){
       await fetch(
-        "/api/fetchData",
+        "/api/websitestaticinfo",
         {
-          
+          method:"POST",
+          body:JSON.stringify({
+              
+          }),
+          headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              mode:'cors'
         }
-      )
-      
-      return () => {
-      
-      }
+      ).then(async res=>{
+        const collection = await res.json()
+        // collection.forEach(doc => {
+        //   console.log(Object.keys(doc))
+        // });
+        console.log("collection",collection)
+        // Replace with recursive in future
+        let data = {}
+        let title = {}
+        let content = []
+        // collection.forEach(doc => {
+        //   const keys = (Object.keys(doc))
+        //   keys.forEach((key,i)=>{
+        //     console.log("element in ",key,":",doc[key])
+        //     if (Array.isArray(doc[key])) {
+        //       doc[key].forEach(element=>{
+        //         console.log(`array element in ${key}`,element)
+        //       })
+        //     }
+        //   })
+        // });
+        setStaticData(collection)
+      })
     }
-    
+    fetchData()
     
   }, [])
+  
   
   function handleUpdate(data){
     
   }
   
   return (
-    <div className='flex flex-col '>
-      <p className='text-start'>編輯最新消息 Edit Latest News </p>
+    StaticData&&(
+      <div className='flex flex-col '>
+        {/* <p className='text-start'>編輯最新消息 Edit Latest News </p> */}
+      {/* <p className='text-start'>編輯最新消息 Edit Latest News </p>
       
-      {/* <div className="flex flex-row gap-2">
-        <input type="text"  className='border border-1 border-su-green'/>
-        <button className='bg-green-400 p-1 rounded-md'>save</button>
-        <button 
-            className='bg-red-400 p-1 rounded-md'
-        >
-            delete
-        </button>
-        
-        
-      </div> */}
-      <Field fieldType={"text"} uploadData={handleUpdate} className={"w-1/2"}/>
+      <Field fieldType={"text"} uploadData={handleUpdate} className={"w-1/2"}/> */}
       {/* <Field fieldType={"text"} uploadData={handleUpdate} edit={true}/> */}
+      {
+        StaticData.map(doc => {
+          console.log('e',doc.name)
+          return(
+            // <p>{doc.name}</p>
+            <>
+              <p>{`${doc.name}`}</p>
+              <Field 
+                fieldName={doc.content} 
+                fieldType={doc.content_type} 
+                className={"w-6/12"} 
+                fieldValues={doc.content} 
+                multipleValue={doc.multiple_content}
+              />
+            </>
+          )
+        })
+      }
     </div>
+    )
+    
   )
 }
