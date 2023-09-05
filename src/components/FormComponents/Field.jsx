@@ -23,9 +23,8 @@ export default function Field({fieldType,index,handleUpdate,fieldName,className,
     }, [fieldValues])
 
     useEffect(() => {
-      console.log("FieldValues",FieldValues)
-    
-      
+      console.log(fieldName," FieldValues",FieldValues)
+
     }, [FieldValues])
     
     
@@ -36,10 +35,14 @@ export default function Field({fieldType,index,handleUpdate,fieldName,className,
 
     function handleDelete(i){
         console.log("deleting index",i)
-        var tmp = fieldValues.toSpliced(i,1)
-       
-        console.log("tmp",tmp)
-        setFieldValues(tmp)
+        console.log(fieldName," b4 FieldValues",FieldValues)
+        FieldValues.splice(i,1)
+        console.log(fieldName," after FieldValues",FieldValues)
+        setFieldValues([...FieldValues])
+    }
+
+    function updateToParents(){
+        handleUpdate(fieldName,FieldValues)
     }
     
     console.log("field content_type",fieldType)
@@ -94,37 +97,29 @@ export default function Field({fieldType,index,handleUpdate,fieldName,className,
                 //         )
                 //     }
                 // })   
-                FieldValues.map((value,i)=>{
-                    return(
-                        <>
-                            
-                            {
-                                mutilpleField&&(// Add and Delete Button and for mutilpleField
-                                    <div className="flex flex-row">
-                                        <input 
-                                            type={fieldType} 
-                                            defaultValue={value}
-                                            className="bg-gray-50 border w-full p-1 block rounded-lg shadow shadow-gray-400"
-                                            onChange={(e)=>{
-                                                let tmp = FieldValues
-                                                tmp[i]=e.target.value
-                                                setFieldValues(tmp)
-                                            }}
-                                        />
-                                        <button 
-                                            className='p-1  bg-red-600 rounded-md '
-                                            onClick={()=>{handleDelete(i)}}
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                )
-                            }
-                            <>
-                                
-                            </>
-                        </>
-                        
+                FieldValues?.map((value,i)=>{
+                    return(   
+                        mutilpleField&&(// Add and Delete Button and for mutilpleField
+                            <div className="flex flex-row">
+                                <input 
+                                    type={fieldType} 
+                                    // defaultValue={value}
+                                    value={value}
+                                    className="bg-gray-50 border w-full p-1 block rounded-lg shadow shadow-gray-400"
+                                    onChange={(e)=>{
+                                        FieldValues[i]=e.target.value
+                                        setFieldValues([...FieldValues])
+                                        updateToParents(fieldName,FieldValues,index)
+                                    }}
+                                />
+                                <button 
+                                    className='p-1  bg-red-600 rounded-md '
+                                    onClick={()=>{handleDelete()}}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        )
                     )
                 })
             }

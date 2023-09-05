@@ -7,6 +7,17 @@ export default function EditLastestnews() {
   function handleChildData (data){
     setNews(data)
   }
+
+  function SaveFieldValues (fieldName,fieldValues,index){
+    console.log("Updating value from field",fieldName)
+    var tmp = StaticData
+    tmp[index]=fieldValues
+    setStaticData(tmp)
+  }
+  useEffect(() => {
+    console.log("StaticData:",StaticData)
+  }, [StaticData])
+  
   useEffect(() => {
     async function fetchData(){
       await fetch(
@@ -64,18 +75,20 @@ export default function EditLastestnews() {
       <Field fieldType={"text"} uploadData={handleUpdate} className={"w-1/2"}/> */}
       {/* <Field fieldType={"text"} uploadData={handleUpdate} edit={true}/> */}
       {
-        StaticData.map(doc => {
+        StaticData.map((doc,i) => {
           console.log('e',doc.name)
           return(
             // <p>{doc.name}</p>
             <>
               <p>{`${doc.name}`}</p>
               <Field 
-                fieldName={doc.content} 
+                fieldName={doc.name} 
                 fieldType={doc.content_type} 
                 className={"w-6/12"} 
                 fieldValues={doc.content} 
                 multipleValue={doc.multiple_content}
+                handleUpdate={SaveFieldValues}
+                index={i}
               />
             </>
           )
