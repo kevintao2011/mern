@@ -62,7 +62,7 @@ export default function EditLastestnews() {
   }, [])
   
   
-  function handleUpdate(data){
+  function handle(data){
     
   }
   
@@ -72,25 +72,28 @@ export default function EditLastestnews() {
         {/* <p className='text-start'>編輯最新消息 Edit Latest News </p> */}
       {/* <p className='text-start'>編輯最新消息 Edit Latest News </p>
       
-      <Field fieldType={"text"} uploadData={handleUpdate} className={"w-1/2"}/> */}
-      {/* <Field fieldType={"text"} uploadData={handleUpdate} edit={true}/> */}
+      <Field fieldType={"text"} uploadData={handle} className={"w-1/2"}/> */}
+      {/* <Field fieldType={"text"} uploadData={handle} edit={true}/> */}
       {
         StaticData.map((doc,i) => {
-          console.log('e',doc.name)
+          // console.log('e',doc)
           return(
             // <p>{doc.name}</p>
-            <>
-              <p>{`${doc.name}`}</p>
+            <div className="w-1/2" key={`edit-components-${i}`}>
+              <p key={`title-${i}`}>{`${doc.name}`}</p>
               <Field 
+                key={`${doc.name}`}
                 fieldName={doc.name} 
                 fieldType={doc.content_type} 
-                className={"w-6/12"} 
+                className={""} 
                 fieldValues={doc.content} 
                 multipleValue={doc.multiple_content}
                 handleUpdate={SaveFieldValues}
                 index={i}
+                postAPI={"/api/setwebsitestaticinfo"}
               />
-            </>
+              
+            </div>
           )
         })
       }
