@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState} from "react";
+import { useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 
 
@@ -9,7 +9,64 @@ const Home = () => {
   
 
   const [redbtn , setredbtn] = useState(false);
+  const [latestActivity, setlatestActivity] = useState([])
+  const [activityCounter, setactivityCounter] = useState(0)
+  const [latestNews, setlatestNews] = useState([])
+  const [newsCounter, setnewsCounter] = useState(0)
+  useEffect(() => {
+    async function fetchData(){
+      await fetch(
+        "/api/websitestaticinfo",
+        {
+          method:"POST",
+          body:JSON.stringify({
+              
+          }),
+          headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              mode:'cors'
+        }
+      ).then(async res=>{
+        const collection = await res.json()
+        // collection.forEach(doc => {
+        //   console.log(Object.keys(doc))
+        // });
+        console.log("collection",collection)
+        // Replace with recursive in future
+        collection.forEach(title=>{
+          if(title.name==="最新消息 Latest News"){
+            setlatestNews(title.content)
+          }else if (title.name==="最新活動 Latest Activities"){
+            setlatestActivity(title.content)
+          }
+        })
+        
+      })
+    }
+    fetchData()
+    
+  }, [])
 
+  useEffect(() => {
+    const latestNewsInterval = setInterval(() => {
+      setnewsCounter((newsCounter+1)%latestNews.length)
+      console.log(newsCounter,latestNews.length,(newsCounter+1)%latestNews.length)
+    }, 3000);
+    return () =>{clearInterval(latestNewsInterval)};
+    
+  }, [latestNews,newsCounter])
+
+  useEffect(() => {
+    const latestActivitiesInterval = setInterval(() => {
+      setnewsCounter((newsCounter+1)%latestNews.length)
+      console.log(newsCounter,latestNews.length,(newsCounter+1)%latestNews.length)
+    }, 3000);
+    return () =>{clearInterval(latestActivitiesInterval)};
+    
+  }, [latestNews,newsCounter])
+  
   return (
     <div className=''>
         
@@ -29,7 +86,7 @@ const Home = () => {
                 
                 <div className="flex flex-row justify-center py-10">
                   <p className='description backdrop-blur bg-gray-100/10 rounded-xl text-xl text-white p-2'>
-                    學生會為嶺南大學唯一代表全體全日制學生的學生組織。
+                    {latestNews[newsCounter]}
                   </p>
 
                 </div>
