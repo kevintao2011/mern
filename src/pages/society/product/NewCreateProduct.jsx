@@ -1,9 +1,21 @@
 import React, { useEffect, useState,useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../../components/session'
+import ProtoTypes from "prop-types";
 
+function NewCreateProduct ({
+    parentCategory,
+    parentSKU,
+    action="create",
+    inheritedCategories,
+    childIndex,
+    handleDelete,
 
-export default function NewCreateProduct ({parentCategory,parentSKU,action="create",inheritedCategories,childIndex}){
+    //given info
+    givenData,
+    handleData
+})
+    {
     
     //action can be create or edit
     const {code} = useParams()
@@ -11,10 +23,11 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
     // const first = useRef(second)
     const [SubProductDatas, setSubProductDatas] = useState([])
     // Product Category Option
+    const [CategoriesObject, setCategoriesObject] = useState()
     const [Categories, setCategories] = useState([])
     //form data 
     const [serialNumber, setserialNumber] = useState()
-    const [Category, setCategory] = useState()
+    const [SelectedCategory, setSelectedCategory] = useState()
     
     const [ProductNameChi, setProductNameChi] = useState()
     const [ProductNameEng, setProductNameEng] = useState()
@@ -23,19 +36,62 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
     const [tags, settags] = useState([])
     const [Coupons, setCoupons] = useState([])
     const [Parent, setParent] = useState()
-    
+    const [Inventory, setInventory] = useState(0)
     // if the component is various option 
     const [hasVariant, sethasVariant] = useState(false)
 
     //for root product
     const [unitPrice, setunitPrice] = useState()
     const [isLimited, setisLimited] = useState(true)//unlimited? have quantity if limited
+    const [ProductFormData, setProductFormData] = useState()
+    useEffect(() => {
+        setProductFormData({
+            ref_society:code, //soc-code
+            product_name_chi:ProductNameChi,
+            product_name_eng:ProductNameEng,
+            product_description_chi:ProductDescriptionChi,
+            product_description_eng:ProductDescriptionEng,
+            product_type: SelectedCategory,
+            product_img_url:[],
+            product_link:[],
+            product_status:"", //selling//ended
+            is_limited:isLimited,
+            sku:serialNumber,
+            tags:tags,
+            allowed_coupon:[],
+            subProducts:SubProductDatas
+        })
+        
+    }, [
+        isLimited,
+        unitPrice,
+        hasVariant,
+        Parent,
+        Coupons,
+        tags,
+        ProductDescriptionEng,
+        ProductDescriptionChi,
+        ProductNameEng,
+        ProductNameChi,
+        SelectedCategory,
+        serialNumber,
+        Categories,
+        SubProductDatas,
+        
+    ])
+    useEffect(() => {
+      if(handleData){
+        handleData(childIndex,ProductFormData)
+      }
+    }, [ProductFormData])
+    
+    
 
     //Childeren's state
-    const [DeleteButton, setDeleteButton] = useState(false)
-    const [ProductOptions, setProductOptions] = useState([])
-    const [childrenCount, setchildrenCount] = useState(0)
-    const [childrenData, setchildrenData] = useState([])
+    // const [DeleteButton, setDeleteButton] = useState(false)
+    // const [ProductOptions, setProductOptions] = useState([])
+    // const [childrenCount, setchildrenCount] = useState(0)
+    // const [childrenData, setchildrenData] = useState([])
     const [CSS, setCSS] = useState(
         "grid lg:grid-cols-2 md:grid-cols-1 gap-5"
     )
@@ -71,8 +127,9 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                             return d["catergory_name"]
                         })
                         console.log("CatOptions",cats)
+                        setCategoriesObject(data)
                         setCategories(cats)
-                        setCategory(cats[0])
+                        setSelectedCategory(cats[0])
                         //if have hasVariant type  
                     }else{
                         console.log("response.body",await response.json())
@@ -96,10 +153,9 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
             console.log("set parent to ",parentSKU);
             setCSS("grid grid-cols-1 gap-5")
             setCategories(inheritedCategories)
-            setCategory(parentCategory)
+            setSelectedCategory(parentCategory)
         }
     }, [])
-    
     
     
     async function handleParentFormSubmit(e){
@@ -107,9 +163,44 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
         console.log("Triggered Submission!")
         
     }
+    function handleTags(e){
+        var fieldValue=e.target.value
+        fieldValue = fieldValue.split("#")
+        fieldValue.splice(0,1)
+        fieldValue = fieldValue.map(element => {
+            return element.trim()
+        });
+        settags([...tags,fieldValue])
+        console.log("fieldValue",fieldValue)
+        e.target.value=""
+    }
+
+    function handleChildDelete(index){
+        console.log(`Deleting the ${index} product in SubProductDatas${SubProductDatas}`)
+        SubProductDatas.splice(index,1)
+        if(!SubProductDatas){
+            console.log(`Empty`)
+            setSubProductDatas([])
+        }else{
+            setSubProductDatas([...SubProductDatas])
+        }
+        
+    }
+
+    function organiseData(index,data){
+        console.log("calling organiseData from",serialNumber)
+        
+        SubProductDatas[index]=data
+        setSubProductDatas([...SubProductDatas])
+    }
+    useEffect(() => {
+      console.log("subproducts Data changed",SubProductDatas)
+    }, [SubProductDatas])
+    
+    
     
     return (
-        <div className="border border-gray-500 border-1 m-10 p-1">
+        <div className="border border-gray-500 border-1 m-10 p-1" key={serialNumber}>
             <div className={CSS}>
                 <div className="flex flex-col ">
                     <label htmlFor="product_id" className='w-full'>
@@ -123,6 +214,7 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                         disabled={true}
                     />
                 </div>
+                
                 {
                     (
                         <div className="flex flex-col ">
@@ -135,9 +227,9 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                                 id="product_type" 
                                 className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' 
                                 disabled={Parent||false}
-                                value={Category}
+                                value={SelectedCategory}
                                 onChange={(e)=>{
-                                    setCategory(e.currentTarget.value);
+                                    setSelectedCategory(e.currentTarget.value);
                                     console.log("Chosen Type: "+e.currentTarget.value)}}
                             >
                                 {
@@ -146,6 +238,7 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                                         return(
                                         
                                             <option  
+                                                key={`${serialNumber}-type-${i}`}
                                                 id={`product_type-${i}`}
                                                 value={type}
                                                 className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
@@ -174,7 +267,8 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                         className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         type="text" 
                         id="product_name_chi" 
-                        
+                        onChange={(e=>{setProductNameChi(e.target.value)})}
+                        value={givenData?.ProductNameChi}
                     />
                 </div>
                 <div className="flex flex-col ">
@@ -187,7 +281,8 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                         className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         type="text" 
                         id="product_name_eng" 
-                        
+                        onChange={(e=>{setProductNameEng(e.target.value)})}
+                        value={givenData?.ProductNameEng}
                     />
                 </div>
                 <div className="flex flex-col ">
@@ -200,6 +295,8 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                         className="w-full bg-gray-50 border p-2.5 block rounded-lg shadow shadow-gray-400" 
                         rows="6" 
                         cols="50"
+                        onChange={(e=>{setProductDescriptionChi(e.target.value)})}
+                        value={givenData?.ProductProductDescriptionChi}
                     />
                         
                     
@@ -214,6 +311,8 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                         className="w-full bg-gray-50 border p-2.5 block rounded-lg shadow shadow-gray-400" 
                         rows="6" 
                         cols="50"
+                        onChange={(e=>{setProductDescriptionEng(e.target.value)})}
+                        value={givenData?.ProductProductDescriptionEng}
                     />
                 </div>
 
@@ -226,8 +325,36 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                         className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         type="text" 
                         id="product_name_chi" 
-                        
+                        onChange={(e=>{if(e.target.value[e.target.value.length-1]===" "){
+                            handleTags(e)
+                        }})}
                     />
+                    <div className="flex flex-row">
+                    {
+                        tags.map((tag,i)=>{
+                            return(
+                                <div className="flex flex-row" key={`${serialNumber}-tag-${i}`}>
+                                    <p>#{tag}</p>
+                                    <button 
+                                        className='bg-red-500 text-white'
+                                        onClick={
+                                            ()=>{
+                                                tags.splice(i,1)
+                                                settags([...tags])
+                                            }
+                                        }
+                                    >
+                                        
+                                        x
+                                    </button>
+                                </div>
+                            )
+                        }
+                            
+                        )
+                    }
+                    </div>
+                    
                 </div>
 
                 <div className="flex flex-col ">
@@ -239,16 +366,11 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                         <option 
                             
                             className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
-                            buy 1  get 1 Free
+                            Not Availible now
 
                         </option>
 
-                        <option 
-                            
-                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
-                            送會籍
-
-                        </option>
+                        
                     </select>
                 </div>
 
@@ -256,7 +378,7 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                     <label htmlFor="product_name_chi" className='w-full'>
                         附屬於產品 Parent product
                     </label>
-                    <select name="" id="" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' defaultValue={Parent} disabled={!hasVariant} >
+                    <select name="" id="" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' value={Parent} disabled={true} >
 
                         <option 
                             
@@ -308,11 +430,25 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                         disabled={!hasVariant}
                     /> */}
                     <div className="flex flex-row bg-gray-50 border w-full p-2.5  rounded-lg shadow shadow-gray-400  justify-between">
-                        <p className='text-base'>{ProductOptions.length} </p>
+                        <p className='text-base'>{SubProductDatas.length} </p>
                         <button
                             onClick={(e)=>{
                                 e.preventDefault()
-                                setProductOptions([...ProductOptions,<NewCreateProduct parentSKU={serialNumber} parentCategory={Category} />])
+                                // setProductOptions([...ProductOptions,<NewCreateProduct parentSKU={serialNumber} parentCategory={SelectedCategory} />])
+                                setSubProductDatas([...SubProductDatas,
+                                    {
+                                        parentCategory:SelectedCategory,
+                                        parentSKU:serialNumber,
+                                        inheritedCategories:Categories,
+                                        givenData:{
+                                            ProductNameChi:ProductNameChi,
+                                            ProductNameEng:ProductNameEng,
+                                            ProductDescriptionChi:ProductDescriptionChi,
+                                            ProductDescriptionEng:ProductDescriptionEng,
+                                            tags:tags
+                                        }
+                                    }
+                                ])
                                 
                             }}
                             disabled={!hasVariant}
@@ -399,7 +535,7 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                 )
             }
             {
-                Parent &&(
+                
                     <button 
                         className='bg-red-600 p-2 rounded-md'
                         onClick={()=>{
@@ -409,30 +545,66 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
                             // )else{
                             //     console.log("bye")  
                             // }
+                            handleDelete(childIndex)
                         }}
                     
                     >
                         delete
                     </button>
-                )
+                
             }
                 
                 
                 
-         
-            <div className="w-full flex flex-row justify-center">
+            {
+                <div className="w-full flex flex-row justify-center">
                     <button 
                         className='bg-su-green p-2 rounded-md m-2 text-white'
                     >
                         創建 Create
                     </button>
                 </div>
+            }
+            
             {/* for Variants */}
-            {
+            {/* {
                 hasVariant && (
                     <div className="grid grid-cols-2">
                         {ProductOptions}
                     </div>
+                    
+                )
+            } */}
+            {
+                hasVariant && (
+                    <div className={`grid grid-cols-2`}>
+                        {
+                            SubProductDatas.map((subProduct,i)=>{
+                                return(
+                                    <NewCreateProduct 
+                                        key={`${serialNumber}-${"subProduct"}-${i}`}
+                                        parentCategory={subProduct?.parentCategory}
+                                        parentSKU={subProduct?.parentSKU}
+                                        inheritedCategories={subProduct?.inheritedCategories}
+                                        childIndex={i}
+                                        handleDelete={handleChildDelete}
+                                        givenData={
+                                            {
+                                                ProductNameChi:subProduct?.givenData?.ProductNameChi,
+                                                ProductNameProductNameEng:subProduct?.givenData?.ProductNameEng,
+        ProductDescriptionChi:subProduct?.givenData?.ProductDescriptionChi,
+        ProductDescriptionEng:subProduct?.givenData?.ProductDescriptionEng,
+                                            }
+
+                                        }
+                                        handleData={organiseData}
+                                        
+                                    />
+                                )
+                            })
+                        }
+                    </div>
+                    
                     
                 )
             }
@@ -441,3 +613,33 @@ export default function NewCreateProduct ({parentCategory,parentSKU,action="crea
         
     )
 }
+NewCreateProduct.propTypes = {
+    parentCategory:ProtoTypes.string,
+    parentSKU:ProtoTypes.string,
+    action:ProtoTypes.string,
+    inheritedCategories:ProtoTypes.arrayOf(ProtoTypes.string),
+    childIndex:ProtoTypes.number,
+    handleDelete:ProtoTypes.func,
+    handleData:ProtoTypes.func,
+    givenData:ProtoTypes.shape({
+        ProductNameChi:ProtoTypes.string,
+        ProductNameEng:ProtoTypes.string,
+        ProductDescriptionChi:ProtoTypes.string,
+        ProductDescriptionEng:ProtoTypes.string,
+        tags:ProtoTypes.arrayOf(ProtoTypes.string)
+    }),
+    
+};
+// shape({
+//     index:ProtoTypes.number,
+//     data:ProtoTypes.func({
+//         ProductNameChi:ProtoTypes.string,
+//         ProductNameEng:ProtoTypes.string,
+//         ProductDescriptionChi:ProtoTypes.string,
+//         ProductDescriptionEng:ProtoTypes.string,
+//         tags:ProtoTypes.arrayOf(ProtoTypes.string)
+//     })
+// }
+    
+// )
+export default NewCreateProduct
