@@ -29,7 +29,7 @@ function FunctionalChildComponent({ number , deleteFunction ,index }) {
 
     <div className="">
       
-      <h1>Hello, {number}!</h1>;
+      <h1>Hello, {index}!</h1>;
       <button
         onClick={()=>{onDelet()}} 
       >

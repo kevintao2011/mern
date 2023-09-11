@@ -26,7 +26,7 @@ export const Inputblock = (props) => {
                             id="variant"  
                             required="required" 
                             defaultValue={defaultValue}
-                            className='rounded-md px-5 w-full justify-self-center'
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         />
                     ):
                     (
@@ -35,7 +35,7 @@ export const Inputblock = (props) => {
                             name="variant" 
                             id="variant"  
                             required="required" 
-                            className='rounded-md px-5 w-full justify-self-center'
+                            className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         />
                     )
                 }
@@ -51,7 +51,7 @@ export const Inputblock = (props) => {
                 name="price" 
                 id="price"  
                 required="required" 
-                className='rounded-md px-5 w-full justify-self-center'
+                className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
             />
         </div>
         <div className="flex flex-row py-2 justify-between">
@@ -64,7 +64,7 @@ export const Inputblock = (props) => {
                 name="inventory" 
                 id="inventory"  
                 required="required" 
-                className='rounded-md px-5 w-full justify-self-center'
+                className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
             />
         </div>
         

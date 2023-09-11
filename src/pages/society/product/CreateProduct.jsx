@@ -268,7 +268,7 @@ const CreateProduct = () => {
                         required="required" 
                         value={code}
                         placeholder={code}
-                        className='rounded-md px-5 w-full justify-self-center'
+                        className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         disabled={true}
                     />
 
@@ -286,7 +286,7 @@ const CreateProduct = () => {
                         name="product_name" 
                         id="product_name"  
                         required="required" 
-                        className='rounded-md px-5 w-full justify-self-center'
+                        className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                     />
                     
                 
@@ -331,7 +331,7 @@ const CreateProduct = () => {
                     </label>
                     <span className='px-5'></span>
                     
-                    <textarea id="description_chi" name='description_chi' className="w-full" rows="4" cols="50">
+                    <textarea id="description_chi" name='description_chi' className="bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400" rows="4" cols="50">
 
 </textarea>
                
@@ -345,7 +345,7 @@ const CreateProduct = () => {
                     </label>
                     <span className='px-5'></span>
                     
-                    <textarea id="description_eng" name='description_eng' className="w-full" rows="4" cols="50">
+                    <textarea id="description_eng" name='description_eng' className="bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400" rows="4" cols="50">
 
 </textarea>
                
