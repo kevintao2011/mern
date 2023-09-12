@@ -29,7 +29,7 @@ function FunctionalChildComponent({ number , deleteFunction ,index }) {
 
     <div className="">
       
-      <h1>Hello, {index}!</h1>;
+      <h1>Hello, {index}! {crypto.randomUUID()}</h1>;
       <button
         onClick={()=>{onDelet()}} 
       >

@@ -2,6 +2,7 @@ import React, { useEffect, useState,useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../../components/session'
 import ProtoTypes from "prop-types";
+import { reload } from 'firebase/auth';
 
 function NewCreateProduct ({
     isRoot = true,
@@ -22,6 +23,9 @@ function NewCreateProduct ({
     defaultProductDescriptionChi,
     defaultProductDescriptionEng,
     defaulthasVariant,
+    defaultTags,
+    defaultSubProducts,
+    
 
 
 })
@@ -57,8 +61,12 @@ function NewCreateProduct ({
 
     const [Rearranging, setRearranging] = useState(false)
 
-    
     useEffect(() => {
+        console.log(serialNumber,"SubProductDatas detected updates to",SubProductDatas)
+    }, [SubProductDatas])
+    
+
+    useEffect(() => { //updating local and parent data
         console.log("updating local and parent data")
         const data = {
             ref_society:code, //soc-code
@@ -75,29 +83,15 @@ function NewCreateProduct ({
             sku:serialNumber,
             tags:tags,
             allowed_coupon:[],
-            subProducts:SubProductDatas
+            subProducts:SubProductDatas,
+            parent_product:parentSKU
         }
         setProductFormData(data)// set local states
-        
-        if(!isRoot){
-            handleData(childIndex,data) // set parent states
-        }else 
-        if(isRoot){
-            console.log("Root data",data)
-        }
-        // return()=>{
-        //     if(parentSKU){
-        //         setCategories(inheritedCategories)
-        //         setParent(parentSKU)
-        //         setSelectedCategory(parentCategory)
-        //     }
-            
-        // }
     }, [
         isLimited,
         unitPrice,
         // hasVariant,
-        Parent,
+        // Parent,
         Coupons,
         tags,
         ProductDescriptionEng,
@@ -107,16 +101,27 @@ function NewCreateProduct ({
         serialNumber,
         Categories,
         SubProductDatas
-    ])
-    function organiseData(index,data){
+    ]) 
+    useEffect(() => {
+        console.log("detect ProductFormData Update")
+        if(!isRoot){
+            handleData(childIndex,ProductFormData) // set parent states
+        }else 
+        if(isRoot){
+            console.log("Root data",ProductFormData)
+        }
+    }, [ProductFormData] )//datas of subproducts]
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    function organiseData(index,data){ 
         console.log("Updating Parents' Data....",serialNumber)
         SubProductDatas[index]=data
         setSubProductDatas([...SubProductDatas])
     }
     
     //check SelectedCategory
-    useEffect(() => {
-        console.log("SelectedCategory",SelectedCategory)
+    useEffect(() => { //update Category
+        console.log("Detected SelectedCategory",SelectedCategory)
         function recursiveChange(subProductsArray){
             console.log("recursive")
             console.log("SubProductDatas",subProductsArray)
@@ -136,14 +141,16 @@ function NewCreateProduct ({
         }
     }, [SelectedCategory])
     
-    useEffect(() => {
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    useEffect(() => { 
       setProductNameChi(defaultProductNameChi)
     }, [defaultProductNameChi])
     useEffect(() => {
         setProductNameEng(defaultProductNameEng)
     }, [defaultProductNameEng])
     useEffect(() => {
-        setProductDescriptionChi(defaultProductNameChi)
+        setProductDescriptionChi(defaultProductDescriptionChi)
     }, [defaultProductDescriptionChi])
     useEffect(() => {
         setProductDescriptionEng(defaultProductDescriptionEng)
@@ -151,24 +158,58 @@ function NewCreateProduct ({
     useEffect(() => {
         sethasVariant(defaulthasVariant)
     }, [defaulthasVariant])
- 
-    
+
+    // useEffect(() => {
+    //     if(defaultSubProducts){
+    //         setSubProductDatas(defaultSubProducts)
+    //     }
+    // }, [defaultSubProducts])
+
     useEffect(() => {
-        console.log("Updated Parents' Data of:",serialNumber,SubProductDatas)
-    }, [SubProductDatas])
+        console.log("detected defaultTags")
+        if(defaultTags){
+            settags(defaultTags)
+        }else{}
+        
+    }, [defaultTags])
+
+    function handleSubmit(){
+        let productlist = []
+        function InterateTree (topNode){
+            console.log("Interate Tree")
+            console.log(topNode.subProducts.length)
+            if (!topNode.subProducts.length){
+                productlist.push(topNode)
+                console.log("Pushed")
+            }else{
+                productlist.push(topNode)
+                topNode.subProducts.forEach(childNode=>{
+                    
+                    InterateTree(childNode)
+                })
+            }
+        }
+        InterateTree(ProductFormData)
+        console.log("productlist",productlist)
+    }
     
     const [CSS, setCSS] = useState(
         "grid lg:grid-cols-2 md:grid-cols-1 gap-5"
     )
     
     //Init for parent exclusively
+    /*
+        1. Generate ID for the component
+        2. setCategories for select fields if root
+    */
     useEffect(() => {
+        console.log("detected Init")
         // Generate Product ID
         const serial = `${code}-${crypto.randomUUID().split('-')[4]}`
         setserialNumber(serial)
         // fetch Product Type Options from database 
         async function getCategories(){
-            if(!parentCategory){
+            if(isRoot){
                 await fetch('/api/getcatoption', { 
                     method: "POST",
                     body: JSON.stringify({
@@ -223,6 +264,14 @@ function NewCreateProduct ({
     useEffect(() => {
         setSelectedCategory(parentCategory)
     }, [parentCategory])
+    
+    useEffect(() => {
+        console.log("reload")
+        console.log("reload")
+        console.log("reload")
+        console.log("reload")
+        console.log("reload")
+    }, [reload])
     
     async function handleParentFormSubmit(e){
         e.preventDefault()
@@ -287,7 +336,7 @@ function NewCreateProduct ({
                                         name="" 
                                         id="product_type" 
                                         className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' 
-                                        disabled={Parent||false}
+                                        disabled={!isRoot||false}
                                         value={SelectedCategory}
                                         onChange={(e)=>{
                                             setSelectedCategory(e.currentTarget.value); 
@@ -480,8 +529,14 @@ function NewCreateProduct ({
                             name="" 
                             id="has_options" 
                             checked={hasVariant}
-                            onChange={()=>{
-                                sethasVariant(!hasVariant);
+                            onClick={(e)=>{
+sethasVariant(!hasVariant);
+                                setSubProductDatas([])
+                                console.log(e)
+                            }}
+                            onPointerOut={(e)=>{
+                                
+                                console.log(e)
                             }}
                             
                         />
@@ -502,16 +557,21 @@ function NewCreateProduct ({
                         <button
                             onClick={(e)=>{
                                 e.preventDefault()
-                                // setProductOptions([...ProductOptions,<NewCreateProduct parentSKU={serialNumber} parentCategory={SelectedCategory} />])
-                                setSubProductDatas([...SubProductDatas,
-                                    {
-                                        parentCategory:SelectedCategory,
-                                        parentSKU:serialNumber,
-                                        inheritedCategories:Categories,
-                                        
-                                    }
-                                ])
-                                
+                                // setProductOptions([...ProductOptions,<NewCreateProduct parentSKU={serialNumber} parentCategory={SelectedCategory} />])   
+                                // const newSubProductsData = [...SubProductDatas,
+                                    // {
+                                    //     parentCategory:SelectedCategory,
+                                    //     parentSKU:serialNumber,
+                                    //     inheritedCategories:Categories,
+                                    // }
+                                // ]
+                                SubProductDatas.push({
+                                    parentCategory:SelectedCategory,
+                                    parentSKU:serialNumber,
+                                    inheritedCategories:Categories,
+                                })
+                                setSubProductDatas([...SubProductDatas])
+                                console.log("SubProductDatas After add",[...SubProductDatas])
                             }}
                             disabled={!hasVariant}
                         >
@@ -520,15 +580,6 @@ function NewCreateProduct ({
                         
                     </div>
                 </div>
-
-                
-                
-                {/* <div className="">
-                    <label htmlFor="Number of Variants"></label>
-                    <input type="number" name="" id="" />
-                </div> */}
-                
-                
 
             </div>
             {
@@ -597,7 +648,7 @@ function NewCreateProduct ({
                 )
             }
             {
-                
+                    !isRoot&&(
                     <button 
                         className='bg-red-600 p-2 rounded-md'
                         onClick={()=>{
@@ -608,53 +659,69 @@ function NewCreateProduct ({
                     >
                         delete
                     </button>
-                
+                    )
             }
                 
                 
+               
+            
+            
+            
+            {
                 
-            {
-                <div className="w-full flex flex-row justify-center">
-                    <button 
-                        className='bg-su-green p-2 rounded-md m-2 text-white'
-                    >
-                        創建 Create
-                    </button>
-                </div>
-            }
-            
-            
-            {
-                hasVariant && (
-                    <div className={`grid grid-cols-2`}>
-                        {
+                
+                <div className={`grid grid-cols-2`}>
+                    {
+                        hasVariant&&
                             SubProductDatas.map((subProduct,i)=>{
+                                console.log(`${i}SubProductDatas to be render,${subProduct}, is array?${Array.isArray(SubProductDatas)}`)
                                 return(
                                     <NewCreateProduct 
                                         key={`${serialNumber}-${"subProduct"}-${i}`}
                                         parentCategory={SelectedCategory}
                                         parentSKU={serialNumber}
                                         inheritedCategories={Categories}
+                                        // parentCategory={subProduct.parentCategory}
+                                        // parentSKU={subProduct.parentSKU}
+                                        // inheritedCategories={subProduct.inheritedCategories}
                                         childIndex={i}
                                         handleDelete={handleChildDelete}
+                                        //product content
+                                        defaultProductNameChi={subProduct?.product_name_chi}
+                                        defaultProductNameEng={subProduct?.product_name_eng}
+                                        defaultProductDescriptionChi={subProduct?.product_description_chi}
+                                        defaultProductDescriptionEng={subProduct?.product_description_eng}
+                                        defaulthasVariant={subProduct?.has_variant}
+                                        defaultTags={subProduct?.tags}
                                         
-                                        defaultProductNameChi={subProduct.product_name_chi}
-                                        defaultProductNameEng={subProduct.product_name_eng}
-                                        defaultProductDescriptionChi={subProduct.product_description_chi}
-                                        defaultProductDescriptionEng={subProduct.product_description_eng}
-                                        defaulthasVariant={subProduct.has_variant}
-
-                                        
+                                        defaultSubProducts={subProduct?.subProducts}
                                         handleData={organiseData}
                                         isRoot={false}
+                                        reload={true}
                                         
                                     />
                                 )
                             })
-                        }
-                    </div>
+                        
+                        
+                    }
+
+                    
+                </div>
                     
                     
+                
+            }
+            {
+                isRoot&&(
+                <div className="w-full flex flex-row justify-center">
+                    <button 
+                        className='bg-su-green p-2 rounded-md m-2 text-white'
+                        onClick={()=>{handleSubmit()}}
+                    >
+                        創建 Create
+                    </button>
+                </div>
                 )
             }
            
@@ -680,16 +747,5 @@ NewCreateProduct.propTypes = {
     }),
     
 };
-// shape({
-//     index:ProtoTypes.number,
-//     data:ProtoTypes.func({
-//         ProductNameChi:ProtoTypes.string,
-//         ProductNameEng:ProtoTypes.string,
-//         ProductDescriptionChi:ProtoTypes.string,
-//         ProductDescriptionEng:ProtoTypes.string,
-//         tags:ProtoTypes.arrayOf(ProtoTypes.string)
-//     })
-// }
-    
-// )
+
 export default NewCreateProduct
