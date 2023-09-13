@@ -12,11 +12,11 @@ function NewCreateProduct ({
     action="create",
     inheritedCategories,
     childIndex,
-    handleDelete,
+    handleParentDelete,
 
     //given info
     givenData,
-    uploadData,
+    
 
 
     defaultProductNameChi,
@@ -26,7 +26,9 @@ function NewCreateProduct ({
     defaulthasVariant,
     defaultTags,
     defaultSubProducts,
-    reload
+    triggerSubmit=false,
+    uploadData,
+    // update
 
 })
     
@@ -60,7 +62,7 @@ function NewCreateProduct ({
     const [isLimited, setisLimited] = useState(true)//unlimited? have quantity if limited
     const [ProductFormData, setProductFormData] = useState()
 
-    const [Rearranging, setRearranging] = useState(false)
+    const [Update, setUpdate] = useState(false)
     
     useEffect(() => {
         //console.log(serialNumber,"SubProductDatas detected updates to",SubProductDatas)
@@ -68,46 +70,95 @@ function NewCreateProduct ({
 //////////////////////////////////////////////////////////////////////////////////////////////////////
    
     
-    
-    useEffect(() => { 
-        setProductNameChi(defaultProductNameChi)
-        console.log("rerender component")
+    //Init for parent exclusively
+    /*
+        1. Generate ID for the component
+        2. setCategories for select fields if root
+    */
+    useEffect(() => {
+        //console.log("detected Init")
+        // Generate Product ID
+        const serial = `${code}-${crypto.randomUUID().split('-')[4]}`
+        setserialNumber(serial)
+        // fetch Product Type Options from database 
+        async function getCategories(){
+            await fetch('/api/getcatoption', { 
+                method: "POST",
+                body: JSON.stringify({
+                    user:{
+                        token:await currentUser.getIdToken()
+                    },
+                    id:code
+                }),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                mode:'cors'
+                
+            }).then(async response => {
+                if (response.ok){
+                    // registered
+                    
+                    var data = await response.json()
+                    const cats = data.map(d=>{
+                        return d["catergory_name"]
+                    })
+                    
+                    setCategoriesObject(data)
+                    setCategories(cats)
+                    setSelectedCategory(cats[0])
+                    //if have hasVariant type  
+                }
+            })
+        }
+        if(isRoot){
+            getCategories()
+        }
+        return () => { 
+        }
     }, [])
-    useEffect(() => { 
-        setProductNameChi(defaultProductNameChi)
-        console.log("has default ProductNameChi",defaultProductNameChi)
-    }, [defaultProductNameChi])
-    useEffect(() => {
-        setProductNameEng(defaultProductNameEng)
-        console.log("has default ProductNameEng")
-    }, [defaultProductNameEng])
-    useEffect(() => {
-        setProductDescriptionChi(defaultProductDescriptionChi)
-        console.log("has default ProductDescriptionChi")
-    }, [defaultProductDescriptionChi])
-    useEffect(() => {
-        setProductDescriptionEng(defaultProductDescriptionEng)
-        console.log("has default ProductDescriptionEng")
-    }, [defaultProductDescriptionEng])
+    
+    // useEffect(() => { 
+    //     console.log("Init isRoot",isRoot)
+    //     setProductNameChi(defaultProductNameChi)
+    //     console.log("render component")
+    // }, [])
+    // useEffect(() => { 
+    //     setProductNameChi(defaultProductNameChi)
+    //     console.log("has default ProductNameChi",defaultProductNameChi)
+    // }, [defaultProductNameChi])
+    // useEffect(() => {
+    //     setProductNameEng(defaultProductNameEng)
+    //     console.log("has default ProductNameEng",defaultProductNameEng)
+    // }, [defaultProductNameEng])
+    // useEffect(() => {
+    //     setProductDescriptionChi(defaultProductDescriptionChi)
+    //     console.log("has default ProductDescriptionChi",defaultProductDescriptionChi)
+    // }, [defaultProductDescriptionChi])
+    // useEffect(() => {
+    //     setProductDescriptionEng(defaultProductDescriptionEng)
+    //     console.log("has default ProductDescriptionEng",defaultProductDescriptionEng)
+    // }, [defaultProductDescriptionEng])
 
-    // init for child exclusively
-    useEffect(() => {
-    // Set child product default activity
-    if (parent_product) {
-        setParent(parent_product);
-        setCSS("grid grid-cols-1 gap-5")
-        setCategories(inheritedCategories)
-    }
-    }, [parent_product])
+    // // init for child exclusively
+    // useEffect(() => {
+    // // Set child product default activity
+    // if (parent_product) {
+    //     setParent(parent_product);
+    //     setCSS("grid grid-cols-1 gap-5")
+    //     setCategories(inheritedCategories)
+    // }
+    // }, [parent_product])
 
-    useEffect(() => {
-        setSelectedCategory(product_type)
-    }, [product_type])
+    // useEffect(() => {
+    //     setSelectedCategory(product_type)
+    // }, [product_type])
 
-    useEffect(() => {
-        sethasVariant(defaulthasVariant)
-        console.log("has default hasVariant")
-    }, [defaulthasVariant])
+    // useEffect(() => {
+    //     sethasVariant(defaulthasVariant)
+    //     console.log("has default hasVariant")
+    // }, [defaulthasVariant])
 
     // useEffect(() => {
     //     if(defaultSubProducts){
@@ -117,8 +168,7 @@ function NewCreateProduct ({
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     
     
-    useEffect(() => { //updating local and parent data
-        //console.log("updating local and parent data")
+    useEffect(() => { //updating local
         const data = {
             ref_society:code, //soc-code
             product_name_chi:ProductNameChi,
@@ -138,7 +188,17 @@ function NewCreateProduct ({
             parent_product:parent_product
         }
         setProductFormData(data)// set local states
-       
+        // this is trigger by local state change
+        console.log(serialNumber,"data has changed,is root?",isRoot)
+        if(!isRoot){
+            uploadData(childIndex,data) // set parent states
+            console.log("call parent update (handle Update)")
+        }else 
+        if(isRoot){
+           
+        }
+        console.log(serialNumber,"updating local data",data)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         isLimited,
         unitPrice,
@@ -151,19 +211,39 @@ function NewCreateProduct ({
         ProductNameChi,
         serialNumber,
         Categories,
-        SubProductDatas,
     ]) 
-    useEffect(() => {
-        //console.log("detect ProductFormData Update")
-        if(!isRoot){
-            uploadData(childIndex,ProductFormData) // set parent states
-        }else 
-        if(isRoot){
-            console.log("Root data",ProductFormData)
+
+    useEffect(() => {//update if value changed
+        // this is trigger by child change
+        if(SubProductDatas.length){
+            console.log(serialNumber," SubProductDatas trigger update Parent data,starter is root?",isRoot,SubProductDatas)
+            if(!isRoot){
+                console.log("call parent update (handle Update)")
+                uploadData(childIndex,ProductFormData) // set parent states
+                
+            }else 
+            if(isRoot){
+                console.log("Root data",ProductFormData)
+                console.log("//////////////////////////////////////")
+            }
+            setUpdate(false)
         }
-    }, [ProductFormData] )//datas of subproducts]
+    }, [SubProductDatas] )//datas of parent's subproduct]
+
+    function organiseData(index,data){ 
+        //console.log("Updating Parents' Data....",serialNumber)
+        SubProductDatas[index]=data
+        setSubProductDatas([...SubProductDatas])
+    }
+
+    useEffect(() => {
+        //console.log("detected defaultTags")
+        if(defaultTags){
+            settags(defaultTags)
+        }else{}
+    }, [defaultTags])
     
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////recursive////////////////////////////////////////
     
     
     //check SelectedCategory
@@ -189,20 +269,7 @@ function NewCreateProduct ({
     }, [SelectedCategory])
     
     
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    function organiseData(index,data){ 
-        //console.log("Updating Parents' Data....",serialNumber)
-        SubProductDatas[index]=data
-        setSubProductDatas([...SubProductDatas])
-    }
-    useEffect(() => {
-        //console.log("detected defaultTags")
-        if(defaultTags){
-            settags(defaultTags)
-        }else{}
-        
-    }, [defaultTags])
+/////////////////////////////////////////////recursive////////////////////////////////////////
 
     function handleSubmit(){
         let productlist = []
@@ -228,70 +295,8 @@ function NewCreateProduct ({
         "grid lg:grid-cols-2 md:grid-cols-1 gap-5"
     )
     
-    //Init for parent exclusively
-    /*
-        1. Generate ID for the component
-        2. setCategories for select fields if root
-    */
-    useEffect(() => {
-        //console.log("detected Init")
-        // Generate Product ID
-        const serial = `${code}-${crypto.randomUUID().split('-')[4]}`
-        setserialNumber(serial)
-        // fetch Product Type Options from database 
-        async function getCategories(){
-            if(isRoot){
-                await fetch('/api/getcatoption', { 
-                    method: "POST",
-                    body: JSON.stringify({
-                        user:{
-                            token:await currentUser.getIdToken()
-                        },
-                        id:code
-                    }),
-                    headers: {
-                    "Content-Type": "application/json",
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    mode:'cors'
-                    
-                }).then(async response => {
-                    if (response.ok){
-                        // registered
-                     
-                        var data = await response.json()
-                        const cats = data.map(d=>{
-                            return d["catergory_name"]
-                        })
-                        
-                        setCategoriesObject(data)
-                        setCategories(cats)
-                        setSelectedCategory(cats[0])
-                        //if have hasVariant type  
-                    }
-                    // else{
-                    //     //console.log("response.body",await response.json())
-                    //     const data = await response.json()
-                    //     //console.log("data.error",data)
-                        
-                    // }  
-                })
-            }
-        }
-        getCategories()
-        return () => { 
-        }
-    }, [])
+    
 
-    
-    
-    useEffect(() => {
-        //console.log("reload")
-        //console.log("reload")
-        //console.log("reload")
-        //console.log("reload")
-        //console.log("reload")
-    }, [reload])
     
     async function handleParentFormSubmit(e){
         e.preventDefault()
@@ -312,8 +317,8 @@ function NewCreateProduct ({
         //console.log(`Deleting the ${index} product in SubProductDatas${SubProductDatas}`)
         SubProductDatas.splice(index,1)
         setSubProductDatas([...SubProductDatas])
-        setRearranging(true)
         
+       
     }
 
     
@@ -397,7 +402,8 @@ function NewCreateProduct ({
                         type="text" 
                         id="product_name_chi" 
                         onChange={(e=>{setProductNameChi(e.target.value);})}
-                        value={ProductNameChi}
+                        // value={ProductNameChi}
+                        value={defaultProductNameChi}
                     />
                 </div>
                 <div className="flex flex-col ">
@@ -411,7 +417,8 @@ function NewCreateProduct ({
                         type="text" 
                         id="product_name_eng" 
                         onChange={(e=>{setProductNameEng(e.target.value)})}
-                        value={ProductNameEng}
+                        // value={ProductNameEng}
+                        value={defaultProductNameEng}
                     />
                 </div>
                 <div className="flex flex-col ">
@@ -425,7 +432,8 @@ function NewCreateProduct ({
                         rows="6" 
                         cols="50"
                         onChange={(e=>{setProductDescriptionChi(e.target.value)})}
-                        value={ProductDescriptionChi}
+                        // value={ProductDescriptionChi}
+                        value={defaultProductDescriptionChi}
                     />
                         
                     
@@ -441,7 +449,8 @@ function NewCreateProduct ({
                         rows="6" 
                         cols="50"
                         onChange={(e=>{setProductDescriptionEng(e.target.value)})}
-                        value={ProductDescriptionEng}
+                        // value={ProductDescriptionEng}
+                        value={defaultProductDescriptionEng}
                     />
                 </div>
 
@@ -581,10 +590,12 @@ function NewCreateProduct ({
                                     //     inheritedCategories:Categories,
                                     // }
                                 // ]
+                                
                                 SubProductDatas.push({
                                     product_type:SelectedCategory,
                                     parent_product:serialNumber,
                                 })
+                                console.log("pressed add new, new sub",SubProductDatas)
                                 setSubProductDatas([...SubProductDatas])
                                 //console.log("SubProductDatas After add",[...SubProductDatas])
                             }}
@@ -668,7 +679,8 @@ function NewCreateProduct ({
                         className='bg-red-600 p-2 rounded-md'
                         onClick={()=>{
                             
-                            handleDelete(childIndex)
+                            handleParentDelete(childIndex)
+                         
                         }}
                     
                     >
@@ -681,7 +693,9 @@ function NewCreateProduct ({
                     {
                         hasVariant&&
                             SubProductDatas.map((subProduct,i)=>{
-                                //console.log(`${i}SubProductDatas to be render,${subProduct}, is array?${Array.isArray(SubProductDatas)}`)
+                                // console.log("before render Parent Data: ",ProductFormData)
+                                console.log(`${serialNumber}SubProductDatas ${i} to be render,${subProduct}, is array?${Array.isArray(SubProductDatas)}`)
+                                console.log("subProduct",i,"data",subProduct)
                                 return(
                                     <NewCreateProduct 
                                         key={`${serialNumber}-${"subProduct"}-${i}`}
@@ -690,7 +704,7 @@ function NewCreateProduct ({
                                         inheritedCategories={Categories}
                                        
                                         childIndex={i}
-                                        handleDelete={handleChildDelete}
+                                        handleParentDelete={handleChildDelete}
                                         //product content
                                         defaultProductNameChi={subProduct?.product_name_chi}
                                         defaultProductNameEng={subProduct?.product_name_eng}
@@ -701,8 +715,10 @@ function NewCreateProduct ({
                                         
                                         defaultSubProducts={subProduct?.subProducts}
                                         uploadData={organiseData}
+                                        // update={Update}
                                         isRoot={false}
-                                        reload={true}
+                                        
+                                        
                                         
                                     />
                                 )
@@ -738,7 +754,7 @@ NewCreateProduct.propTypes = {
     action:ProtoTypes.string,
     inheritedCategories:ProtoTypes.arrayOf(ProtoTypes.string),
     childIndex:ProtoTypes.number,
-    handleDelete:ProtoTypes.func,
+    handleParentDelete:ProtoTypes.func,
     uploadData:ProtoTypes.func,
     givenData:ProtoTypes.shape({
         ProductNameChi:ProtoTypes.string,
