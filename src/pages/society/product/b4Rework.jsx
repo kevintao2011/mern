@@ -16,6 +16,9 @@ function NewCreateProduct ({
 
     //given info
     givenData,
+    
+
+
     defaultProductNameChi,
     defaultProductNameEng,
     defaultProductDescriptionChi,
@@ -26,8 +29,6 @@ function NewCreateProduct ({
     triggerSubmit=false,
     uploadData,
     // update
-    updateSingle,
-    updateSubProduct
 
 })
     
@@ -121,46 +122,46 @@ function NewCreateProduct ({
     //     setProductNameChi(defaultProductNameChi)
     //     console.log("render component")
     // }, [])
-    // useEffect(() => { 
-    //     if(defaultProductNameChi!==ProductNameChi){
-    //         setProductNameChi(defaultProductNameChi)
-    //         console.log("has default ProductNameChi",defaultProductNameChi)
-    //     }
+    useEffect(() => { 
+        if(defaultProductNameChi!==ProductNameChi){
+            setProductNameChi(defaultProductNameChi)
+            console.log("has default ProductNameChi",defaultProductNameChi)
+        }
         
-    // }, [defaultProductNameChi])
-    // useEffect(() => {
-    //     if(defaultProductNameEng!==ProductNameEng){
-    //         setProductNameEng(defaultProductNameEng)
-    //         console.log("has default ProductNameEng",defaultProductNameEng)
-    //     }
+    }, [defaultProductNameChi])
+    useEffect(() => {
+        if(defaultProductNameEng!==ProductNameEng){
+            setProductNameEng(defaultProductNameEng)
+            console.log("has default ProductNameEng",defaultProductNameEng)
+        }
         
-    // }, [defaultProductNameEng])
-    // useEffect(() => {
-    //     setProductDescriptionChi(defaultProductDescriptionChi)
-    //     console.log("has default ProductDescriptionChi",defaultProductDescriptionChi)
-    // }, [defaultProductDescriptionChi])
-    // useEffect(() => {
-    //     setProductDescriptionEng(defaultProductDescriptionEng)
-    //     console.log("has default ProductDescriptionEng",defaultProductDescriptionEng)
-    // }, [defaultProductDescriptionEng])
+    }, [defaultProductNameEng])
+    useEffect(() => {
+        setProductDescriptionChi(defaultProductDescriptionChi)
+        console.log("has default ProductDescriptionChi",defaultProductDescriptionChi)
+    }, [defaultProductDescriptionChi])
+    useEffect(() => {
+        setProductDescriptionEng(defaultProductDescriptionEng)
+        console.log("has default ProductDescriptionEng",defaultProductDescriptionEng)
+    }, [defaultProductDescriptionEng])
 
-    // // init for child exclusively
-    // useEffect(() => {
-    // // Set child product default activity
-    // if (parent_product) {
-    //     setParent(parent_product);
-    //     setCSS("grid grid-cols-1 gap-5")
-    //     setCategories(inheritedCategories)
-    // }
-    // }, [parent_product])
+    // init for child exclusively
+    useEffect(() => {
+    // Set child product default activity
+    if (parent_product) {
+        setParent(parent_product);
+        setCSS("grid grid-cols-1 gap-5")
+        setCategories(inheritedCategories)
+    }
+    }, [parent_product])
 
-    // useEffect(() => {
-    //     if(product_type){
-    //         setSelectedCategory(product_type)
-    //         // console.log(set)
-    //     }
+    useEffect(() => {
+        if(product_type){
+            setSelectedCategory(product_type)
+            // console.log(set)
+        }
         
-    // }, [product_type])
+    }, [product_type])
 
     // useEffect(() => {
     //     sethasVariant(defaulthasVariant)
@@ -219,14 +220,6 @@ function NewCreateProduct ({
         serialNumber,
         Categories,
     ]) 
-    useEffect(() => {
-        console.log(serialNumber,"called update single")
-        
-        return () => {
-            
-        }
-    }, [updateSingle])
-    
 
     useEffect(() => {//update if value changed
         // this is trigger by child change
@@ -282,27 +275,9 @@ function NewCreateProduct ({
             )
         }
     }, [SelectedCategory])
-
-    useEffect(() => {
-      console.log("Trigger is root effect and the value: ",isRoot)
-    }, [isRoot])
-    
     
     
 /////////////////////////////////////////////recursive////////////////////////////////////////
-    function fineUpdate(index,id,value){
-        console.log(`subproduct ${index} calling update props ${id} to ${value}`)
-        console.log(`change from ${SubProductDatas[index][id]} to ${value}`)
-        SubProductDatas[index][id]=value
-        setSubProductDatas([...SubProductDatas])
-    }
-
-    function subProductUpdate(index,id,value){
-        console.log(`subproduct ${index} calling update props ${id} to ${value}`)
-        console.log(`change from ${SubProductDatas[index][id]} to ${value}`)
-        SubProductDatas[index][id]=value
-        setSubProductDatas([...SubProductDatas])
-    }
 
     function handleSubmit(){
         let productlist = []
@@ -435,17 +410,9 @@ function NewCreateProduct ({
                         className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         type="text" 
                         id="product_name_chi" 
-                        onChange={(e=>{
-                            if(isRoot){
-                                console.log(`set ${e.target.id} state since is root`)
-                                setProductNameChi(e.target.value);
-                            }else{
-                                console.log("set parent subdata since is child")
-                                updateSingle(childIndex,e.target.id,e.target.value)
-                            }
-                            })}
+                        onChange={(e=>{setProductNameChi(e.target.value);})}
                         // value={ProductNameChi}
-                        value={isRoot?ProductNameChi:defaultProductNameChi}
+                        value={defaultProductNameChi}
                     />
                 </div>
                 <div className="flex flex-col ">
@@ -759,8 +726,8 @@ function NewCreateProduct ({
                                         uploadData={organiseData}
                                         // update={Update}
                                         isRoot={false}
-                                        updateSingle={fineUpdate}
-                                        updateSubProduct={subProductUpdate}
+                                        
+                                        
                                         
                                     />
                                 )
