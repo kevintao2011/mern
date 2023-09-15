@@ -25,9 +25,10 @@ function NewCreateProduct ({
     defaultSubProducts,
     triggerSubmit=false,
     uploadData,
+
     // update
     updateSingle,
-    updateSubProduct
+    updateParentSubProduct
 
 })
     
@@ -73,7 +74,7 @@ function NewCreateProduct ({
         2. setCategories for select fields if root
     */
     useEffect(() => {
-        //console.log("detected Init")
+        console.log("detected Init")
         // Generate Product ID
         const serial = `${code}-${crypto.randomUUID().split('-')[4]}`
         setserialNumber(serial)
@@ -111,139 +112,26 @@ function NewCreateProduct ({
         }
         if(isRoot){
             getCategories()
-        }
-        return () => { 
-        }
-    }, [])
- //////////////////////////////////////////////////////////////////////////////////////////////////////   
-    // useEffect(() => { 
-    //     console.log("Init isRoot",isRoot)
-    //     setProductNameChi(defaultProductNameChi)
-    //     console.log("render component")
-    // }, [])
-    // useEffect(() => { 
-    //     if(defaultProductNameChi!==ProductNameChi){
-    //         setProductNameChi(defaultProductNameChi)
-    //         console.log("has default ProductNameChi",defaultProductNameChi)
-    //     }
-        
-    // }, [defaultProductNameChi])
-    // useEffect(() => {
-    //     if(defaultProductNameEng!==ProductNameEng){
-    //         setProductNameEng(defaultProductNameEng)
-    //         console.log("has default ProductNameEng",defaultProductNameEng)
-    //     }
-        
-    // }, [defaultProductNameEng])
-    // useEffect(() => {
-    //     setProductDescriptionChi(defaultProductDescriptionChi)
-    //     console.log("has default ProductDescriptionChi",defaultProductDescriptionChi)
-    // }, [defaultProductDescriptionChi])
-    // useEffect(() => {
-    //     setProductDescriptionEng(defaultProductDescriptionEng)
-    //     console.log("has default ProductDescriptionEng",defaultProductDescriptionEng)
-    // }, [defaultProductDescriptionEng])
-
-    // // init for child exclusively
-    // useEffect(() => {
-    // // Set child product default activity
-    // if (parent_product) {
-    //     setParent(parent_product);
-    //     setCSS("grid grid-cols-1 gap-5")
-    //     setCategories(inheritedCategories)
-    // }
-    // }, [parent_product])
-
-    // useEffect(() => {
-    //     if(product_type){
-    //         setSelectedCategory(product_type)
-    //         // console.log(set)
-    //     }
-        
-    // }, [product_type])
-
-    // useEffect(() => {
-    //     sethasVariant(defaulthasVariant)
-    //     console.log("has default hasVariant")
-    // }, [defaulthasVariant])
-
-    useEffect(() => {
-        if(defaultSubProducts){
-            setSubProductDatas(defaultSubProducts)
-        }
-    }, [defaultSubProducts])
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    useEffect(() => { //updating local
-        const data = {
-            ref_society:code, //soc-code
-            product_name_chi:ProductNameChi,
-            product_name_eng:ProductNameEng,
-            product_description_chi:ProductDescriptionChi,
-            product_description_eng:ProductDescriptionEng,
-            product_type: SelectedCategory,
-            product_img_url:[],
-            product_link:[],
-            product_status:"", //selling//endeds
-            has_variant:hasVariant,
-            is_limited:isLimited,
-            sku:serialNumber,
-            tags:tags,
-            allowed_coupon:[],
-            subProducts:SubProductDatas,
-            parent_product:parent_product
-        }
-        setProductFormData(data)// set local states
-        // this is trigger by local state change
-        console.log(serialNumber,"data has changed,is root?",isRoot)
-        if(!isRoot){
-            uploadData(childIndex,data) // set parent states
-            console.log("call parent update (handle Update)")
-        }else 
-        if(isRoot){
-           
-        }
-        console.log(serialNumber,"updating local data",data)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        isLimited,
-        unitPrice,
-        hasVariant,
-        Coupons,
-        tags,
-        ProductDescriptionEng,
-        ProductDescriptionChi,
-        ProductNameEng,
-        ProductNameChi,
-        serialNumber,
-        Categories,
-    ]) 
-    useEffect(() => {
-        console.log(serialNumber,"called update single")
-        
-        return () => {
+        }else{
+            // console.log("Init setSerial Number only")
+            // console.log("Parent sku",parent_product)
+            // console.log("product type",product_type)
+            setSelectedCategory(product_type)
+            setCategories(inheritedCategories)
+            setParent(parent_product)
             
         }
-    }, [updateSingle])
+        
+    }, [])
     
 
     useEffect(() => {//update if value changed
-        // this is trigger by child change
-        if(SubProductDatas.length){
-            console.log(serialNumber," SubProductDatas trigger update Parent data,starter is root?",isRoot,SubProductDatas)
-            if(!isRoot){
-                console.log("call parent update (handle Update)")
-                uploadData(childIndex,ProductFormData) // set parent states
-                
-            }else 
-            if(isRoot){
-                console.log("Root data",ProductFormData)
-                
-            }
-            setUpdate(false)
+        if(!isRoot){
+            updateParentSubProduct(childIndex,SubProductDatas)
         }
     }, [SubProductDatas] )//datas of parent's subproduct]
+
+    
 
     function organiseData(index,data){ 
         //console.log("Updating Parents' Data....",serialNumber)
@@ -257,6 +145,20 @@ function NewCreateProduct ({
             settags(defaultTags)
         }else{}
     }, [defaultTags])
+
+    useEffect(() => {
+      sethasVariant(defaulthasVariant)
+    }, [defaulthasVariant])
+
+    useEffect(() => {
+      if(product_type){
+        setSelectedCategory(product_type)
+      }
+    }, [product_type])
+    
+
+    
+    
     
 ////////////////////////////////////////recursive////////////////////////////////////////
     
@@ -264,44 +166,59 @@ function NewCreateProduct ({
     //check SelectedCategory
     useEffect(() => { //update Category
         //console.log("Detected SelectedCategory",SelectedCategory)
-        function recursiveChange(subProductsArray){
+        function recursiveChange(subProductsArray,cat){
             //console.log("recursive")
-            //console.log("SubProductDatas",subProductsArray)
+            console.log("SubProductDatas",subProductsArray)
             return subProductsArray.map((subProduct,i) => {
-                subProduct.product_type=SelectedCategory
+                subProduct.product_type=cat
+                console.log("SubProductData",subProduct)
                 if (!subProduct.subProducts.length){ //endConcdition
+                    console.log("Returning",subProduct)
                     return subProduct
                 }else{
-                    return recursiveChange(subProduct.subProducts)
+                    console.log("subProduct.subProducts",subProduct.subProducts)
+                    subProduct.subProducts = recursiveChange(subProduct.subProducts,cat)             
+                    return subProduct   
                 }
             });
         }
-        if(SubProductDatas.length){
-            setSubProductDatas(
-                recursiveChange(SubProductDatas)
-            )
+        if(isRoot){
+            if(SubProductDatas.length){
+                // console.log(recursiveChange(SubProductDatas,SelectedCategory))
+                setSubProductDatas(
+                   [...recursiveChange(SubProductDatas,SelectedCategory)]
+                )
+            }else{
+                setSubProductDatas([])
+            }
         }
+        
     }, [SelectedCategory])
-
-    useEffect(() => {
-      console.log("Trigger is root effect and the value: ",isRoot)
-    }, [isRoot])
-    
-    
     
 /////////////////////////////////////////////recursive////////////////////////////////////////
     function fineUpdate(index,id,value){
-        console.log(`subproduct ${index} calling update props ${id} to ${value}`)
-        console.log(`change from ${SubProductDatas[index][id]} to ${value}`)
-        SubProductDatas[index][id]=value
-        setSubProductDatas([...SubProductDatas])
+        
+
+        if(isRoot){
+            SubProductDatas[index][id]=value
+            setSubProductDatas([...SubProductDatas])
+        }else{
+            defaultSubProducts[index][id]=value
+            updateParentSubProduct(childIndex,defaultSubProducts)
+        }
+       
     }
 
-    function subProductUpdate(index,id,value){
-        console.log(`subproduct ${index} calling update props ${id} to ${value}`)
-        console.log(`change from ${SubProductDatas[index][id]} to ${value}`)
-        SubProductDatas[index][id]=value
-        setSubProductDatas([...SubProductDatas])
+    function subProductUpdate(index,subproductdata){
+        if(isRoot){
+            SubProductDatas[index]["subProducts"]=subproductdata
+            setSubProductDatas([...SubProductDatas])
+        }else{
+            defaultSubProducts[index]["subProducts"]=subproductdata
+            updateParentSubProduct(childIndex,defaultSubProducts)
+        }
+        
+        
     }
 
     function handleSubmit(){
@@ -335,30 +252,45 @@ function NewCreateProduct ({
         e.preventDefault()
     }
     function handleTags(e){
+        console.log("fieldValue b4 handle",e.target.value,"default tags",defaultTags)
         var fieldValue=e.target.value
         fieldValue = fieldValue.split("#")
         fieldValue.splice(0,1)
         fieldValue = fieldValue.map(element => {
             return element.trim()
         });
-        settags([...tags,fieldValue])
-        //console.log("set tags")
+        if(isRoot){
+            settags([...tags,fieldValue])
+        }else{
+            fieldValue=[...defaultTags,...fieldValue]
+            updateSingle(childIndex,e.target.id,fieldValue)
+        }
+        
+        console.log("set tags",[...tags,fieldValue])
         e.target.value=""
     }
 
     function handleChildDelete(index){
-        console.log(`Deleting the ${index} product in SubProductDatas${SubProductDatas}`)
-        SubProductDatas.splice(index,1)
+        if(isRoot){
+            SubProductDatas.splice(index,1)
+            setSubProductDatas([...SubProductDatas])
+        }else{
+            defaultSubProducts.splice(index,1)
+            updateParentSubProduct(childIndex,defaultSubProducts)
+        }
         console.log(`Deleted the ${index} product in SubProductDatas${SubProductDatas}`)
-        setSubProductDatas([...SubProductDatas])
-        
-       
     }
 
     
     return (
         <div className="border border-gray-500 border-1 m-10 p-1" key={serialNumber}>
-            
+            <button
+                onClick={()=>{
+                    console.log(SubProductDatas)
+                }}
+            >
+                Details
+            </button>
             <div className={CSS}>
                 <div className="flex flex-col ">
                     <label htmlFor="product_id" className='w-full'>
@@ -379,29 +311,28 @@ function NewCreateProduct ({
                             <label htmlFor="product_type" className='w-full'>
                                 產品類型 Product Type 
                             </label>
-                            {/* {
-                                !isRoot?(
-                                    <p className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
-                                        {SelectedCategory}
-                                    </p>
-                                ):( */}
+                           
                                     <select 
                                         name="" 
                                         id="product_type" 
                                         className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' 
                                         disabled={!isRoot||false}
-                                        value={SelectedCategory}
-                                        onChange={(e)=>{
-                                            setSelectedCategory(e.currentTarget.value); 
-                                            
-                                        }}
-                                            
+                                        value={isRoot?SelectedCategory:product_type}
+                                        required="required"
+                                        onChange={(e=>{
+                                        if(isRoot){
+                                            console.log(`set ${e.target.id} state since is root`)
+                                            setSelectedCategory(e.target.value);
+                                        }else{
+                                            console.log("set parent subdata since is child")
+                                            updateSingle(childIndex,e.target.id,e.target.value)
+                                        }
+                                        })} 
                                     >
                                         {
                                             Categories.map((type,i)=>{
                                                 
                                                 return(
-                                                
                                                     <option  
                                                         key={`${serialNumber}-type-${i}`}
                                                         id={`product_type-${i}`}
@@ -411,8 +342,6 @@ function NewCreateProduct ({
                                                         
                                                         
                                                     </option>
-                                                
-                                                    
                                                 )
                                             })
                                         }
@@ -435,6 +364,9 @@ function NewCreateProduct ({
                         className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         type="text" 
                         id="product_name_chi" 
+                        
+                        // value={ProductNameChi}
+                        value={isRoot?ProductNameChi:defaultProductNameChi}
                         onChange={(e=>{
                             if(isRoot){
                                 console.log(`set ${e.target.id} state since is root`)
@@ -443,9 +375,7 @@ function NewCreateProduct ({
                                 console.log("set parent subdata since is child")
                                 updateSingle(childIndex,e.target.id,e.target.value)
                             }
-                            })}
-                        // value={ProductNameChi}
-                        value={isRoot?ProductNameChi:defaultProductNameChi}
+                        })} 
                     />
                 </div>
                 <div className="flex flex-col ">
@@ -458,41 +388,65 @@ function NewCreateProduct ({
                         className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         type="text" 
                         id="product_name_eng" 
-                        onChange={(e=>{setProductNameEng(e.target.value)})}
-                        // value={ProductNameEng}
-                        value={defaultProductNameEng}
+                       
+
+                        value={isRoot?ProductNameEng:defaultProductNameEng}
+                        onChange={(e=>{
+                            if(isRoot){
+                                console.log(`set ${e.target.id} state since is root`)
+                                setProductNameEng(e.target.value);
+                            }else{
+                                console.log("set parent subdata since is child")
+                                updateSingle(childIndex,e.target.id,e.target.value)
+                            }
+                        })} 
                     />
                 </div>
                 <div className="flex flex-col ">
-                    <label htmlFor="description_chi" className='w-full'>
+                    <label htmlFor="product_description_chi" className='w-full'>
                         產品介紹
                     </label>
                     <textarea 
-                        id="description_chi" 
-                        name='description_chi'   
+                        id="product_description_chi" 
+                        name='product_description_chi'   
                         className="w-full bg-gray-50 border p-2.5 block rounded-lg shadow shadow-gray-400" 
                         rows="6" 
                         cols="50"
-                        onChange={(e=>{setProductDescriptionChi(e.target.value)})}
-                        // value={ProductDescriptionChi}
-                        value={defaultProductDescriptionChi}
+
+                        value={isRoot?ProductDescriptionChi:defaultProductDescriptionChi}
+                        onChange={(e=>{
+                            if(isRoot){
+                                console.log(`set ${e.target.id} state since is root`)
+                                setProductDescriptionChi(e.target.value);
+                            }else{
+                                console.log("set parent subdata since is child")
+                                updateSingle(childIndex,e.target.id,e.target.value)
+                            }
+                        })} 
                     />
                         
                     
                 </div>
                 <div className="flex flex-col ">
-                    <label htmlFor="description_eng" className='w-full'>
+                    <label htmlFor="product_description_eng" className='w-full'>
                         Product Description
                     </label>
                     <textarea 
-                        id="description_eng" 
-                        name='description_eng'   
+                        id="product_description_eng" 
+                        name='product_description_eng'   
                         className="w-full bg-gray-50 border p-2.5 block rounded-lg shadow shadow-gray-400" 
                         rows="6" 
                         cols="50"
-                        onChange={(e=>{setProductDescriptionEng(e.target.value)})}
-                        // value={ProductDescriptionEng}
-                        value={defaultProductDescriptionEng}
+                        value={isRoot?ProductDescriptionEng:defaultProductDescriptionEng}
+                        onChange={(e=>{
+                            if(isRoot){
+                                console.log(`set ${e.target.id} state since is root`)
+                                setProductDescriptionEng(e.target.value);
+                            }else{
+                                console.log("set parent subdata since is child")
+                                updateSingle(childIndex,e.target.id,e.target.value)
+                            }
+                        })} 
                     />
                 </div>
 
@@ -504,14 +458,37 @@ function NewCreateProduct ({
                         placeholder={"#xxxx #xxxx"}
                         className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                         type="text" 
-                        id="product_name_chi" 
+                        id="tags" 
                         onChange={(e=>{if(e.target.value[e.target.value.length-1]===" "){
                             handleTags(e)
                         }})}
                     />
                     <div className="flex flex-row">
                     {
-                        tags.map((tag,i)=>{
+                        !isRoot&&defaultTags?.map((tag,i)=>{
+                            return(
+                                <div className="flex flex-row" key={`${serialNumber}-tag-${i}`}>
+                                    <p>#{tag}</p>
+                                    <button 
+                                        className='bg-red-500 text-white'
+                                        onClick={
+                                            ()=>{
+                                                defaultTags.splice(i,1)
+                                                updateSingle(childIndex,"tags",defaultTags)
+                                            }
+                                        }
+                                    >
+                                        
+                                        x
+                                    </button>
+                                </div>
+                            )
+                        }
+                            
+                        )
+                    }
+                    {
+                        isRoot&&tags.map((tag,i)=>{
                             return(
                                 <div className="flex flex-row" key={`${serialNumber}-tag-${i}`}>
                                     <p>#{tag}</p>
@@ -538,11 +515,11 @@ function NewCreateProduct ({
                 </div>
 
                 <div className="flex flex-col ">
-                    <label htmlFor="product_name_chi" className='w-full'>
+                    <label htmlFor="allowed_coupon" className='w-full'>
                         可使用優惠 Allowed Discount
                     </label>
                     
-                    <select name="" id="" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
+                    <select name="" id="allowed_coupon" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
                         <option 
                             
                             className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'>
@@ -555,10 +532,10 @@ function NewCreateProduct ({
                 </div>
 
                 <div className="flex flex-col ">
-                    <label htmlFor="product_name_chi" className='w-full'>
+                    <label htmlFor="parent_product" className='w-full'>
                         附屬於產品 Parent product
                     </label>
-                    <select name="" id="" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' value={Parent} disabled={true} >
+                    <select name="" id="parent_product" className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' value={Parent} disabled={true} >
 
                         <option 
                             
@@ -585,60 +562,56 @@ function NewCreateProduct ({
 
                 <div className="flex flex-col">
                     <div className="flex flex-row ">
-                        <label htmlFor="has_options" className=''>
+                        <label htmlFor="has_variant" className=''>
                             設有不同選項? Has various Options?
                         </label>
                         {
                             <input 
                             type="checkbox" 
                             name="" 
-                            id="has_options" 
-                            checked={hasVariant}
+                            id="has_variant" 
+                            checked={isRoot?hasVariant:defaulthasVariant}
                             onChange={(e)=>{
-                                if (e.target.checked){
-                                    sethasVariant(true);
+                           
+                                sethasVariant(e.target.checked)
+                                if(isRoot){
+                                    console.log(`set ${e.target.id} state since is root`)
+                                    sethasVariant(e.target.checked);
                                 }else{
-                                    sethasVariant(false);
+                                    console.log("set parent subdata since is child")
+                                    updateSingle(childIndex,e.target.id,e.target.checked)
                                 }
                             }}
-                            onPointerOut={(e)=>{
-                                
-                                
-                            }}
+                            
                             
                         />
                         }
                         
                         
                     </div>
-                    {/* <input 
-                        type="number" 
-                        name="" 
-                        id="options" 
-                        className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400' defaultValue={ProductOptions.length}
-                        
-                        disabled={!hasVariant}
-                    /> */}
+                    
                     <div className="flex flex-row bg-gray-50 border w-full p-2.5  rounded-lg shadow shadow-gray-400  justify-between">
-                        <p className='text-base'>{SubProductDatas.length} </p>
+                        <p className='text-base'>{defaultSubProducts?.length?defaultSubProducts.length:SubProductDatas.length} </p>
                         <button
                             onClick={(e)=>{
                                 e.preventDefault()
-                                // setProductOptions([...ProductOptions,<NewCreateProduct parent_product={serialNumber} product_type={SelectedCategory} />])   
-                                // const newSubProductsData = [...SubProductDatas,
-                                    // {
-                                    //     product_type:SelectedCategory,
-                                    //     parent_product:serialNumber,
-                                    //     inheritedCategories:Categories,
-                                    // }
-                                // ]
-                                
-                                SubProductDatas.push({
+                                console.log("b4 add subproduct data")
+                                const newData = {
                                     product_type:SelectedCategory,
                                     parent_product:serialNumber,
-                                })
-                                console.log("pressed add new, new sub",SubProductDatas)
-                                setSubProductDatas([...SubProductDatas])
+                                }
+                                if(!isRoot){
+                                    defaultSubProducts.push(newData)
+                                    updateParentSubProduct(childIndex,defaultSubProducts)
+                                    console.log("pressed add new, new sub",defaultSubProducts)
+                                }else{
+                                    SubProductDatas.push(newData)
+                                    setSubProductDatas([...SubProductDatas])
+                                    console.log("pressed add new, new sub",SubProductDatas)
+                                }
+                                
+                                
+                                
                                 //console.log("SubProductDatas After add",[...SubProductDatas])
                             }}
                             disabled={!hasVariant}
@@ -734,14 +707,14 @@ function NewCreateProduct ({
                 <div className={`grid grid-cols-2`}>
                     {
                         hasVariant&&
-                            SubProductDatas?.map((subProduct,i)=>{
+                            (defaultSubProducts?defaultSubProducts:SubProductDatas).map((subProduct,i)=>{
                                 // console.log("before render Parent Data: ",ProductFormData)
-                                console.log(`${serialNumber}SubProductDatas ${i} to be render,${subProduct.product_name_chi}, is array?${Array.isArray(SubProductDatas)}`)
-                                console.log("set subProduct",i,"to data",subProduct)
+                                console.log(`${serialNumber}SubProductDatas ${i} to be render, is array?${Array.isArray(defaultSubProducts?defaultSubProducts:SubProductDatas)}`)
+                                console.log("Render subProduct",i,"with data",subProduct)
                                 return(
                                     <NewCreateProduct 
                                         key={`${serialNumber}-${"subProduct"}-${i}`}
-                                        product_type={SelectedCategory?SelectedCategory:subProduct.ref_society}
+                                        product_type={SelectedCategory?SelectedCategory:product_type}
                                         parent_product={serialNumber}
                                         inheritedCategories={Categories}
                                        
@@ -753,14 +726,14 @@ function NewCreateProduct ({
                                         defaultProductDescriptionChi={subProduct?.product_description_chi}
                                         defaultProductDescriptionEng={subProduct?.product_description_eng}
                                         defaulthasVariant={subProduct?.has_variant}
-                                        defaultTags={subProduct?.tags}
+                                        defaultTags={subProduct.tags?subProduct.tags:[]}
                                         
-                                        defaultSubProducts={subProduct?.subProducts}
-                                        uploadData={organiseData}
+                                        defaultSubProducts={subProduct.subProducts?subProduct.subProducts:[]}
                                         // update={Update}
                                         isRoot={false}
                                         updateSingle={fineUpdate}
-                                        updateSubProduct={subProductUpdate}
+                                        updateParentSubProduct={subProductUpdate}
+                                        
                                         
                                     />
                                 )
