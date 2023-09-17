@@ -69,7 +69,7 @@ export default function EditLastestnews() {
   return (
     StaticData&&(
       <div className='flex flex-col '>
-        {/* <p className='text-start'>編輯最新消息 Edit Latest News </p> */}
+    <p className='text-start underline font-bold'>編輯最新消息 Edit Latest News </p>
       {/* <p className='text-start'>編輯最新消息 Edit Latest News </p>
       
       <Field fieldType={"text"} uploadData={handle} className={"w-1/2"}/> */}
