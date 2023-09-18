@@ -7,7 +7,12 @@ export default function ToggleList({title,subIndexs,toggleState,onPressed}) {
   return (
     <div className="w-full">
       <div className='flex flex-row p-1  rounded-lg bg-gray-100 justify-between'>
-        <p>{title}</p>
+        <p>
+          <button onClick={()=>onPressed(title)}>
+            {title}
+          </button>
+          
+        </p>
         {
           Object.keys(subIndexs).length>0 && <button
             onClick={()=>{setExpanded(prev=>!prev);}}
@@ -22,7 +27,7 @@ export default function ToggleList({title,subIndexs,toggleState,onPressed}) {
           return <ToggleList
             title={index}
             subIndexs={subIndexs[index]["subIndex"]}
-
+            onPressed={onPressed}
           />  
         })
       }

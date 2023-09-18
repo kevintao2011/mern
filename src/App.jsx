@@ -31,7 +31,7 @@ import CheckOut from './pages/shop/CheckOut';
 import Product from './pages/shop/Product';
 import NewCreateProduct from './pages/society/product/NewCreateProduct';
 import AdminPage from './pages/admin/AdminPage';
-
+import CreateProductPage from './pages/society/product/CreateProductPage';
 
 import FuntionalParentComponent from './pages/Test/FuntionalParentComponent';
 
@@ -72,7 +72,7 @@ function App() {
             </Route>
             <Route path="/society/:code/manage" element={<Manage />} />
             <Route path="society/:code/createactivity" element={<ActivityForm />} />
-            <Route path="society/:code/createproduct" element={<NewCreateProduct/>} />
+            <Route path="society/:code/createproduct" element={<CreateProductPage/>} />
         <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
         <Route exact path="society/:code/manage/:id/editproduct" element={<EditProduct />} />
             

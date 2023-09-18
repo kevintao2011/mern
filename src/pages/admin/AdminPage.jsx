@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import EditLastestnews from './EditLastestnews'
 import SearchField from '../../components/FormComponents/SearchField'
 import ToggleList from './ToggleList'
+import MembershipManagement from './Membership/MembershipManagement'
 
 /*
   Index tree 
@@ -21,15 +22,15 @@ import ToggleList from './ToggleList'
 export default function AdminPage() {
   const [Indexs, setIndexs] = useState(
     {
-      Edit:{ 
+      "網站資訊 Website Info":{ 
         expanded:false,
         subIndex:{
-          News:{
+          "最新消息 Edit Latest News":{
             expanded:false,
             subIndex:{
             }
           },
-          Activities:{
+          "最新活動 Edit Latest Activities":{
             expanded:false,
             subIndex:{
             }
@@ -37,34 +38,63 @@ export default function AdminPage() {
         }
           
       },
-      Member:{
+      "會員事務 Membership":{
         expanded:false,
         subIndex:{
-          Society:{
+          "學會會員 Society Member":{
+            expanded:false,
+            subIndex:{
+            }
+          },
+          "會員查詢 Society Member":{
+            expanded:false,
+            subIndex:{
+            }
+          },
+          "更改會員狀態 Society Member":{
             expanded:false,
             subIndex:{
             }
           }
         }
-      }
+      },
+      "場地管理 Venue Management":{ 
+        expanded:false,
+        subIndex:{
+          "建立預約 Create Booking":{
+            expanded:false,
+            subIndex:{
+            }
+          },
+          "加入場地 Add New Venue":{
+            expanded:false,
+            subIndex:{
+            }
+          }
+        },
+
+          
+      },
     }
   )
   const [Index, setIndex] = useState(
     
   )
   const [Tab, setTab] = useState()
+  function setPage(title){
+    setTab(title)
+  }
+  useEffect(() => {
+    console.log("set Tab to", Tab)
+  }, [Tab])
+  
+  
   return (
     <div className="w-full flex flex-row">
       <div className="w-3/12">
         <div className="p-5">
           <p className='text-start underline font-bold'>管理功能 Functions</p>
-          <ul>
-            <li>
-              <div className="p-1 rounded-lg bg-gray-100">
-                <p className='text-base'>Edit Latest News </p>
-              </div>
-            </li>
-          </ul>
+          
           
           <div className="w-full ">
             
@@ -74,6 +104,7 @@ export default function AdminPage() {
                 return <ToggleList
                   title={index}
                   subIndexs={Indexs[index]["subIndex"]}
+                  onPressed={setPage}
                 />
               })
               
@@ -85,13 +116,7 @@ export default function AdminPage() {
       </div>
       <div className="w-9/12">
         
-        <div className="flex flex-col">
-          <div className="">
-            <button className='bg-su-green p-2 rounded-lg text-white '>
-              Edit Products/Activities 
-            </button>
-          </div>
-            
+        <div className="flex flex-col">  
             <EditLastestnews/>
             {/* <button> End of Admin Page </button> */}
         </div>

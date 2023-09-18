@@ -23,8 +23,11 @@ function NewCreateProduct ({
     defaulthasVariant,
     defaultTags,
     defaultSubProducts,
-    triggerSubmit=false,
-    uploadData,
+    
+    defaultUnitPrice,
+    defaultInventory,
+    defaultLimited,
+    defaultCoupons,
 
     // update
     updateSingle,
@@ -63,6 +66,8 @@ function NewCreateProduct ({
     const [ProductFormData, setProductFormData] = useState()
 
     const [Update, setUpdate] = useState(false)
+    const [ErrorMsg, setErrorMsg] = useState([])
+    const [Submitting, setSubmitting] = useState(false)
     
     
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,34 +216,101 @@ function NewCreateProduct ({
 
     function subProductUpdate(index,subproductdata){
         if(isRoot){
-            SubProductDatas[index]["subProducts"]=subproductdata
+            SubProductDatas[index]["child_products"]=subproductdata
             setSubProductDatas([...SubProductDatas])
         }else{
-            defaultSubProducts[index]["subProducts"]=subproductdata
+            defaultSubProducts[index]["child_products"]=subproductdata
             updateParentSubProduct(childIndex,defaultSubProducts)
         }
         
         
     }
-
-    function handleSubmit(){
+    useEffect(() => {
+      console.log(ErrorMsg)
+    }, [ErrorMsg])
+    
+    async function handleSubmit(){
+        const rootData = {
+            code:code,
+            //ref_soc
+            product_name_chi:ProductNameChi,
+            product_name_eng:ProductNameEng,
+            product_description_chi:ProductDescriptionChi,
+            product_description_eng:ProductDescriptionEng,
+            //CreateAt
+            has_variant:hasVariant,
+            is_limited:isLimited,
+            inventory:Inventory,
+            //totalsales
+            unit_price:unitPrice,
+            tags:tags,
+            Coupons:Coupons,
+            child_products:SubProductDatas
+            
+            
+        }
+        
         let productlist = []
-        function InterateTree (topNode){
-            //console.log("Interate Tree")
+        let msgs =[]
+        function IterateTree (topNode){
+            
+            console.log("Iterate Tree",topNode.has_variant)
             //console.log(topNode.subProducts.length)
-            if (!topNode.subProducts.length){
+            if (!topNode.has_variant){ // end condtion, no subProduct 
+                //shld have price , limited then hv quantity
                 productlist.push(topNode)
-                //console.log("Pushed")
+                if(!topNode.product_name_chi){
+                    msgs.push("A Product Missing Chinese Name")
+                    // setErrorMsg([...ErrorMsg,"A Product Missing Chinese Name"])
+                }
+                if(topNode.is_limited){
+                    if(!topNode.inventory){
+                        msgs.push("A Limited Product Missing Quantity")
+                        // setErrorMsg([...ErrorMsg,"A Limited Product Missing Quantity"])
+                    }
+                }
             }else{
                 productlist.push(topNode)
-                topNode.subProducts.forEach(childNode=>{
-                    
-                    InterateTree(childNode)
+                topNode.child_products.forEach(childNode=>{
+                    IterateTree(childNode)
                 })
             }
+           
         }
-        InterateTree(ProductFormData)
-        //console.log("productlist",productlist)
+        IterateTree(rootData)
+        setErrorMsg([...msgs])
+
+        if (msgs.length>0) {
+            setSubmitting(false)
+            return
+        }else{
+            await fetch(
+                "/api/newcreateproduct",
+                {
+                    method:"POST",
+                    body:JSON.stringify({
+                        data:{
+                            code:code,
+                            productList:productlist,
+                            productTree:rootData
+                        }
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    mode:'cors'
+                }
+            ).then(async res=>{
+                await res.json().then(data=>{
+                    setErrorMsg([data.msg])
+                })
+                setSubmitting(false)
+              })
+            
+        }
+        console.log("productlist",productlist)
+
     }
     
     const [CSS, setCSS] = useState(
@@ -284,6 +356,7 @@ function NewCreateProduct ({
     
     return (
         <div className="border border-gray-500 border-1 m-10 p-1" key={serialNumber}>
+           
             <button
                 onClick={()=>{
                     console.log(SubProductDatas)
@@ -291,7 +364,7 @@ function NewCreateProduct ({
             >
                 Details
             </button>
-            <div className={CSS}>
+            <div className={isRoot?CSS:"grid-cols-1 gap-5"}>
                 <div className="flex flex-col ">
                     <label htmlFor="product_id" className='w-full'>
                         產品編號
@@ -573,7 +646,7 @@ function NewCreateProduct ({
                             checked={isRoot?hasVariant:defaulthasVariant}
                             onChange={(e)=>{
                            
-                                sethasVariant(e.target.checked)
+                             
                                 if(isRoot){
                                     console.log(`set ${e.target.id} state since is root`)
                                     sethasVariant(e.target.checked);
@@ -599,6 +672,9 @@ function NewCreateProduct ({
                                 const newData = {
                                     product_type:SelectedCategory,
                                     parent_product:serialNumber,
+                                    is_limited:false,
+                                    has_variant:false,
+                                    
                                 }
                                 if(!isRoot){
                                     defaultSubProducts.push(newData)
@@ -642,14 +718,22 @@ function NewCreateProduct ({
                                         type="checkbox" 
                                         id="is_limited" 
                                         name='is_limited' 
-                                        value={isLimited} 
-                                        className="sr-only peer" 
-                                        onClick={()=>{setisLimited(prev=>!prev);}} 
+                                        checked={isRoot?isLimited:defaultLimited} 
+                                        className="" //sr-only peer
+                                        onChange={(e)=>{
+                                            if(isRoot){
+                                                console.log(`set ${e.target.id} state since is root`)
+                                                setisLimited(e.target.checked);
+                                            }else{
+                                                console.log("set parent subdata since is child")
+                                                updateSingle(childIndex,e.target.id,e.target.checked)
+                                            }
+                                        }} 
                                     
                                     />
-                                    <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                                    {/* <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
 
-                                    </div>
+                                    </div> */}
                                 </label>
                             </div>
                             
@@ -660,7 +744,18 @@ function NewCreateProduct ({
                                     className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
                                     type="Number" 
                                     id="inventory" 
-                                    disabled={isLimited}
+                                    disabled={isRoot?!isLimited:!defaultLimited}
+                                    value={isRoot?Inventory:defaultInventory}
+                                    min={1}
+                                    onChange={(e=>{
+                                        if(isRoot){
+                                            console.log(`set ${e.target.id} state since is root`)
+                                            setInventory(e.target.value);
+                                        }else{
+                                            console.log("set parent subdata since is child")
+                                            updateSingle(childIndex,e.target.id,e.target.value)
+                                        }
+                                    })} 
                                 />
                             </div>
                         </div>
@@ -674,9 +769,20 @@ function NewCreateProduct ({
                                 <input 
                                     placeholder={0}
                                     className='bg-gray-50 border w-full p-2.5 block rounded-lg shadow shadow-gray-400'
+                                    min={0}
                                     type="Number" 
                                     id="unit_price" 
-                                    disabled={isLimited}
+                                    // disabled={isLimited}
+                                    value={isRoot?unitPrice:defaultUnitPrice}
+                                    onChange={(e=>{
+                                        if(isRoot){
+                                            console.log(`set ${e.target.id} state since is root`)
+                                            setunitPrice(e.target.value);
+                                        }else{
+                                            console.log("set parent subdata since is child")
+                                            updateSingle(childIndex,e.target.id,e.target.value)
+                                        }
+                                    })} 
                                 />
                             </div>
                         </div>
@@ -693,9 +799,7 @@ function NewCreateProduct ({
                     <button 
                         className='bg-red-600 p-2 rounded-md'
                         onClick={()=>{
-                            
                             handleParentDelete(childIndex)
-                         
                         }}
                     
                     >
@@ -714,7 +818,7 @@ function NewCreateProduct ({
                                 return(
                                     <NewCreateProduct 
                                         key={`${serialNumber}-${"subProduct"}-${i}`}
-                                        product_type={SelectedCategory?SelectedCategory:product_type}
+                                        product_type={subProduct?.product_type}
                                         parent_product={serialNumber}
                                         inheritedCategories={Categories}
                                        
@@ -728,7 +832,12 @@ function NewCreateProduct ({
                                         defaulthasVariant={subProduct?.has_variant}
                                         defaultTags={subProduct.tags?subProduct.tags:[]}
                                         
-                                        defaultSubProducts={subProduct.subProducts?subProduct.subProducts:[]}
+                                        defaultSubProducts={subProduct.child_products?subProduct.child_products:[]}
+
+                                        defaultInventory={subProduct?.inventory}
+                                        defaultLimited={subProduct?.is_limited}
+                                        defaultUnitPrice={subProduct?.unit_price}
+                                        
                                         // update={Update}
                                         isRoot={false}
                                         updateSingle={fineUpdate}
@@ -747,13 +856,32 @@ function NewCreateProduct ({
             }
             {
                 isRoot&&(
-                <div className="w-full flex flex-row justify-center">
+                <div className="w-full flex flex-col justify-center">
+                    <div className="w-full text-start text-sm">
+                        <p className='text-red-600 '>
+                            注意事項 Reminders
+                        </p>
+                        <ol className=''>
+                            <li>
+                                全部商品必填上中文名稱 All products must have Chinese Name.
+                            </li>
+                            <li>
+                                所有限量產品必須填上數量 Quantity field must be filled if its quanity is limited.
+                            </li>
+                        </ol>
+                    </div>
                     <button 
                         className='bg-su-green p-2 rounded-md m-2 text-white'
-                        onClick={()=>{handleSubmit()}}
+                        // disabled={Submitting}
+                        onClick={async ()=>{await handleSubmit();setSubmitting(true)}}
                     >
                         創建 Create
                     </button>
+                    {
+                        ErrorMsg.map(msg=>{
+                            return <p className='text-sm text-red-600'>{msg}</p>
+                        })
+                    }
                 </div>
                 )
             }
@@ -771,13 +899,19 @@ NewCreateProduct.propTypes = {
     childIndex:ProtoTypes.number,
     handleParentDelete:ProtoTypes.func,
     uploadData:ProtoTypes.func,
-    givenData:ProtoTypes.shape({
-        ProductNameChi:ProtoTypes.string,
-        ProductNameEng:ProtoTypes.string,
-        ProductDescriptionChi:ProtoTypes.string,
-        ProductDescriptionEng:ProtoTypes.string,
-        tags:ProtoTypes.arrayOf(ProtoTypes.string)
-    }),
+    
+
+    defaultProductNameChi:ProtoTypes.string,
+    defaultProductNameEng:ProtoTypes.string,
+    defaultProductDescriptionChi:ProtoTypes.string,
+    defaultProductDescriptionEng:ProtoTypes.string,
+    defaulthasVariant:ProtoTypes.bool,
+    defaultTags:ProtoTypes.array,
+    defaultSubProducts:ProtoTypes.array,
+    defaultUnitPrice:ProtoTypes.number,
+    defaultInventory:ProtoTypes.number,
+    defaultLimited:ProtoTypes.bool,
+    defaultCoupons:ProtoTypes.array
     
 };
 
