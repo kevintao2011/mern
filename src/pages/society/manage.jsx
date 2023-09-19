@@ -151,8 +151,15 @@ const Manage = () => {
                 
                 console.log("recieved")
                 const data = await response.json()
+                
+                var productList = [...data]
+                productList.sort((a,b)=>a.parent>b.parent)
+                
+                
+                
+
                 console.log("Product",data)
-                setProduct(data)
+                setProduct(productList)
                 
                 
             }else{
@@ -530,37 +537,38 @@ const Manage = () => {
                                                 return(
                                                     <li key={product._id}>
                                                         <div className="flex flex-row justify-between " >
-                                                        <p className='w-2/12 justify-center '>{(product.type)}</p>
-                                                        <p className='w-1/4 flex justify-center'>{product.product_name} </p>
+                                                        <p className='w-2/12 justify-center '>{(product.product_type
+)}</p>
+                                                        <p className='w-1/4 flex justify-center'>{product.product_name_chi} </p>
                                                         <div className="w-2/4 flex flex-col">
                                                             {
-                                                                product.variants.map((productObj,i)=>{
-                                                                    console.log(i,"productObj",productObj)
-                                                                    return(
-                                                                        <div className="w-full flex flex-col">
-                                                                            <div className="flex flex-row w-full px-2">
-                                                                                {/* <p className='  rounded-md bg-cyan-500'>{productObj.name}</p> */}
-                                                                                <p className='  rounded-md'>{productObj.name}</p>
-                                                                            </div>
+                                                                // product.sub.map((productObj,i)=>{
+                                                                //     console.log(i,"productObj",productObj)
+                                                                //     return(
+                                                                //         <div className="w-full flex flex-col">
+                                                                //             <div className="flex flex-row w-full px-2">
+                                                                //                 {/* <p className='  rounded-md bg-cyan-500'>{productObj.name}</p> */}
+                                                                //                 <p className='  rounded-md'>{productObj.name}</p>
+                                                                //             </div>
                                                                             
-                                                                            <div className="flex flex-row w-full">
-                                                                                <div className="px-2 w-1/2 ">
-                                                                                    {/* <p className='rounded-md bg-orange-600'>${productObj.price}</p> */}
-                                                                                    <p className='rounded-md'>${productObj.price}</p>
-                                                                                </div>
-                                                                                <div className="px-2 w-1/2">
-                                                                                    {/* <p className='px-2 w-1/2 rounded-md bg-blue-700'>{productObj.inventory}pcs</p> */}
-                                                                                    <p className='px-2 w-1/2 rounded-md '>{productObj.inventory}pcs</p>
-                                                                                </div>
+                                                                //             <div className="flex flex-row w-full">
+                                                                //                 <div className="px-2 w-1/2 ">
+                                                                //                     {/* <p className='rounded-md bg-orange-600'>${productObj.price}</p> */}
+                                                                //                     <p className='rounded-md'>${productObj.price}</p>
+                                                                //                 </div>
+                                                                //                 <div className="px-2 w-1/2">
+                                                                //                     {/* <p className='px-2 w-1/2 rounded-md bg-blue-700'>{productObj.inventory}pcs</p> */}
+                                                                //                     <p className='px-2 w-1/2 rounded-md '>{productObj.inventory}pcs</p>
+                                                                //                 </div>
                                                                                 
                                                                                 
-                                                                            </div>
+                                                                //             </div>
                                                                             
-                                                                        </div>
+                                                                //         </div>
                                                                         
                                                                         
-                                                                    )
-                                                                })
+                                                                //     )
+                                                                // })
                                                             }
                                                         </div>
                                                         

@@ -35,7 +35,7 @@ function NewCreateProduct ({
 
 })
     
-    {
+{
    
     //action can be create or edit
     const {code} = useParams()
@@ -216,10 +216,10 @@ function NewCreateProduct ({
 
     function subProductUpdate(index,subproductdata){
         if(isRoot){
-            SubProductDatas[index]["child_products"]=subproductdata
+            SubProductDatas[index]["subProducts"]=subproductdata
             setSubProductDatas([...SubProductDatas])
         }else{
-            defaultSubProducts[index]["child_products"]=subproductdata
+            defaultSubProducts[index]["subProducts"]=subproductdata
             updateParentSubProduct(childIndex,defaultSubProducts)
         }
         
@@ -233,6 +233,7 @@ function NewCreateProduct ({
         const rootData = {
             code:code,
             //ref_soc
+            product_type:SelectedCategory,
             product_name_chi:ProductNameChi,
             product_name_eng:ProductNameEng,
             product_description_chi:ProductDescriptionChi,
@@ -245,7 +246,7 @@ function NewCreateProduct ({
             unit_price:unitPrice,
             tags:tags,
             Coupons:Coupons,
-            child_products:SubProductDatas
+            subProducts:SubProductDatas
             
             
         }
@@ -271,7 +272,7 @@ function NewCreateProduct ({
                 }
             }else{
                 productlist.push(topNode)
-                topNode.child_products.forEach(childNode=>{
+                topNode.subProducts.forEach(childNode=>{
                     IterateTree(childNode)
                 })
             }
@@ -287,8 +288,12 @@ function NewCreateProduct ({
             await fetch(
                 "/api/newcreateproduct",
                 {
+                    
                     method:"POST",
                     body:JSON.stringify({
+                        user:{
+                            token:await currentUser.getIdToken()
+                        },
                         data:{
                             code:code,
                             productList:productlist,
@@ -832,7 +837,7 @@ function NewCreateProduct ({
                                         defaulthasVariant={subProduct?.has_variant}
                                         defaultTags={subProduct.tags?subProduct.tags:[]}
                                         
-                                        defaultSubProducts={subProduct.child_products?subProduct.child_products:[]}
+                                        defaultSubProducts={subProduct.subProducts?subProduct.subProducts:[]}
 
                                         defaultInventory={subProduct?.inventory}
                                         defaultLimited={subProduct?.is_limited}

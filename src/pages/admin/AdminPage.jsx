@@ -3,7 +3,7 @@ import EditLastestnews from './EditLastestnews'
 import SearchField from '../../components/FormComponents/SearchField'
 import ToggleList from './ToggleList'
 import MembershipManagement from './Membership/MembershipManagement'
-
+import EditCategory from './shop/EditCategory'
 /*
   Index tree 
   {
@@ -38,6 +38,32 @@ export default function AdminPage() {
         }
           
       },
+      "商店設定 Shop Setting":{ 
+        expanded:false,
+        subIndex:{
+          "更改類型選項 Edit Category Option":{
+            expanded:false,
+            subIndex:{
+            }
+          },
+          
+        }
+          
+      },
+      "學會設定 Socities":{ 
+        expanded:false,
+        subIndex:{
+          "增加/更改學會 Edit Societies":{
+            expanded:false,
+            subIndex:{
+            }
+          },
+          
+          
+        }
+          
+      },
+      
       "會員事務 Membership":{
         expanded:false,
         subIndex:{
@@ -117,7 +143,8 @@ export default function AdminPage() {
       <div className="w-9/12">
         
         <div className="flex flex-col">  
-            <EditLastestnews/>
+            <EditCategory/>
+            {/* <EditLastestnews/> */}
             {/* <button> End of Admin Page </button> */}
         </div>
       </div>
