@@ -152,21 +152,21 @@ const Manage = () => {
                 console.log("recieved")
                 const data = await response.json()
                 
-                var productList = [...data]
-                productList.sort((a,b)=>a.parent>b.parent)
+                // var productList = [...data]
+                // productList.sort((a,b)=>a.parent>b.parent)
                 
                 
                 
 
-                console.log("Product",data)
-                setProduct(productList)
+                console.log("Product",data.data)
+                setProduct(data.data)
                 
                 
             }else{
                 console.log("response.body",await response.json())
                 const data = await response.json()
-                console.log("data.error",data)
-                setProduct(data)
+                console.log("data.error",data.data)
+                setProduct(data.data)
                 
             }  
         })
@@ -421,7 +421,7 @@ const Manage = () => {
                     <div className="p-5 ">
                         {tab==="Member"&&(
                             <div className="flex flex-col">
-                                <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/creatactivity`); navigate(`/society/${code}/createactivity`)}}>
+                                <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/editmembership`); navigate(`/society/${code}/editmembership`)}}>
                                         Add member
                                 </button>
                                 {

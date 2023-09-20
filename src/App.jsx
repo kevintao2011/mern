@@ -32,7 +32,7 @@ import Product from './pages/shop/Product';
 import NewCreateProduct from './pages/society/product/NewCreateProduct';
 import AdminPage from './pages/admin/AdminPage';
 import CreateProductPage from './pages/society/product/CreateProductPage';
-
+import EditMembership from './pages/society/membership/EditMembership';
 import FuntionalParentComponent from './pages/Test/FuntionalParentComponent';
 
 function App() {
@@ -75,6 +75,7 @@ function App() {
             <Route path="society/:code/createproduct" element={<CreateProductPage/>} />
         <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
         <Route exact path="society/:code/manage/:id/editproduct" element={<EditProduct />} />
+        <Route exact path="society/:code/editmembership" element={<EditMembership />} />
             
         <Route path="account">
               <Route path="setup" element={<SetupAccount />} />

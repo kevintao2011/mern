@@ -12,11 +12,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 const iconsize = 20;
 const Profile = () => {
   const [ProfileInfo, setProfileInfo] = useState(new Info.ProfileInfo())
-  if (auth.currentUser)(
-    
-    console.log("accessToken",auth.currentUser.accessToken)
-    
-  )
+  
   
   const [init, setinit] = useState(false)
   const {currentUser,userDBInfo,setuserDBInfo,Soc} = useAuth()
@@ -65,7 +61,7 @@ const Profile = () => {
           method: "POST",
           body: JSON.stringify({
             user:{
-              token:await auth.currentUser.getIdToken()
+              token:await currentUser.getIdToken()
             },
             sid:userDBInfo.sid
           }),
