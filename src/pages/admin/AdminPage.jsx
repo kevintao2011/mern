@@ -3,7 +3,7 @@ import EditLastestnews from './EditLastestnews'
 import SearchField from '../../components/FormComponents/SearchField'
 import ToggleList from './ToggleList'
 import MembershipManagement from './Membership/MembershipManagement'
-import EditCategory from './shop/EditCategory'
+import CategoryTable from './shop/CategoryTable'
 /*
   Index tree 
   {
@@ -143,7 +143,7 @@ export default function AdminPage() {
       <div className="w-9/12">
         
         <div className="flex flex-col">  
-            <EditCategory/>
+            <CategoryTable/>
             {/* <EditLastestnews/> */}
             {/* <button> End of Admin Page </button> */}
         </div>

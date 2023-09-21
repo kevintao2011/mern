@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react"
 import { useAuth } from "../session"
 import { auth } from "../../utils/firebasefunction"
-export default function Field(
+export default function FieldForArray(
     {
         fieldType,
         index,

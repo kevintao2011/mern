@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Field from '../../components/FormComponents/Field'
+import FieldForArray from '../../components/FormComponents/FieldForArray'
 
 export default function EditLastestnews() {
   const [StaticData, setStaticData] = useState()
@@ -81,7 +81,7 @@ export default function EditLastestnews() {
             // <p>{doc.name}</p>
             <div className="w-1/2" key={`edit-components-${i}`}>
               <p key={`title-${i}`}>{`${doc.name}`}</p>
-              <Field 
+              <FieldForArray
                 key={`${doc.name}`}
                 fieldName={doc.name} 
                 fieldType={doc.content_type} 
