@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import EditLastestnews from './EditLastestnews'
-import SearchField from '../../components/FormComponents/SearchField'
+import SearchField from '../../components/FormComponents/SSelectFieldWithSearch'
 import ToggleList from './ToggleList'
 import MembershipManagement from './Membership/MembershipManagement'
 import CategoryTable from './shop/CategoryTable'

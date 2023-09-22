@@ -102,13 +102,14 @@ function NewCreateProduct ({
             }).then(async response => {
                 if (response.ok){
                     // registered
-                    
+                    var catMap={}
                     var data = await response.json()
                     const cats = data.map(d=>{
+                        catMap[d.catergory_name]=d.id
                         return d["catergory_name"]
                     })
                     
-                    setCategoriesObject(data)
+                    setCategoriesObject(catMap)
                     setCategories(cats)
                     setSelectedCategory(cats[0])
                     //if have hasVariant type  
@@ -256,9 +257,11 @@ function NewCreateProduct ({
         function IterateTree (topNode){
             
             console.log("Iterate Tree",topNode.has_variant)
+            topNode.ref_category=CategoriesObject[SelectedCategory]
             //console.log(topNode.subProducts.length)
             if (!topNode.has_variant){ // end condtion, no subProduct 
                 //shld have price , limited then hv quantity
+                console.log(CategoriesObject,SelectedCategory)
                 productlist.push(topNode)
                 if(!topNode.product_name_chi){
                     msgs.push("A Product Missing Chinese Name")
