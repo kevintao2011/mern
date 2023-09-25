@@ -53,19 +53,34 @@ function FillForm({fields , className ,title ,description}) {
                                         {
                                             field.field_type.includes('text')&&(
                                                 field.single_value?(
-                                                    <input 
-                                                        className=' border w-full p-1 block rounded-md shadow  focus:border-blue-400 '
-                                                        id={field.field_name}
-                                                        type={field.field_type} 
-                                                        value={field.field_value}
-                                                        onChange={(e)=>{updateField(index,e.target.value)}}        
-                                                        
-                                                    />
+                                                    field.field_props?.includes('paragraph')?(
+                                                        <textarea 
+                                                            name="" 
+                                                            id="" 
+                                                            cols="30" 
+                                                            className='w-full' 
+                                                            onChange={(e)=>{updateField(index,e.target.value)}}
+                                                        >
+
+                                                        </textarea>
+                                                    ):(
+                                                        <input 
+                                                            className=' border w-full p-1 block rounded-md shadow  focus:border-blue-400 '
+                                                            id={field.field_name}
+                                                            type={field.field_type} 
+                                                            value={field.field_value}
+                                                            onChange={(e)=>{updateField(index,e.target.value)}}        
+                                                            
+                                                        />
+                                                    )
+                                                    
+                                                    
                                                 ):(
                                                     <MultipleValuesField 
                                                         values={field.field_value}
                                                         uploadValues={updateField}
                                                         splitSymbol={field.split_by}
+                                                        index={index}
                                                     />
                                                 )
                                                 
@@ -109,6 +124,12 @@ function FillForm({fields , className ,title ,description}) {
                 
                 
             </table>
+            <div className="w-full flex flex-row justify-center">
+                <button className='text-center my-5 p-1 bg-green-500 rounded-md'>
+                    Create
+                </button>
+            </div>
+            
         </div>
     )
 }

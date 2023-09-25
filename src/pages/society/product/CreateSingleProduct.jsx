@@ -45,6 +45,7 @@ function CreateSingleProduct() {
                     single_value:true,
                     field_value:[], //given
                     field_type:"text",
+                    field_props:"paragraph"
                 },
                 {
                     field_name:"Product Image",
@@ -80,7 +81,7 @@ function CreateSingleProduct() {
                     field_value:[], //given
                     field_props:"multiple",
                     field_type:"text",
-                    split_by:'\s'
+                    split_by:' '
                 },
             ]
             setFormData(data)

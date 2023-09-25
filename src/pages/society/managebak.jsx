@@ -3,7 +3,6 @@ import { useAuth } from '../../components/session';
 import { useParams,useNavigate,Link } from 'react-router-dom';
 import { auth,deleteFile,storage } from '../../utils/firebasefunction';
 import ListTable from '../../components/table/ListTable';
-import SearchTool from '../../components/table/SearchTool';
 const Manage = () => {
     const {code} = useParams()
     const [tab, settab] = useState('Activity')
@@ -92,181 +91,173 @@ const Manage = () => {
     }
     useEffect(() => {
         
-        async function getSocActivity(){
-            await fetch('/api/getsocactivity', { 
-                method: "POST",
-                body: JSON.stringify({
-                    user:{
-                        token:await auth.currentUser.getIdToken()
-                    },
-                    id:code
-                }),
-                headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
+      async function getSocActivity(){
+        await fetch('/api/getsocactivity', { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken()
                 },
-                mode:'cors'
-                
-            }).then(async response => {
-                
-                if (response.ok){
-                    // registered
-                    
-                    console.log("added")
-                    const data = await response.json()
-                    console.log("Activity",data)
-                    setActivity(data)
-                    
-                    
-                }else{
-                    console.log("response.body",await response.json())
-                    const data = await response.json()
-                    console.log("data.error",data)
-                    setActivity(data)
-                    
-                }  
-            })
+                id:code
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
             
+        }).then(async response => {
             
-        }
-        async function getSocProduct(){
-            await fetch('/api/getsocproduct', { 
-                method: "POST",
-                body: JSON.stringify({
-                    user:{
-                        token:await auth.currentUser.getIdToken()
-                    },
-                    id:code
-                }),
-                headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
+            if (response.ok){
+                // registered
+                
+                console.log("added")
+                const data = await response.json()
+                console.log("Activity",data)
+                setActivity(data)
+                
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("data.error",data)
+                setActivity(data)
+                
+            }  
+        })
+        
+        
+      }
+      async function getSocProduct(){
+        await fetch('/api/getsocproduct', { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken()
                 },
-                mode:'cors'
-                
-            }).then(async response => {
-                
-                if (response.ok){
-                    // registered
-                    
-                    console.log("recieved")
-                    await response.json().then(data=>{
-                        console.log("product in fetch",data.data)
-                        setProduct(data.data)
-                    })
-                    
-                    
-                    
-                }else{
-                    console.log("response.body",await response.json())
-                    const data = await response.json()
-                    console.log("data.error",data.data)
-                    setProduct([])
-                    
-                }  
-            })
+                id:code
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
             
+        }).then(async response => {
             
-        }
-        async function getSocUser(){
-            await fetch('/api/getsocuser', { 
-                method: "POST",
-                body: JSON.stringify({
-                    user:{
-                        token:await auth.currentUser.getIdToken()
-                    },
-                    id:code
-                }),
-                headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                mode:'cors'
+            if (response.ok){
+                // registered
                 
-            }).then(async response => {
+                console.log("recieved")
+                const data = await response.json()
                 
-                if (response.ok){
-                    // registered
-                    
-                    console.log("recieved")
-                    const data = await response.json()
-                    console.log("Member",data)
-                    setMember(data)
-                    
-                    
-                }else{
-                    console.log("response.body",await response.json())
-                    const data = await response.json()
-                    console.log("data.error",data)
-                    setMember(data)
-                    
-                }  
-            })
-            
-            
-            
-        }
-        async function getSocOrder(){
-            await fetch('/api/getordersbysoc', { 
-                method: "POST",
-                body: JSON.stringify({
-                    user:{
-                        token:await auth.currentUser.getIdToken()
-                    },
-                    code:code
-                }),
-                headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                mode:'cors'
+                // var productList = [...data]
+                // productList.sort((a,b)=>a.parent>b.parent)
                 
-            }).then(async response => {
                 
-                if (response.ok){
-                    // registered
-                    
-                    console.log("recieved")
-                    const data = await response.json()
-                    console.log("order",data)
-                    setOrder(data)
-                    
-                    
-                }else{
-                    console.log("response.body",await response.json())
-                    const data = await response.json()
-                    console.log("order",data)
-                    setOrder(data)
-                    
-                }  
-            })
-        }
-        if(tab==="Activity"){
-            getSocActivity()
-        }else if(tab==="Product"){
-            getSocProduct()
-        }else if(tab==="User"){
-            getSocUser()
-        }else if(tab==="Order"){
-            getSocOrder()
-        }
-        // async function fetchAllInfo(){
-        //     await getSocActivity()
-        //     await getSocProduct()
-        //     await getSocUser()
-        //     await getSocOrder()
-        // }
-        // fetchAllInfo()
-        return () => {
-            
-        }
-    }, [tab])
+                
 
-    useEffect(() => {
-        console.log("Product",Product)
-     
-    }, [Product])
-    
+                console.log("Product",data.data)
+                setProduct(data.data)
+                
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("data.error",data.data)
+                setProduct(data.data)
+                
+            }  
+        })
+        
+        
+      }
+      async function getSocUser(){
+        await fetch('/api/getsocuser', { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken()
+                },
+                id:code
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
+            
+        }).then(async response => {
+            
+            if (response.ok){
+                // registered
+                
+                console.log("recieved")
+                const data = await response.json()
+                console.log("Member",data)
+                setMember(data)
+                
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("data.error",data)
+                setMember(data)
+                
+            }  
+        })
+        
+        
+        
+      }
+
+      async function getSocOrder(){
+        await fetch('/api/getordersbysoc', { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken()
+                },
+                code:code
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
+            
+        }).then(async response => {
+            
+            if (response.ok){
+                // registered
+                
+                console.log("recieved")
+                const data = await response.json()
+                console.log("order",data)
+                setOrder(data)
+                
+                
+            }else{
+                console.log("response.body",await response.json())
+                const data = await response.json()
+                console.log("order",data)
+                setOrder(data)
+                
+            }  
+        })
+    }
+
+      async function fetchAllInfo(){
+        await getSocActivity()
+        await getSocProduct()
+        await getSocUser()
+        await getSocOrder()
+      }
+      fetchAllInfo()
+      return () => {
+        
+      }
+    }, [])
     
     
 
@@ -526,30 +517,20 @@ const Manage = () => {
                         {tab==="Product"&&(
                             <div className="w-full flex-col ">
                                 <div className="w-full flex flex-row justify-center">
-                                    <div className="w-1/2">
-                                        <SearchTool />
-                                    </div>
-                                    <button className="bg-su-green w-1/2 text-white rounded-md p-3 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
+                                    <button className="bg-su-green w-2/3 text-white rounded-md p-3 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
                                         Create Product
                                     </button>
-                                    
                                 </div>
-                                {Array.isArray(Product)&&(
+                                {
+                                    Product&&(
                                         <ListTable 
                                             dataEntries={Product}
-                                            TitleMap={{
-                                                // _id:"_ID",
-                                                code:"Society",
-                                                product_name_chi:"Product",
-                                                product_type:"Category",
-                                                inventory:"stock",
-                                                total_sales:"sold",
-                                                published:"published"
-                                            }}
+                                            
                                         />
-                                    )}
+                                    )
+                                }
                                 
-                                {/* {Product&&(
+                                {Product&&(
                                     <div className="flex flex-col ">
                                         <div className="flex flex-row justify-start  text-base">
                                             <div className="w-2/12 justify-center">Type</div>
@@ -584,7 +565,7 @@ const Manage = () => {
                                             })}
                                         </ul>
                                     </div>
-                                )} */}
+                                )}
                             </div>
                         )}
 
