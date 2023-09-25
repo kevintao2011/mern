@@ -1,71 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import SSelectFieldWithSearch from './SSelectFieldWithSearch'
+import FileField from './FileField'
+import MultipleValuesField from './MultipleValuesField'
 function FillForm({fields , className ,title ,description}) {
-    const [Headings, setHeadings] = useState([])
-    const [CategoryMap, setCategoryMap] = useState()
-    const [Values, setValues] = useState()
-    const [FieldType, setFieldType] = useState("text")
-    const fieldTypeMap = {
-        
-    }
+    // const [Headings, setHeadings] = useState([])
+    
+    const [Fields, setFields] = useState()
+    useEffect(() => {
+        console.log("Initing form")
+        setFields(fields)
+    }, [])
+    
+    // index: index of field, single: multiple objects, id : field id
 
-    useEffect(() => {
-        setFieldType()
-      
-        return () => {
-          
-        }
-      }, [fields.field_type])
+    function updateField(index,values){
+        var newFields  = Fields
+        newFields[index]["field_value"]=values
+        setFields([...newFields])
+        console.log("updated",newFields)
+    }
     
-    
-    useEffect(() => {
-        var hlist = []
-        fields.map(field=>{
-            hlist.push(field.field_name)
-        })
-        setHeadings(hlist)
-    }, [])
-    /*
-        [
-            {
-            field_name:"Product Title/Name",
-            field_type:"text",
-            field_value:"", //given
-            
-            },
-            :
-            :
-        ]
-    */
-    useEffect(() => {
-        async function getCategories(){
-            await fetch('/api/getcatoption', { 
-                method: "POST",
-                body: JSON.stringify({
-                    
-                }),
-                headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                mode:'cors'
-                
-            }).then(async response => {
-                if (response.ok){
-                    var newMap = {}
-                    var data = await response.json()
-                    data.forEach(d=>{
-                        newMap[d.catergory_name]=d.id
-                    })
-                    setCategoryMap(newMap)
-                }
-            })
-        }
-        getCategories()
-        return () => {
-        
-        }
-    }, [])
     
     return (
         <div className={`${className}`}>
@@ -74,46 +28,86 @@ function FillForm({fields , className ,title ,description}) {
                 <p className='my-2 text-base'>{description}</p>
             </div>
             <table className="w-full">
-                {
-                    fields.map(field=>{
-                        return(
-                            <tr>
-                                <td className="text-start">{field.field_name}</td>
-                                {/* <th className="text-start">{field.field_name}</th> */}
-                                {
-                                    field.field_type.includes('search')&&<SSelectFieldWithSearch items={Object.keys(field.field_type)} />
-                                }
-                                {
-                                    field.field_type.includes('select')?(
-                                        <></>
-                                    ):(
-                                        <input 
-                                            className=' border w-full p-1 block rounded-md shadow  focus:border-blue-400 '
-
-                                            id={field.field_name}
-                                            type={field.field_type} 
-                                        />
-                                    )
-                                }
-                                
-                                
-                            </tr>
-                        )
-                        
-                    })
-                }
-                {/* <tr>
-                    <th>Name:</th>
-                    <td>Bill Gates</td>
-                </tr>
-                <tr>
-                    <th>Telephone:</th>
-                    <td>555 77 854</td>
-                </tr>
-                <tr>
-                    <th>Telephone:</th>
-                    <td>555 77 855</td>
-                </tr> */}
+                <tbody>
+                    {
+                        Fields?.map((field,index)=>{
+                            // console.log("field",index," ",field)
+                            return(
+                                <tr key={`field-${index}`}>
+                                    <td className="text-start">{field.field_name}</td>
+                                    <td>
+                                        {
+                                            field.field_type.includes('select')&&(
+                                                <SSelectFieldWithSearch 
+                                                    key={crypto.randomUUID()}
+                                                    options={field.field_options} 
+                                                    uploadSelected={updateField}
+                                                    index={index}
+                                                    single={field.single_value}
+                                                    values={field.field_value} 
+                                                    canSearch={field.field_props.includes('search')}
+                                                />
+                                            )
+                                            
+                                        }
+                                        {
+                                            field.field_type.includes('text')&&(
+                                                field.single_value?(
+                                                    <input 
+                                                        className=' border w-full p-1 block rounded-md shadow  focus:border-blue-400 '
+                                                        id={field.field_name}
+                                                        type={field.field_type} 
+                                                        value={field.field_value}
+                                                        onChange={(e)=>{updateField(index,e.target.value)}}        
+                                                        
+                                                    />
+                                                ):(
+                                                    <MultipleValuesField 
+                                                        values={field.field_value}
+                                                        uploadValues={updateField}
+                                                        splitSymbol={field.split_by}
+                                                    />
+                                                )
+                                                
+                                            )
+                                        }
+                                        {
+                                            field.field_type.includes('number')&&(
+                                                <input 
+                                                    className=' border w-full p-1 block rounded-md shadow  focus:border-blue-400 '
+                                                    id={field.field_name}
+                                                    type={field.field_type} 
+                                                    value={field.field_value}
+                                                    onChange={(e)=>{updateField(index,field.field_type==='file'?e.target.files:e.target.value)}}
+                                                    min={0}                                      
+                                                />
+                                            )
+                                        }
+                                        {
+                                            field.field_type.includes('file')&&(
+                                                
+                                                <FileField 
+                                                    imgs={field.field_value}
+                                                    fieldTitle={field.field_name}
+                                                    single={field.single_value}
+                                                    updatePhoto={updateField}
+                                                    index={index}
+                                                    
+                                                />
+                                            )
+                                        }
+                                    </td>
+                                    
+                                    
+                                    
+                                </tr>
+                            )
+                            
+                        })
+                    }
+                </tbody>
+                
+                
             </table>
         </div>
     )
