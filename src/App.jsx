@@ -35,6 +35,7 @@ import CreateProductPage from './pages/society/product/CreateProductPage';
 import EditMembership from './pages/society/membership/EditMembership';
 import FuntionalParentComponent from './pages/Test/FuntionalParentComponent';
 import CreateSingleProduct from './pages/society/product/CreateSingleProduct';
+import 'rsuite/dist/rsuite.min.css';
 
 function App() {
   console.log("load app.jsx")

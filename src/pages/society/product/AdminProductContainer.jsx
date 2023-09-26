@@ -2,10 +2,13 @@ import React, { useEffect,useRef,useState } from 'react'
 import ListTable from '../../../components/table/ListTable'
 import { useNavigate } from 'react-router-dom'
 import CreateSingleProduct from './CreateSingleProduct'
+import { Drawer, ButtonToolbar, Button, Placeholder } from 'rsuite';
 
-function AdminProductPage({Product,code}) {
+function AdminProductContainer({Product,code}) {
     const navigate = useNavigate()
     const [showDrawer, setshowDrawer] = useState(false)
+    const [open, setOpen] = useState(false);
+    
     
     console.log(code)
     let sideBarRef = useRef()
@@ -39,6 +42,19 @@ function AdminProductPage({Product,code}) {
                     <CreateSingleProduct/>
                 </div>
             }
+            <div className="">
+                <ButtonToolbar>
+                    <Button onClick={() => setOpen(true)}>Open</Button>
+                </ButtonToolbar>
+
+                <Drawer open={open} onClose={() => setOpen(false)}>
+                    <Drawer.Body className=''>
+                        <CreateSingleProduct/>
+                    </Drawer.Body>
+                </Drawer>
+
+                
+            </div>
             <div className={`w-full flex-col ${showDrawer&&'blur-md'} z-0`}  >
             
                 <div className="w-full flex flex-row justify-center">
@@ -89,4 +105,4 @@ function AdminProductPage({Product,code}) {
     )
 }
 
-export default AdminProductPage
+export default AdminProductContainer

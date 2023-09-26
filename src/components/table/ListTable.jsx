@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import SearchTool from './SearchTool'
+import moment from 'moment/moment'
+import { Toggle } from 'rsuite'
 function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,DeletAPI}) {
     console.log("dataEntries.dataEntries",dataEntries)
     const headings = Object.keys(TitleMap)
@@ -57,20 +59,39 @@ function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,Del
                                             return (
                                                 <td>
                                                     {
-                                                        Array.isArray(entry[key])?(
-                                                            <div className="">
-                                                                {
-                                                                    entry[key].map(item=>{
-                                                                        return <>{item}</>
-                                                                    })
-                                                                }
-                                                            </div>
-                                                            
+                                                        entry[key]===undefined?(
+                                                            <div className="overflow-scroll"> </div>
                                                         ):(
+                                                            Array.isArray(entry[key])?(
+                                                                <div className="overflow-scroll">
+                                                                    {
+                                                                        entry[key].map(item=>{
+                                                                            return <>{item}</>
+                                                                        })
+                                                                    }
+                                                                </div>
+                                                                
+                                                            ):(
+                                                                (String(entry[key])==="true"||String(entry[key])==="false")?(
+                                                                    <Toggle 
+                                                                        checked={(Boolean(entry[key]))}
+                                                                        // disabled={true}
+                                                                        size={"sm"}
+                                                                    />
+                                                                    // <div className="overflow-scroll">{String(entry[key])}</div>
+                                                                ):(
+                                                                    (moment(entry[key]).isValid()&&isNaN(entry[key]))?(
+                                                                        <div className="overflow-scroll">{moment(entry[key]).format("MMM Do YY")}</div>
+                                                                    ):(
+                                                                        <div className="overflow-scroll">{String(entry[key])}</div>
+                                                                    )
+                                                                )
+                                                                
+                                                                
                                                             
-                                                            <div className="">{String(entry[key])}</div>
-                                                        
+                                                            )
                                                         )
+                                                        
                                                     }
                                                     
                                                 </td>

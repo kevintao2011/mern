@@ -4,8 +4,9 @@ import { useParams,useNavigate,Link } from 'react-router-dom';
 import { auth,deleteFile,storage } from '../../utils/firebasefunction';
 import ListTable from '../../components/table/ListTable';
 import CreateSingleProduct from './product/CreateSingleProduct';
-import AdminProductPage from './product/AdminProductPage';
+import AdminProductContainer from './product/AdminProductContainer';
 import FieldForArray from '../../components/FormComponents/FieldForArray';
+import AdminActivityContainer from './Activity/AdminActivityContainer';
 
 const Manage = () => {
     const {code} = useParams()
@@ -486,69 +487,72 @@ const Manage = () => {
                             
                         )}
                         {tab==="Activity"&&(
-                            <div className="flex flex-col ">
-                                <div className="flex justify-center">
-                                    <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/creatactivity`); navigate(`/society/${code}/createactivity`)}}>
-                                        Create Activity
-                                    </button>
+                            <AdminActivityContainer 
+                                code={code}
+                                Activities={Activity}
+                            />
+                            // <div className="flex flex-col ">
+                            //     <div className="flex justify-center">
+                            //         <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/creatactivity`); navigate(`/society/${code}/createactivity`)}}>
+                            //             Create Activity
+                            //         </button>
                                    
-                                </div>  
-                                {Activity&&(
-                                    <div className="flex flex-col ">
-                                        <div className="flex flex-row justify-between ">
-                                            <p className='w-1/6 justify-center'>Date</p>
-                                            <p className='w-1/6 justify-center'>Single Date</p>
-                                            <p className='w-1/3 flex justify-center'>Activity </p>
-                                            <p className='w-1/3 flex justify-center'> Action </p>
-                                        </div>
-                                        <ul className='list-none'>             
-                                            {Activity.map(activity => {
-                                                activity.start_date = new Date(activity.start_date);
+                            //     </div>  
+                            //     {Activity&&(
+                            //         <div className="flex flex-col ">
+                            //             <div className="flex flex-row justify-between ">
+                            //                 <p className='w-1/6 justify-center'>Date</p>
+                            //                 <p className='w-1/6 justify-center'>Single Date</p>
+                            //                 <p className='w-1/3 flex justify-center'>Activity </p>
+                            //                 <p className='w-1/3 flex justify-center'> Action </p>
+                            //             </div>
+                            //             <ul className='list-none'>             
+                            //                 {Activity.map(activity => {
+                            //                     activity.start_date = new Date(activity.start_date);
                                                 
-                                                console.log("activity",activity)
-                                                return(
-                                                    <li key={activity._id}>
-                                                        <div className="flex flex-row justify-between" >
-                                                        <p className='w-1/6 justify-center'>{(activity.start_date.toISOString().substring(0, 10))}</p>
-                                                        {
-                                                            activity.single_date?(
-                                                                <p className='w-1/6 justify-center'>Yes</p>
-                                                            ):(
-                                                                <p className='w-1/6 justify-center'>No</p>
-                                                            )
-                                                        }
+                            //                     console.log("activity",activity)
+                            //                     return(
+                            //                         <li key={activity._id}>
+                            //                             <div className="flex flex-row justify-between" >
+                            //                             <p className='w-1/6 justify-center'>{(activity.start_date.toISOString().substring(0, 10))}</p>
+                            //                             {
+                            //                                 activity.single_date?(
+                            //                                     <p className='w-1/6 justify-center'>Yes</p>
+                            //                                 ):(
+                            //                                     <p className='w-1/6 justify-center'>No</p>
+                            //                                 )
+                            //                             }
                                                         
                                                         
-                                                        <p className='w-1/3 flex justify-center'>{activity.activity_name} </p>
-                                                        <div className="w-1/3 flex justify-center">
-                                                            {/* <button className='w-1/3 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button> */}
-                                                            <button className='w-1/3 flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={activity._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editactivity`,{state:{Product:Product}})}}> Manage </button>
-                                                            <button className='w-1/3 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'
-                                                                onClick={()=>{removeActivity(activity._id)}}
-                                                            > 
-                                                                Delete 
-                                                            </button>
+                            //                             <p className='w-1/3 flex justify-center'>{activity.activity_name} </p>
+                            //                             <div className="w-1/3 flex justify-center">
+                            //                                 {/* <button className='w-1/3 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button> */}
+                            //                                 <button className='w-1/3 flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={activity._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editactivity`,{state:{Product:Product}})}}> Manage </button>
+                            //                                 <button className='w-1/3 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'
+                            //                                     onClick={()=>{removeActivity(activity._id)}}
+                            //                                 > 
+                            //                                     Delete 
+                            //                                 </button>
                                                             
-                                                        </div>
+                            //                             </div>
                                                         
-                                                    </div>
-                                                    </li>
+                            //                         </div>
+                            //                         </li>
                                                     
                                                     
                                                     
-                                                )
-                                            })}
-                                        </ul>
-                                    </div>
-                                )}
-                            </div>
-                            
+                            //                     )
+                            //                 })}
+                            //             </ul>
+                            //         </div>
+                            //     )}
+                            // </div>
                             
                             
                         )}
 
                         {tab==="Product"&&(
-                            <AdminProductPage 
+                            <AdminProductContainer
                                 code={code}
                                 Product={Product}
                             />

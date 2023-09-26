@@ -104,7 +104,7 @@ function CreateSingleProduct() {
                     <FillForm 
                         fields={FormData} 
                         title={"Products"}
-                        className={"w-1/2"}
+                        className={"w-full"}
                         description={"A list of all the users in your account including their name, title, email and role."}    
                     />
                 )
