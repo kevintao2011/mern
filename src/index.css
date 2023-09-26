@@ -53,7 +53,13 @@
   background-size:cover
 }
 
-
+.drawer.active{
+  visibility: visible;
+  
+}
+.drawer.inactive{
+  visibility: hidden;
+}
 
 body {
   color: black;

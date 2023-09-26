@@ -1,9 +1,12 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect, useRef} from 'react'
 import { useAuth } from '../../components/session';
 import { useParams,useNavigate,Link } from 'react-router-dom';
 import { auth,deleteFile,storage } from '../../utils/firebasefunction';
 import ListTable from '../../components/table/ListTable';
-import SearchTool from '../../components/table/SearchTool';
+import CreateSingleProduct from './product/CreateSingleProduct';
+import AdminProductPage from './product/AdminProductPage';
+import FieldForArray from '../../components/FormComponents/FieldForArray';
+
 const Manage = () => {
     const {code} = useParams()
     const [tab, settab] = useState('Activity')
@@ -13,8 +16,11 @@ const Manage = () => {
     const [Order, setOrder] = useState()
     const iconsize = 20;
     const {Soc,currentUser} = useAuth()
+    
     const navigate = useNavigate()
     console.log(code)
+    
+    
     async function removeActivity(id){
         const reqbody = {
             "user":{
@@ -264,15 +270,23 @@ const Manage = () => {
 
     useEffect(() => {
         console.log("Product",Product)
-     
+
     }, [Product])
     
     
     
 
     return (
-    <div className=" w-full flex flex-row px-20 mainpage-i ">
-            <div className="LHS flex flex-col w-3/12 items-center justify-center">
+    <div className={` w-full flex flex-row px-20 mainpage-i `}>
+            <div className={`LHS flex flex-col w-3/12 items-center justify-center `}>
+                {/* {
+                    showDrawer&&(
+                        <div className="absolute top-0 right-0 w-full bg-transparent" ref={sideBarRef}>
+                            <CreateSingleProduct/>
+                        </div>
+                    )
+                } */}
+                
                 <div className="py-10">
                     <img 
                         src     ="/assests/img/cow.png" 
@@ -374,7 +388,7 @@ const Manage = () => {
                         <p>payme link</p>
                     </div>
                     
-                    <div className=" w-10/12 justify-center">
+                    {/* <div className=" w-10/12 justify-center">
                     
                         
                             <form action="" className='flex flex-row '>
@@ -392,7 +406,17 @@ const Manage = () => {
                         
                     
                     
-                    </div>
+                    </div> */}
+                    <FieldForArray
+                        key={`payme`}
+                        fieldName={`payme`} 
+                        fieldType={"text"} 
+                        className={""} 
+                        fieldValues={[""]} 
+                        multipleValue={false}
+                        // handleUpdate={SaveFieldValues}
+                        postAPI={"/api/postpayme"}
+                    />
                 </div>
                 
                 
@@ -524,70 +548,11 @@ const Manage = () => {
                         )}
 
                         {tab==="Product"&&(
-                            <div className="w-full flex-col ">
-                                <div className="w-full flex flex-row justify-center">
-                                    <div className="w-1/2">
-                                        <SearchTool />
-                                    </div>
-                                    <button className="bg-su-green w-1/2 text-white rounded-md p-3 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
-                                        Create Product
-                                    </button>
-                                    
-                                </div>
-                                {Array.isArray(Product)&&(
-                                        <ListTable 
-                                            dataEntries={Product}
-                                            TitleMap={{
-                                                // _id:"_ID",
-                                                
-                                                product_name_chi:"Product",
-                                                product_type:"Category",
-                                                inventory:"stock",
-                                                total_sales:"sold",
-                                                unit_price:"UNIT Price",
-                                                published:"published",
-
-                                            }}
-                                        />
-                                    )}
-                                
-                                {/* {Product&&(
-                                    <div className="flex flex-col ">
-                                        <div className="flex flex-row justify-start  text-base">
-                                            <div className="w-2/12 justify-center">Type</div>
-                                            <div className="w-2/12 justify-center">Product</div>
-                                            <div className="w-2/12 justify-center">Options</div>
-                                            <div className="w-2/12 justify-center">Manage</div>
-                                        </div>
-                                        <ul className='list-none'>             
-                                            {Product.map(product => {
-                                                console.log("activity",product)
-                                                return(
-                                                    <li key={product._id}>
-                                                        <div className="flex flex-row justify-between " >
-                                                        <p className='w-2/12 justify-center text-base'>{(product.product_type
-)}</p>
-                                                        <p className='w-1/4 flex justify-center  text-base'>{product.product_name_chi} </p>
-                                
-                                                        
-                                                        <div className="w-1/4 flex justify-center">
-                                                            <button className='w-1/3 h-10 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button>
-                                                            <button className='w-1/3  h-10  flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={product._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editproduct`,{state:{Product:Product}})}}> Manage</button>
-                                                            <button className='w-1/3   h-10 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'> Delete </button>
-                                                            
-                                                        </div>
-                                                        
-                                                    </div>
-                                                    </li>
-                                                    
-                                                    
-                                                    
-                                                )
-                                            })}
-                                        </ul>
-                                    </div>
-                                )} */}
-                            </div>
+                            <AdminProductPage 
+                                code={code}
+                                Product={Product}
+                            />
+                            
                         )}
 
                         {

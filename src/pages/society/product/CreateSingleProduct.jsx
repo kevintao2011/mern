@@ -92,7 +92,7 @@ function CreateSingleProduct() {
     
     
     return (
-        <div className={`w-full `}>
+        <div className={`w-full blur-0 border-2 border-red-600`}>
             <div className="flex flex-col">
                 <div className="flex flex-row">
 

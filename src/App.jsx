@@ -43,7 +43,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          < Route path="/" element={<Nav />}>
+          < Route path="/" element={<Nav/>}>
             <Route index element={<Home />} /> 
             <Route path="counter" element={<CounterForm />} />
             <Route path="home" element={<Home />} />

@@ -169,7 +169,10 @@ export default function FieldForArray(
                                 onChange={(e)=>{
                                     FieldValues[i]=e.target.value
                                     setFieldValues([...FieldValues])
-                                    updateToParents(fieldName,FieldValues,index)
+                                    if(handleUpdate){
+                                        updateToParents(fieldName,FieldValues,index)
+                                    }
+                                    
                                 }}
                             /> 
                             {

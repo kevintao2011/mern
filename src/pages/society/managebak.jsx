@@ -1,8 +1,11 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect, useRef} from 'react'
 import { useAuth } from '../../components/session';
 import { useParams,useNavigate,Link } from 'react-router-dom';
 import { auth,deleteFile,storage } from '../../utils/firebasefunction';
 import ListTable from '../../components/table/ListTable';
+import CreateSingleProduct from './product/CreateSingleProduct';
+import SearchTool from '../../components/table/SearchTool';
+
 const Manage = () => {
     const {code} = useParams()
     const [tab, settab] = useState('Activity')
@@ -12,8 +15,23 @@ const Manage = () => {
     const [Order, setOrder] = useState()
     const iconsize = 20;
     const {Soc,currentUser} = useAuth()
+    const [showDrawer, setshowDrawer] = useState(false)
     const navigate = useNavigate()
     console.log(code)
+    let sideBarRef = useRef()
+    
+    useEffect(() => {
+        let handler = (e)=>{
+            if(!sideBarRef?.current.contains(e.target)){
+                setshowDrawer(false)
+            }
+        }
+        document.addEventListener("mousedown",handler)
+        return()=>{
+            document.removeEventListener("mousedown",handler)
+        }
+    }, [])
+    
     async function removeActivity(id){
         const reqbody = {
             "user":{
@@ -91,179 +109,201 @@ const Manage = () => {
     }
     useEffect(() => {
         
-      async function getSocActivity(){
-        await fetch('/api/getsocactivity', { 
-            method: "POST",
-            body: JSON.stringify({
-                user:{
-                    token:await auth.currentUser.getIdToken()
+        async function getSocActivity(){
+            await fetch('/api/getsocactivity', { 
+                method: "POST",
+                body: JSON.stringify({
+                    user:{
+                        token:await auth.currentUser.getIdToken()
+                    },
+                    id:code
+                }),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                id:code
-            }),
-            headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            mode:'cors'
+                mode:'cors'
+                
+            }).then(async response => {
+                
+                if (response.ok){
+                    // registered
+                    
+                    console.log("added")
+                    const data = await response.json()
+                    console.log("Activity",data)
+                    setActivity(data)
+                    
+                    
+                }else{
+                    console.log("response.body",await response.json())
+                    const data = await response.json()
+                    console.log("data.error",data)
+                    setActivity(data)
+                    
+                }  
+            })
             
-        }).then(async response => {
             
-            if (response.ok){
-                // registered
-                
-                console.log("added")
-                const data = await response.json()
-                console.log("Activity",data)
-                setActivity(data)
-                
-                
-            }else{
-                console.log("response.body",await response.json())
-                const data = await response.json()
-                console.log("data.error",data)
-                setActivity(data)
-                
-            }  
-        })
-        
-        
-      }
-      async function getSocProduct(){
-        await fetch('/api/getsocproduct', { 
-            method: "POST",
-            body: JSON.stringify({
-                user:{
-                    token:await auth.currentUser.getIdToken()
+        }
+        async function getSocProduct(){
+            await fetch('/api/getsocproduct', { 
+                method: "POST",
+                body: JSON.stringify({
+                    user:{
+                        token:await auth.currentUser.getIdToken()
+                    },
+                    id:code
+                }),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                id:code
-            }),
-            headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            mode:'cors'
+                mode:'cors'
+                
+            }).then(async response => {
+                
+                if (response.ok){
+                    // registered
+                    
+                    console.log("recieved")
+                    await response.json().then(data=>{
+                        console.log("product in fetch",data.data)
+                        setProduct(data.data)
+                    })
+                    
+                    
+                    
+                }else{
+                    console.log("response.body",await response.json())
+                    const data = await response.json()
+                    console.log("data.error",data.data)
+                    setProduct([])
+                    
+                }  
+            })
             
-        }).then(async response => {
             
-            if (response.ok){
-                // registered
+        }
+        async function getSocUser(){
+            await fetch('/api/getsocuser', { 
+                method: "POST",
+                body: JSON.stringify({
+                    user:{
+                        token:await auth.currentUser.getIdToken()
+                    },
+                    id:code
+                }),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                mode:'cors'
                 
-                console.log("recieved")
-                const data = await response.json()
+            }).then(async response => {
                 
-                // var productList = [...data]
-                // productList.sort((a,b)=>a.parent>b.parent)
+                if (response.ok){
+                    // registered
+                    
+                    console.log("recieved")
+                    const data = await response.json()
+                    console.log("Member",data)
+                    setMember(data)
+                    
+                    
+                }else{
+                    console.log("response.body",await response.json())
+                    const data = await response.json()
+                    console.log("data.error",data)
+                    setMember(data)
+                    
+                }  
+            })
+            
+            
+            
+        }
+        async function getSocOrder(){
+            await fetch('/api/getordersbysoc', { 
+                method: "POST",
+                body: JSON.stringify({
+                    user:{
+                        token:await auth.currentUser.getIdToken()
+                    },
+                    code:code
+                }),
+                headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                mode:'cors'
                 
+            }).then(async response => {
                 
-                
+                if (response.ok){
+                    // registered
+                    
+                    console.log("recieved")
+                    const data = await response.json()
+                    console.log("order",data)
+                    setOrder(data)
+                    
+                    
+                }else{
+                    console.log("response.body",await response.json())
+                    const data = await response.json()
+                    console.log("order",data)
+                    setOrder(data)
+                    
+                }  
+            })
+        }
+        if(tab==="Activity"){
+            getSocActivity()
+        }else if(tab==="Product"){
+            getSocProduct()
+        }else if(tab==="User"){
+            getSocUser()
+        }else if(tab==="Order"){
+            getSocOrder()
+        }
+        // async function fetchAllInfo(){
+        //     await getSocActivity()
+        //     await getSocProduct()
+        //     await getSocUser()
+        //     await getSocOrder()
+        // }
+        // fetchAllInfo()
+        return () => {
+            
+        }
+    }, [tab])
 
-                console.log("Product",data.data)
-                setProduct(data.data)
-                
-                
-            }else{
-                console.log("response.body",await response.json())
-                const data = await response.json()
-                console.log("data.error",data.data)
-                setProduct(data.data)
-                
-            }  
-        })
-        
-        
-      }
-      async function getSocUser(){
-        await fetch('/api/getsocuser', { 
-            method: "POST",
-            body: JSON.stringify({
-                user:{
-                    token:await auth.currentUser.getIdToken()
-                },
-                id:code
-            }),
-            headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            mode:'cors'
-            
-        }).then(async response => {
-            
-            if (response.ok){
-                // registered
-                
-                console.log("recieved")
-                const data = await response.json()
-                console.log("Member",data)
-                setMember(data)
-                
-                
-            }else{
-                console.log("response.body",await response.json())
-                const data = await response.json()
-                console.log("data.error",data)
-                setMember(data)
-                
-            }  
-        })
-        
-        
-        
-      }
+    useEffect(() => {
+        console.log("Product",Product)
 
-      async function getSocOrder(){
-        await fetch('/api/getordersbysoc', { 
-            method: "POST",
-            body: JSON.stringify({
-                user:{
-                    token:await auth.currentUser.getIdToken()
-                },
-                code:code
-            }),
-            headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            mode:'cors'
-            
-        }).then(async response => {
-            
-            if (response.ok){
-                // registered
-                
-                console.log("recieved")
-                const data = await response.json()
-                console.log("order",data)
-                setOrder(data)
-                
-                
-            }else{
-                console.log("response.body",await response.json())
-                const data = await response.json()
-                console.log("order",data)
-                setOrder(data)
-                
-            }  
-        })
-    }
-
-      async function fetchAllInfo(){
-        await getSocActivity()
-        await getSocProduct()
-        await getSocUser()
-        await getSocOrder()
-      }
-      fetchAllInfo()
-      return () => {
-        
-      }
-    }, [])
+    }, [Product])
+    
     
     
 
     return (
-    <div className=" w-full flex flex-row px-20 mainpage-i ">
-            <div className="LHS flex flex-col w-3/12 items-center justify-center">
+    <div className={` w-full flex flex-row px-20 mainpage-i ${showDrawer&&'blur-md'} `}>
+            <div className={`LHS flex flex-col w-3/12 items-center justify-center `}>
+                {/* {
+                    showDrawer&&(
+                        <div className="absolute top-0 right-0 w-full bg-transparent" ref={sideBarRef}>
+                            <CreateSingleProduct/>
+                        </div>
+                    )
+                } */}
+                {
+                    <div 
+                        className={`absolute top-0 right-0 bg-transparent drawer ${showDrawer?'active':'inactive'}` }
+                        ref={sideBarRef}>
+                        <CreateSingleProduct/>
+                    </div>
+                }
                 <div className="py-10">
                     <img 
                         src     ="/assests/img/cow.png" 
@@ -517,20 +557,46 @@ const Manage = () => {
                         {tab==="Product"&&(
                             <div className="w-full flex-col ">
                                 <div className="w-full flex flex-row justify-center">
-                                    <button className="bg-su-green w-2/3 text-white rounded-md p-3 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
-                                        Create Product
-                                    </button>
+                                    <div className="w-1/2 flex flex-row">
+                                        
+                                        <div className="">
+                                            <div className="text-3xl">Product</div>
+                                        </div>
+                                    </div>
+                                    <div className="w-1/2 py-1">
+                                        <div className="w-full flex flex-row gap-2 justify-end">
+                                            {/* <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}> */}
+                                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setshowDrawer(prev=>!prev)}}>
+                                                Create Product
+                                            </button>
+                                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
+                                                Virtual Stocks
+                                            </button>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    
                                 </div>
-                                {
-                                    Product&&(
+                                {Array.isArray(Product)&&(
                                         <ListTable 
                                             dataEntries={Product}
-                                            
+                                            TitleMap={{
+                                                // _id:"_ID",
+                                                
+                                                product_name_chi:"Product Name",
+                                                product_type:"Category",
+                                                inventory:"stock",
+                                                total_sales:"sold",
+                                                unit_price:"UNIT Price",
+                                                published:"published",
+                                                session:"session"
+
+                                            }}
                                         />
-                                    )
-                                }
+                                    )}
                                 
-                                {Product&&(
+                                {/* {Product&&(
                                     <div className="flex flex-col ">
                                         <div className="flex flex-row justify-start  text-base">
                                             <div className="w-2/12 justify-center">Type</div>
@@ -565,7 +631,7 @@ const Manage = () => {
                                             })}
                                         </ul>
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         )}
 
