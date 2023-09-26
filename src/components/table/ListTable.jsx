@@ -24,13 +24,14 @@ function ListTable({dataEntries,horizontalEntry,TitleMap}) {
                   
                     {
                         dataEntries.map((entry,i)=>{
-                            const keys = Object.keys(entry)
+                            const keys = Object.keys(TitleMap)
                             console.log("Keys:",keys)
                             return (
                                 <tr>
                                     {keys.map(key=>{
-                                        console.log("KV:",entry,entry[key])
-                                        if(TitleMap[key]){
+                                        
+                                        if(key in TitleMap){
+                                            console.log("KV:",entry,entry[key])
                                             return (
                                                 <td>
                                                     {
@@ -38,7 +39,7 @@ function ListTable({dataEntries,horizontalEntry,TitleMap}) {
                                                             <div className="">
                                                                 {
                                                                     entry[key].map(item=>{
-                                                                        <>{item}</>
+                                                                        return <>{item}</>
                                                                     })
                                                                 }
                                                             </div>

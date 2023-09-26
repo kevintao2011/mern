@@ -539,12 +539,14 @@ const Manage = () => {
                                             dataEntries={Product}
                                             TitleMap={{
                                                 // _id:"_ID",
-                                                code:"Society",
+                                                
                                                 product_name_chi:"Product",
                                                 product_type:"Category",
                                                 inventory:"stock",
                                                 total_sales:"sold",
-                                                published:"published"
+                                                unit_price:"UNIT Price",
+                                                published:"published",
+
                                             }}
                                         />
                                     )}
