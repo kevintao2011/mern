@@ -67,10 +67,7 @@ function AdminActivityContainer({Activities,code}) {
                 </Drawer>
             </div>
             <div className={`w-full flex-col ${showDrawer&&'blur-md'} z-0`}  >
-                <Calendar 
-                
-                />
-                <div className="w-full flex flex-row justify-center">
+            <div className="w-full flex flex-row justify-center">
                     <div className="w-1/2 flex flex-row">
                         
                         <div className="">
@@ -112,6 +109,10 @@ function AdminActivityContainer({Activities,code}) {
                             }}
                         />
                     )}
+                <Calendar 
+                
+                />
+                
             </div>
         </div>
         
