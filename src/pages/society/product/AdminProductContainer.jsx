@@ -43,14 +43,16 @@ function AdminProductContainer({Product,code}) {
                 </div>
             }
             <div className="">
-                <ButtonToolbar>
-                    <Button onClick={() => setOpen(true)}>Open</Button>
-                </ButtonToolbar>
+                
 
                 <Drawer open={open} onClose={() => setOpen(false)}>
                     <Drawer.Body className=''>
                         <CreateSingleProduct/>
                     </Drawer.Body>
+                    {/* <div className="">
+                        <CreateSingleProduct onExit={()=>{setOpen(false)}}/>
+                    </div> */}
+                    
                 </Drawer>
 
                 
@@ -66,8 +68,17 @@ function AdminProductContainer({Product,code}) {
                     </div>
                     <div className="w-1/2 py-1">
                         <div className="w-full flex flex-row gap-2 justify-end">
+                        <ButtonToolbar>
+                            <Button  
+                                onClick={() =>setOpen(true)}
+                                appearance="primary"
+                                color="green"
+                            >
+                                Create Product
+                            </Button>
+                        </ButtonToolbar>
                             {/* <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}> */}
-                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
+                            {/* <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
                                 Create Tree Product
                             </button>
                             <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setshowDrawer(prev=>!prev)}}>
@@ -75,7 +86,7 @@ function AdminProductContainer({Product,code}) {
                             </button>
                             <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
                                 Virtual Stocks
-                            </button>
+                            </button> */}
                         </div>
                         
                     </div>

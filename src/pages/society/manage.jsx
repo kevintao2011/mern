@@ -487,10 +487,13 @@ const Manage = () => {
                             
                         )}
                         {tab==="Activity"&&(
-                            <AdminActivityContainer 
-                                code={code}
-                                Activities={Activity}
-                            />
+                            Activity&&(
+                                <AdminActivityContainer 
+                                    code={code}
+                                    Activities={Activity}
+                                />
+                            )
+                            
                             // <div className="flex flex-col ">
                             //     <div className="flex justify-center">
                             //         <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/creatactivity`); navigate(`/society/${code}/createactivity`)}}>

@@ -1,6 +1,7 @@
 import React, { useEffect,useState } from 'react'
 import FillForm from '../../../components/FormComponents/FillForm'
-function CreateSingleProduct() {
+
+function CreateSingleProduct({onExit}) {
     const [FormData, setFormData] = useState()
     const [Categories, setCategories] = useState()
     useEffect(() => {
@@ -92,13 +93,13 @@ function CreateSingleProduct() {
     
     
     return (
-        <div className={`w-full blur-0 border-2 border-red-600`}>
-            <div className="flex flex-col">
-                <div className="flex flex-row">
-
+    <div className={`w-full blur-0 p-2 h-full flex flex-col justify-center`}>
+            {/* <div className="flex flex-col">
+                <div className="w-full flex flex-row justify-end">
+                    <button onClick={onExit}>X</button>
                 </div>
                 
-            </div>
+            </div> */}
             {
                 FormData&&(
                     <FillForm 

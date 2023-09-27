@@ -1,8 +1,10 @@
 import React, { useEffect,useRef,useState } from 'react'
 import ListTable from '../../../components/table/ListTable'
 import { useNavigate } from 'react-router-dom'
-import Calendar from 'rsuite/Calendar';
-import { Drawer, ButtonToolbar, Button, Placeholder } from 'rsuite';
+// import Calendar from 'rsuite/Calendar';
+import { Drawer, ButtonToolbar, Button, Placeholder} from 'rsuite';
+import moment from 'moment';
+import ActivityCalendar from '../../../components/ActivityCalendar';
 
 function AdminActivityContainer({Activities,code}) {
     const navigate = useNavigate()
@@ -10,32 +12,8 @@ function AdminActivityContainer({Activities,code}) {
     const [open, setOpen] = useState(false);
     const [openWithHeader, setOpenWithHeader] = useState(false);
     console.log(code)
-    const activitiesDate={
-        "10":[
-            { time: '10:30 am', title: 'Meeting' },
-            { time: '12:00 pm', title: 'Lunch' }
-          ]
-    }
-    // let sideBarRef = useRef()
     
-    // useEffect(() => {
-    //     let handler = (e)=>{
-    //         if(!sideBarRef?.current.contains(e.target)){
-    //             setshowDrawer(false)
-    //         }
-    //     }
-    //     document.addEventListener("mousedown",handler)
-    //     return()=>{
-    //         document.removeEventListener("mousedown",handler)
-    //     }
-    // }, [])
-    useEffect(() => {
-      
     
-      return () => {
-        
-      }
-    }, [])
     
     return (
         <div className="">
@@ -108,10 +86,9 @@ function AdminActivityContainer({Activities,code}) {
 
                             }}
                         />
-                    )}
-                <Calendar 
+                )}
                 
-                />
+                <ActivityCalendar Activities={Activities}/>
                 
             </div>
         </div>

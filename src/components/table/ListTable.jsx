@@ -10,7 +10,7 @@ function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,Del
     const [filterOption, setfilterOption] = useState(headings[0])
     
     function handleFilter(filteredArray){
-        console.log("Filtered Result:",filteredArray)
+        // console.log("Filtered Result:",filteredArray)
         setfilteredResult(filteredArray)
     }
     
@@ -50,7 +50,7 @@ function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,Del
                     {
                         filteredResult.map((entry,i)=>{
                             const keys = Object.keys(TitleMap)
-                            console.log("Keys:",keys)
+                            // console.log("Keys:",keys)
                             return (
                                 <tr>
                                     {keys.map(key=>{
