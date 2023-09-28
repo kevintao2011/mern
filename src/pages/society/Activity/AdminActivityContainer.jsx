@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { Drawer, ButtonToolbar, Button, Placeholder} from 'rsuite';
 import moment from 'moment';
 import ActivityCalendar from '../../../components/ActivityCalendar';
+import CreateActivityContainer from './CreateActivityContainer';
 
 function AdminActivityContainer({Activities,code}) {
     const navigate = useNavigate()
@@ -18,10 +19,7 @@ function AdminActivityContainer({Activities,code}) {
     return (
         <div className="">
             <div className="">
-                <ButtonToolbar>
-                    <Button onClick={() => setOpen(true)}>Create Activity</Button>
-                    {/* <Button onClick={() => setOpenWithHeader(true)}>Open with header</Button> */}
-                </ButtonToolbar>
+                
 
                 <Drawer open={open} onClose={() => setOpen(false)}>
                     <Drawer.Body>
@@ -29,19 +27,12 @@ function AdminActivityContainer({Activities,code}) {
                     </Drawer.Body>
                 </Drawer>
 
-                <Drawer open={openWithHeader} onClose={() => setOpenWithHeader(false)}>
-                    <Drawer.Header>
-                    <Drawer.Title>Drawer Title</Drawer.Title>
-                    <Drawer.Actions>
-                        <Button onClick={() => setOpenWithHeader(false)}>Cancel</Button>
-                        <Button onClick={() => setOpenWithHeader(false)} appearance="primary">
-                        Confirm
-                        </Button>
-                    </Drawer.Actions>
-                    </Drawer.Header>
-                    <Drawer.Body>
-                    <Placeholder.Paragraph />
+                <Drawer open={open} onClose={() => setOpen(false)}>
+                    <Drawer.Body className=''>
+                        <CreateActivityContainer/>
                     </Drawer.Body>
+                   
+                    
                 </Drawer>
             </div>
             <div className={`w-full flex-col ${showDrawer&&'blur-md'} z-0`}  >
@@ -54,14 +45,17 @@ function AdminActivityContainer({Activities,code}) {
                     </div>
                     <div className="w-1/2 py-1">
                         <div className="w-full flex flex-row gap-2 justify-end">
-                            {/* <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createactivity`)}}> */}
+                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createactivity`)}}>
                             
-                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setshowDrawer(prev=>!prev)}}>
+                            {/* <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setshowDrawer(prev=>!prev)}}> */}
                                 Create Activity
                             </button>
-                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createactivity`)}}>
-                                Virtual Stocks
-                            </button>
+
+                            <ButtonToolbar>
+                                <Button onClick={() => setOpen(true)}>Create Activity</Button>
+                                {/* <Button onClick={() => setOpenWithHeader(true)}>Open with header</Button> */}
+                            </ButtonToolbar>
+                            
                         </div>
                         
                     </div>
@@ -73,7 +67,6 @@ function AdminActivityContainer({Activities,code}) {
                             dataEntries={Activities}
                             TitleMap={{
                                 // _id:"_ID",
-                                
                                 activity_name:"Activity Name",
                                 single_date:"One Day Only?",
                                 start_date:"Start Date",
@@ -82,13 +75,15 @@ function AdminActivityContainer({Activities,code}) {
                                 end_time:"End time",
                                 payment_method:"payment method",
                                 status:"status"
-                                
-
                             }}
                         />
                 )}
-                
+                <div className="flex flex-col mt-5">
+                    <div className="text-xl">Activity Calendar</div>
+                </div>
+                <CreateActivityContainer/>
                 <ActivityCalendar Activities={Activities}/>
+
                 
             </div>
         </div>

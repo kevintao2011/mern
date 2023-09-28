@@ -2,8 +2,6 @@ import React, {useState,useEffect, useRef} from 'react'
 import { useAuth } from '../../components/session';
 import { useParams,useNavigate,Link } from 'react-router-dom';
 import { auth,deleteFile,storage } from '../../utils/firebasefunction';
-import ListTable from '../../components/table/ListTable';
-import CreateSingleProduct from './product/CreateSingleProduct';
 import AdminProductContainer from './product/AdminProductContainer';
 import FieldForArray from '../../components/FormComponents/FieldForArray';
 import AdminActivityContainer from './Activity/AdminActivityContainer';
@@ -280,13 +278,7 @@ const Manage = () => {
     return (
     <div className={` w-full flex flex-row px-20 mainpage-i `}>
             <div className={`LHS flex flex-col w-3/12 items-center justify-center `}>
-                {/* {
-                    showDrawer&&(
-                        <div className="absolute top-0 right-0 w-full bg-transparent" ref={sideBarRef}>
-                            <CreateSingleProduct/>
-                        </div>
-                    )
-                } */}
+               
                 
                 <div className="py-10">
                     <img 

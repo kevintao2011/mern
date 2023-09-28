@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-
-function MultipleValuesField({values,uploadValues,index, splitSymbol=' '}) {
+import FieldForArray from './FieldForArray'
+import ArrayofFields from './ArrayofFields';
+function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' '}) {
     const splitMap = {
         '\\' : "single backslash",
         '\b' : "backspace",
@@ -25,43 +26,74 @@ function MultipleValuesField({values,uploadValues,index, splitSymbol=' '}) {
 
     return (
         <div className="flex flex-col ">
-            <input 
-                placeholder={`use ${splitMap[splitSymbol]} to seperate input`}
-                className='border w-full  p-1 rounded-md shadow  focus:border-blue-400'
-                type="text" 
-                id="tags" 
-                onChange={(e=>{
-                    if(e.target.value[e.target.value.length-1]===splitSymbol){
-                        handleTags(e)
-                    }
-                })}
-            />
-            <div className="flex flex-row gap-2">
             {
-                values.map((tag,i)=>{
-                    return(
-                        <div className="flex flex-row" key={crypto.randomUUID()}>
-                       
-                            <button 
-                                className='bg-red-500 text-white'
-                                onClick={
-                                    ()=>{
-                                        values.splice(i,1)
-                                        uploadValues(i,values)
-                                    }
-                                }
-                            >
-                                
-                                {tag}x
-                            </button>
-                        </div>
-                    )
-                }
+                splitSymbol==="field"?(
+                    <div className="" key={`edit-components`}>
+                        
+                        {/* <FieldForArray
+                            key={`FieldForArray`}
+                            fieldName={"doc.name"} 
+                            fieldCSS={"w-full"}
+                            fieldType={"doc.content_type"} 
+                            className={"w-full"} 
+                            fieldValues={[]} //"doc.multiple_content"
+                            multipleValue={true}//"doc.multiple_content"
+                            returnFunction={uploadValues}
+                            index={"i"}
+                            postAPI={""}
+                            
+                        /> */}
+                        <ArrayofFields 
+                            index={index}
+                            fieldValues={values}
+                            returnFunction={uploadValues}
+                        />
                     
+                    </div>
+                ):(
+                    <>
+                    <input 
+                        placeholder={`use ${splitMap[splitSymbol]} to seperate input`}
+                        className=' field w-full bg-white'
+                        type="text" 
+                        id="tags" 
+                        onChange={(e=>{
+                            if(e.target.value[e.target.value.length-1]===splitSymbol){
+                                handleTags(e)
+                            }
+                        })}
+                    />
+                    <div className="flex flex-row gap-2">
+                    {
+                        
+                        values.map((tag,i)=>{
+                            return(
+                                <div className="flex flex-row" key={crypto.randomUUID()}>
+                            
+                                    <button 
+                                        className='bg-red-500 text-white'
+                                        onClick={
+                                            ()=>{
+                                                values.splice(i,1)
+                                                uploadValues(i,values)
+                                            }
+                                        }
+                                    >
+                                        
+                                        {tag}x
+                                    </button>
+                                </div>
+                            )
+                        }
+                            
+                        )
+                    }
+                
+                    </div>
+                    </>
                 )
             }
-           
-            </div>
+            
             
         </div>
   )

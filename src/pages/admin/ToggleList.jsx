@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
-export default function ToggleList({title,subIndexs,toggleState,onPressed}) {
+export default function ToggleList({title,subIndexs,toggleState,onPressed,className=""}) {
   
   const [Expanded, setExpanded] = useState(false)
   
   return (
-    <div className="w-full">
-      <div className='flex flex-row p-1  rounded-lg bg-gray-100 justify-between'>
+    <div className={`w-full ${className}`}>
+      <div className='flex flex-row p-1  rounded-lg bg-gray-100 justify-between '>
         <p>
-          <button onClick={()=>onPressed(title)}>
+          <button onClick={()=>onPressed(title)} className='text-base'>
             {title}
           </button>
           
@@ -28,6 +28,7 @@ export default function ToggleList({title,subIndexs,toggleState,onPressed}) {
             title={index}
             subIndexs={subIndexs[index]["subIndex"]}
             onPressed={onPressed}
+            className='pl-2'
           />  
         })
       }

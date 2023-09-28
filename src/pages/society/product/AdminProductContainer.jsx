@@ -1,7 +1,7 @@
 import React, { useEffect,useRef,useState } from 'react'
 import ListTable from '../../../components/table/ListTable'
 import { useNavigate } from 'react-router-dom'
-import CreateSingleProduct from './CreateSingleProduct'
+import CreateSingleProductContainer from './CreateSingleProductContainer';
 import { Drawer, ButtonToolbar, Button, Placeholder } from 'rsuite';
 
 function AdminProductContainer({Product,code}) {
@@ -39,7 +39,7 @@ function AdminProductContainer({Product,code}) {
                     className={`absolute top-30 right-0 bg-transparent drawer ${showDrawer?'active':'inactive'} z-1` }
                     ref={sideBarRef}
                 >
-                    <CreateSingleProduct/>
+                    <CreateSingleProductContainer/>
                 </div>
             }
             <div className="">
@@ -47,11 +47,9 @@ function AdminProductContainer({Product,code}) {
 
                 <Drawer open={open} onClose={() => setOpen(false)}>
                     <Drawer.Body className=''>
-                        <CreateSingleProduct/>
+                        <CreateSingleProductContainer/>
                     </Drawer.Body>
-                    {/* <div className="">
-                        <CreateSingleProduct onExit={()=>{setOpen(false)}}/>
-                    </div> */}
+                    
                     
                 </Drawer>
 

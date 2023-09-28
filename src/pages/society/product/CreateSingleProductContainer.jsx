@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from 'react'
 import FillForm from '../../../components/FormComponents/FillForm'
 
-function CreateSingleProduct({onExit}) {
+function CreateSingleProductContainer({onExit}) {
     const [FormData, setFormData] = useState()
     const [Categories, setCategories] = useState()
     useEffect(() => {
@@ -22,7 +22,7 @@ function CreateSingleProduct({onExit}) {
                     await response.json().then(data=>{
                         setCategories(data.map(d=>{
                             console.log("Categories",d)
-                            return d.catergory_name
+                            return {[d.catergory_name]:d.id}
                         }))
                     })
                 }
@@ -32,53 +32,64 @@ function CreateSingleProduct({onExit}) {
     }, [])
     useEffect(() => {
         if(Categories){
+            //for fill form
             console.log("Categories",Categories)
             const data = [
                 {
-                    field_name:"Product Title/Name",
+                    field_name:"product_name_chi",
                     field_type:"text",
-                    single_value:true,
+                    single:true,
                     field_value:[], //given
                     
                 },
                 {
-                    field_name:"Product Description",
-                    single_value:true,
+                    field_name:"product_description_chi",
+                    single:true,
                     field_value:[], //given
                     field_type:"text",
                     field_props:"paragraph"
                 },
                 {
-                    field_name:"Product Image",
+                    field_name:"product_img_url",
                     field_value:[], //given
                     field_type:"file",
-                    single_value:true,
+                    single:true,
                 },
                 {
-                    field_name:"Parent Category",
-                    single_value:true,
+                    field_name:"product_type",
+                    single:true,
                     field_value:[], //given
                     field_type:"select",
-                    field_props:"multiple search",//search 
+                    // field_props:"multiple search",//search 
                     field_options:Categories
                     
                 },
                 {
-                    field_name:"Product Price",
-                    single_value:true,
+                    field_name:"parent",
+                    single:false,
+                    field_value:[], //given
+                    field_options:[],
+                    field_type:"select",
+                    field_props:"",
+                    
+                },
+                {
+                    field_name:"unit_price",
+                    single:true,
                     field_value:[], //given
                     field_type:"number",
                     
                 },
                 {
-                    field_name:"Sale Price",
-                    single_value:true,
+                    field_name:"published",
+                    single:true,
+                    field_options:[{Now:true,Later:false}],
                     field_value:[], //given
                     field_type:"number",
                 },
                 {
                     field_name:"tags",
-                    single_value:false,
+                    single:false,
                     field_value:[], //given
                     field_props:"multiple",
                     field_type:"text",
@@ -106,7 +117,23 @@ function CreateSingleProduct({onExit}) {
                         fields={FormData} 
                         title={"Products"}
                         className={"w-full"}
-                        description={"A list of all the users in your account including their name, title, email and role."}    
+                        description={"A list of all the users in your account including their name, title, email and role."}   
+                        TitleMap={{
+                            product_name_chi:"Product Title/Name",
+                            product_description_chi:"Product Description",
+                            product_type:"Product Type",
+                            product_img_url:"Product Image",
+                            is_limited:"Limited Quantity ?",
+                            parent:"Parent Product",
+                            tags:"tags",
+                            inventory:"stock",
+                            unit_price:"UNIT Price",
+                            allowed_coupon:"Coupons",
+                            published:"Publish Now?",
+                            session:"session",
+                            total_sales:"sold",
+
+                        }}
                     />
                 )
             }
@@ -116,4 +143,4 @@ function CreateSingleProduct({onExit}) {
     )
 }
 
-export default CreateSingleProduct
+export default CreateSingleProductContainer

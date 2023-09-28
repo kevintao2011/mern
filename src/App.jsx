@@ -34,7 +34,7 @@ import AdminPage from './pages/admin/AdminPage';
 import CreateProductPage from './pages/society/product/CreateProductPage';
 import EditMembership from './pages/society/membership/EditMembership';
 import FuntionalParentComponent from './pages/Test/FuntionalParentComponent';
-import CreateSingleProduct from './pages/society/product/CreateSingleProduct';
+import CreateSingleProductContainer from './pages/society/product/CreateSingleProductContainer';
 import 'rsuite/dist/rsuite.min.css';
 
 function App() {
@@ -75,7 +75,7 @@ function App() {
             <Route path="/society/:code/manage" element={<Manage />} />
             <Route path="society/:code/createactivity" element={<ActivityForm />} />
             <Route path="society/:code/createproduct" element={<CreateProductPage/>} />
-            <Route path="society/:code/createsingleproduct" element={<CreateSingleProduct/>} />
+            <Route path="society/:code/createsingleproduct" element={<CreateSingleProductContainer/>} />
         <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
         <Route exact path="society/:code/manage/:id/editproduct" element={<EditProduct />} />
         <Route exact path="society/:code/editmembership" element={<EditMembership />} />

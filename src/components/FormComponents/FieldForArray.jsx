@@ -4,8 +4,9 @@ import { auth } from "../../utils/firebasefunction"
 export default function FieldForArray(
     {
         fieldType,
-        index,
+        index=0,
         handleUpdate,
+        returnFunction,
         fieldName,
         
         edit=true ,
@@ -13,7 +14,7 @@ export default function FieldForArray(
         multipleValue,
 
         // style related
-        className,
+        className="w-full",
         AddButtonCSS , 
         DeleteButtonCSS,
         fieldCSS,
@@ -38,17 +39,20 @@ export default function FieldForArray(
         fieldValues.forEach(value => {
             values.push(value)
         });
-        //console.log(fieldName,"has values",values)
+        console.log(fieldName,"has values",values)
         setFieldValues(values)
         if (multipleValue){
             setmutilpleField(true)
         }
     }, [fieldValues])
 
-    useEffect(() => { // while fieldValues changed
-      //console.log(fieldName," FieldValues",FieldValues)
+    // useEffect(() => { // while fieldValues changed
+    //     if(returnFunction&&FieldValues){
+    //         returnFunction(index,FieldValues)
+    //     }
+        
 
-    }, [FieldValues])
+    // }, [FieldValues])
     
     const [Submit, setSubmit] = useState(false)
     useEffect(() => {
@@ -108,11 +112,7 @@ export default function FieldForArray(
     
     //console.log("field content_type",fieldType)
     return (
-        <div className={className}>
-            {/* <div className="">
-                <label htmlFor="">多項 Mutiple input?</label>
-                <input type="checkbox" id={"multiple"} onChange={(e)=>{setmutilpleField(e.target.checked);//console.log(e.target.id)}}/>
-            </div> */}
+        <div className="w-full">
             
             <div className={className}>
                 <div className="flex flex-row ">
@@ -139,33 +139,15 @@ export default function FieldForArray(
             
 
             {
-                // dataSet.map((v,i)=>{
-                //     if(fieldType==="select"){
-                //         return(
-                //             <select>
-                //                 <option value="">
-                                    
-                //                 </option>
-                //             </select>
-                //         )
-                //     }else{
-                //         return(
-                            
-                //             <input 
-                //                 className="bg-gray-50 border w-full p-1 block rounded-lg shadow shadow-gray-400" 
-                //                 type={v.fieldType} 
-                //             /> 
-                //         )
-                //     }
-                // })   
+                
                 FieldValues?.map((value,i)=>{
                     return(  
-                        <div className="flex flex-row" key={`${fieldName}-${i}`}>
+                        <div className="flex flex-row w-full my-1 gap-1" key={`${fieldName}-${i}`}>
                             <input 
                                 type={fieldType} 
                                 // defaultValue={value}
                                 value={value}
-                                className="bg-gray-50 border w-full p-1 block rounded-lg shadow shadow-gray-400"
+                                className="field bg-white"
                                 onChange={(e)=>{
                                     FieldValues[i]=e.target.value
                                     setFieldValues([...FieldValues])

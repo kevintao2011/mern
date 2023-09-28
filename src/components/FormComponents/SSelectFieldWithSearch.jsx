@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-
+import { InputPicker } from 'rsuite';
 function SSelectFieldWithSearch({options,uploadSelected,index,single,values,canSearch}) {
   const [SearchValue, setSearchValue] = useState("")
   const [searchResult, setsearchResult] = useState(options)
+  const [PickerValues, setPickerValues] = useState([])
   useEffect(() => {
     if (SearchValue===""){
       setsearchResult(options)
@@ -12,6 +13,8 @@ function SSelectFieldWithSearch({options,uploadSelected,index,single,values,canS
       setsearchResult(result)
     }
   }, [SearchValue])
+  
+  
   console.log("options",options)
 
   function addValues (newValue){
@@ -48,6 +51,7 @@ function SSelectFieldWithSearch({options,uploadSelected,index,single,values,canS
           <input type="text" className="w-full" onChange={(e)=>{setSearchValue(e.target.value)}}/>
           <img src="/assests/img/icon/search.svg" alt="" />
         </div> */}
+        <InputPicker data={PickerValues}/>
         <div className="flex flex-col w-full">
           {searchResult.map(item=>{
             return (
@@ -65,11 +69,10 @@ function SSelectFieldWithSearch({options,uploadSelected,index,single,values,canS
       </div>
       <div className="w-full flex flex-col">
         <div
-            
-            className="border p-1 rounded-md shadow  focus:border-blue-400 flex flex-row"
+            className="flex flex-col h-full text-center justify-center items-center"
             // onClick={()=>{deletSelected(index)}}
           >
-            Selected Categories
+            Selected
         </div>
         {
           values?.map((value,i)=>{

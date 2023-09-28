@@ -125,6 +125,10 @@ body {
     @apply  text-su-green
   }
 
+  .field{
+    @apply rounded-md shadow focus:border-blue-400 bg-white p-1
+  }
+
   .greensmalltxt{
     font-family: 'Tensentype RuiHei GB18030';
     font-style: normal;
