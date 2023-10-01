@@ -125,13 +125,17 @@ const SocList = () => {
                     SocietyList.map(l=>{
                         return(
                             <li className='py-5'>
-                                <div className="p-5 mx-5 rounded-lg bg-gray-100">
-                                    {/* <p>學會 Society: {l.society_chinese} {l.society_eng}</p> */}
-                                    <p>{l.society_chinese} {l.society_eng}</p>
-                                    {/* <p>幹事會名稱 Name of Executive Committee: {l.exco_name_chinese} {l.exco_name_eng}</p> */}
-                                    <p>{l.exco_name_chinese} {l.exco_name_eng}</p>
-                                    
-                                </div>
+                                <a href={l.ig?l.ig:""}>
+                                    <div className="p-5 mx-5 rounded-lg bg-gray-100">
+                                        
+                                        {/* <p>學會 Society: {l.society_chinese} {l.society_eng}</p> */}
+                                        <p>{l.society_chinese} {l.society_eng}</p>
+                                        {/* <p>幹事會名稱 Name of Executive Committee: {l.exco_name_chinese} {l.exco_name_eng}</p> */}
+                                        <p>{l.exco_name_chinese} {l.exco_name_eng}</p>
+                                        
+                                    </div>       
+                                </a>
+                                
                             </li>
                         )
                     })

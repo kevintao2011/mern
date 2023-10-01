@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import FieldForArray from './FieldForArray'
 import ArrayofFields from './ArrayofFields';
-function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' '}) {
+import ArrayofKVFields from './ArrayofKVFields';
+function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' ',isKV=false}) {
     const splitMap = {
         '\\' : "single backslash",
         '\b' : "backspace",
@@ -10,7 +11,6 @@ function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' '}) {
         ' ' : "space",
         '\t' : "tab",
     }
-    
     function handleTags(e){
         console.log("fieldValue b4 handle",e.target.value,"default tags",values)
         var fieldValue=e.target.value
@@ -29,25 +29,30 @@ function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' '}) {
             {
                 splitSymbol==="field"?(
                     <div className="" key={`edit-components`}>
+                        {
+                            <ArrayofFields 
+                                index={index}
+                                fieldValues={values}
+                                returnFunction={uploadValues}
+                                isKV={isKV}
+                            />
+                            // isKV?(
+                            //     < ArrayofKVFields
+                            //         index={index}
+                            //         fieldValues={values}
+                            //         returnFunction={uploadValues}
+                                
+                            //     />
+                            // ):(
+                            //     <ArrayofFields 
+                            //         index={index}
+                            //         fieldValues={values}
+                            //         returnFunction={uploadValues}
+                            //         isKV={isKV}
+                            //     />
+                            // )
+                        }
                         
-                        {/* <FieldForArray
-                            key={`FieldForArray`}
-                            fieldName={"doc.name"} 
-                            fieldCSS={"w-full"}
-                            fieldType={"doc.content_type"} 
-                            className={"w-full"} 
-                            fieldValues={[]} //"doc.multiple_content"
-                            multipleValue={true}//"doc.multiple_content"
-                            returnFunction={uploadValues}
-                            index={"i"}
-                            postAPI={""}
-                            
-                        /> */}
-                        <ArrayofFields 
-                            index={index}
-                            fieldValues={values}
-                            returnFunction={uploadValues}
-                        />
                     
                     </div>
                 ):(

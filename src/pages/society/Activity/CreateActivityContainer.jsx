@@ -67,7 +67,7 @@ function CreateActivityContainer({onExit}) {
                     field_type:"text",
                     single:false,
                     field_value:[], //given
-                    field_props:"",
+                    is_kv:true,
                     field_options:[],
                     split_by:'field'
                 },

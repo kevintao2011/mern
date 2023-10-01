@@ -144,7 +144,7 @@ export default function AdminPage() {
         
         <div className="flex flex-col">  
             <CategoryTable/>
-            <EditLastestnews/>
+            {/* <EditLastestnews/> */}
             {/* <button> End of Admin Page </button> */}
         </div>
       </div>

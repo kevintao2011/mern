@@ -36,6 +36,8 @@ import EditMembership from './pages/society/membership/EditMembership';
 import FuntionalParentComponent from './pages/Test/FuntionalParentComponent';
 import CreateSingleProductContainer from './pages/society/product/CreateSingleProductContainer';
 import 'rsuite/dist/rsuite.min.css';
+import Instagramauth from './pages/society/instagram/Instagramauth';
+import CreateForm from './components/FormComponents/CreateForm';
 
 function App() {
   console.log("load app.jsx")
@@ -57,7 +59,7 @@ function App() {
               <Route path="editorialboard" element={<Editorialboard />} />
             </Route>
             <Route path="admin" element={<AdminPage />} />
-            
+            <Route path="createform" element={<CreateForm />} />
             <Route path="test" element={<FuntionalParentComponent />} />
             
             <Route path="shop" >
@@ -73,6 +75,7 @@ function App() {
               {/* <Route path="manage" element={<Manage />} /> */}
             </Route>
             <Route path="/society/:code/manage" element={<Manage />} />
+            <Route path="/society/:code/manage/instagramauth" element={<Instagramauth />} />
             <Route path="society/:code/createactivity" element={<ActivityForm />} />
             <Route path="society/:code/createproduct" element={<CreateProductPage/>} />
             <Route path="society/:code/createsingleproduct" element={<CreateSingleProductContainer/>} />

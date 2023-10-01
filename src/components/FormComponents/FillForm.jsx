@@ -91,6 +91,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI})
                                                         uploadValues={updateField}
                                                         splitSymbol={field.split_by}
                                                         index={index}
+                                                        isKV={field.is_kv}
                                                     />
                                                 )
                                                 
@@ -99,7 +100,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI})
                                         {
                                             field.field_type.includes('number')&&(
                                                 <input 
-                                                    className=' field '
+                                                    className='field'
                                                     id={field.field_name}
                                                     type={field.field_type} 
                                                     value={field.field_value}
