@@ -1,5 +1,5 @@
 import React, { useEffect,useRef,useState } from 'react'
-import ListTable from '../../../components/table/ListTable'
+import ListTable from '../../../components/FormComponents/ListTable'
 import { useNavigate } from 'react-router-dom'
 import CreateSingleProductContainer from './CreateSingleProductContainer';
 import { Drawer, ButtonToolbar, Button, Placeholder } from 'rsuite';
@@ -92,22 +92,23 @@ function AdminProductContainer({Product,code}) {
                     
                 </div>
                 {Array.isArray(Product)&&(
-                        <ListTable 
-                            dataEntries={Product}
-                            TitleMap={{
-                                // _id:"_ID",
-                                
-                                product_name_chi:"Product Name",
-                                product_type:"Category",
-                                inventory:"stock",
-                                total_sales:"sold",
-                                unit_price:"UNIT Price",
-                                published:"published",
-                                session:"session"
+                    <ListTable 
+                        dataEntries={Product}
+                        TitleMap={{
+                            // _id:"_ID",
+                            
+                            product_name_chi:"Product Name",
+                            product_type:"Category",
+                            inventory:"stock",
+                            total_sales:"sold",
+                            unit_price:"UNIT Price",
+                            published:"published",
+                            session:"session"
 
-                            }}
-                        />
-                    )}
+                        }}
+                    />
+                )}
+                <CreateSingleProductContainer/>
             </div>
         </div>
         

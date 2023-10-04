@@ -4,6 +4,9 @@ import FillForm from '../../../components/FormComponents/FillForm'
 function CreateActivityContainer({onExit}) {
     const [FormData, setFormData] = useState()
     const [Categories, setCategories] = useState()
+    function handleSubmit(dataObj){
+        console.log("handleSubmit",dataObj)
+    }
     useEffect(() => {
         async function getCategories(){
             await fetch('/api/getcatoption', { 
@@ -39,7 +42,7 @@ function CreateActivityContainer({onExit}) {
                     field_type:"text",
                     single:true,
                     field_value:[], //given
-                    
+                    is_required:true,
                 },
                 {
                     field_name:"activity_description",
@@ -53,14 +56,15 @@ function CreateActivityContainer({onExit}) {
                     field_value:[], //given
                     field_type:"date",
                     single_value:true,
+                    is_required:true,
                 },
                 {
                     field_name:"end_time",
                     single_value:true,
                     field_value:[], //given
                     field_type:"date",
-                    
-                    
+                    is_required:true,
+
                 },
                 {
                     field_name:"links",
@@ -89,6 +93,27 @@ function CreateActivityContainer({onExit}) {
                     field_type:"text",
                     split_by:' '
                 },
+                {
+                    field_name:"published",
+                    single:true,
+                    field_value:[], //given
+                    field_type:"boolean",
+                    is_required:true,
+                },
+                {
+                    field_name:"poster_url",
+                    single:true,
+                    field_value:[], //given
+                    field_type:"file",
+                },
+                {
+                    field_name:"roles",
+                    single:true,
+                    field_value:[], //given
+                    field_type:"role",
+                    is_required:true,
+                },
+                
             ]
             setFormData(data)
         }
@@ -120,10 +145,12 @@ function CreateActivityContainer({onExit}) {
                                 end_time:"End Time",
                                 links:"Links",
                                 packages:"Product Included",
-                                tags:"tags"
+                                tags:"Tags",
+                                poster_url:"Poster"
 
                             }
                         }
+                        onSubmit={handleSubmit}
                         
                     />
                 )

@@ -9,10 +9,11 @@ function FileField({imgs, fieldTitle, updatePhoto,index,single}) {
     }else{
       return [...imgs,files[0]]
     }
+    
   }
   return (
     <div className="">
-      <div className="">{fieldTitle}</div>
+      {/* <div className="">{fieldTitle}</div> */}
       <div className="flex flex-row">
         {
           imgs.map((img,i)=>{
@@ -23,6 +24,7 @@ function FileField({imgs, fieldTitle, updatePhoto,index,single}) {
                 alt="" 
                 width="100"
                 height="100"
+                onClick={()=>{imgs.splice(i,1);updatePhoto(index,imgs)}}
               />
             )
           })
@@ -33,7 +35,8 @@ function FileField({imgs, fieldTitle, updatePhoto,index,single}) {
           className=' border w-full p-1 block rounded-md shadow  focus:border-blue-400 '
           id={"img"}
           type={"file"} 
-          onChange={(e)=>{updatePhoto(index,updatefileList(e.target.files));}}
+          placeholder=''
+      onChange={(e)=>{updatePhoto(index,updatefileList(e.target.files));}}
           // onChange={(e)=>{console.log(e.target.files)}}
       />
     </div>

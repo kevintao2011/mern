@@ -95,6 +95,25 @@ function CreateSingleProductContainer({onExit}) {
                     field_type:"text",
                     split_by:' '
                 },
+                {
+                    field_name:"has_variant",
+                    single:true,
+                    field_value:[], //given
+                    field_props:"multiple",
+                    field_type:"boolean",
+                },
+                {
+                    field_name:"published",
+                    single:true,
+                    field_value:[], //given
+                    field_type:"boolean",
+                },
+                {
+                    field_name:"subproducts",
+                    single:true,
+                    field_value:[], //given
+                    field_type:"products",
+                },
             ]
             setFormData(data)
         }
@@ -130,10 +149,12 @@ function CreateSingleProductContainer({onExit}) {
                             unit_price:"UNIT Price",
                             allowed_coupon:"Coupons",
                             published:"Publish Now?",
-                            session:"session",
-                            total_sales:"sold",
+                            session:"Session",
+                            total_sales:"Sold",
+                            has_variant:"Has Variant"
 
                         }}
+                        
                     />
                 )
             }

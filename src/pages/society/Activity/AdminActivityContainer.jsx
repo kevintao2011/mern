@@ -1,5 +1,5 @@
 import React, { useEffect,useRef,useState } from 'react'
-import ListTable from '../../../components/table/ListTable'
+import ListTable from '../../../components/FormComponents/ListTable'
 import { useNavigate } from 'react-router-dom'
 // import Calendar from 'rsuite/Calendar';
 import { Drawer, ButtonToolbar, Button, Placeholder} from 'rsuite';
@@ -36,7 +36,7 @@ function AdminActivityContainer({Activities,code}) {
                 </Drawer>
             </div>
             <div className={`w-full flex-col ${showDrawer&&'blur-md'} z-0`}  >
-            <div className="w-full flex flex-row justify-center">
+                <div className="w-full flex flex-row justify-center">
                     <div className="w-1/2 flex flex-row">
                         
                         <div className="">

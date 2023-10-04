@@ -9,12 +9,12 @@ function ActivityCalendar({Activities}) {
         // console.log(day,date,typeof date)
         var tdlist = []
         activities.forEach(activity=>{
-            console.log(`Compare ${String(new Date(activity.start_date)).slice(0,15)} and ${String(date).slice(0,15)}`)
+            // console.log(`Compare ${String(new Date(activity.start_date)).slice(0,15)} and ${String(date).slice(0,15)}`)
             if((String(new Date(activity.start_date)).slice(0,15))===String(date).slice(0,15)){
                 tdlist.push({ time:activity.start_time, title: activity.activity_name })
             }
         })
-        console.log(" ")
+        // console.log(" ")
         return tdlist
     }
     function renderCell(date) {

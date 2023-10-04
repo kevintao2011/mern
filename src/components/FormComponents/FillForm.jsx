@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 import SSelectFieldWithSearch from './SSelectFieldWithSearch'
 import FileField from './FileField'
 import MultipleValuesField from './MultipleValuesField'
-import { DatePicker } from 'rsuite';
+import { DatePicker, Toggle } from 'rsuite';
 import SelectField from './SelectField';
+import RolesField from './RolesField';
+import EntryTable from '../table/EntryTable';
 
-function FillForm({fields , className ,title ,description ,TitleMap={},postAPI}) {
+
+function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,onSubmit}) {
     // const [Headings, setHeadings] = useState([])
     
     const [Fields, setFields] = useState()
@@ -22,6 +25,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI})
         newFields[index]["field_value"]=values
         setFields([...newFields])
         console.log("updated",newFields)
+        
     }
     
     async function handleSubmit(){
@@ -38,15 +42,15 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI})
                 <p className='text-2xl font-bold pb-5'>{title}</p>
                 <p className='my-2 text-base'>{description}</p>
             </div>
-            <table className="w-full">
-                <tbody className='my-1'>
+            <table className="w-full ">
+                <tbody className=''>
                     {
                         Fields?.map((field,index)=>{
                             // console.log("field",index," ",field)
                             return(
-                                <tr key={`field-${index}`}>
+                                <tr key={`field-${index}`} className=''>
                                     <td className="text-start">{TitleMap[field.field_name]?TitleMap[field.field_name]:field.field_name}</td>
-                                    <td>
+                                    <td className='py-2'>
                                         {
                                             field.field_type.includes('select')&&(
                                                 <SelectField
@@ -100,7 +104,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI})
                                         {
                                             field.field_type.includes('number')&&(
                                                 <input 
-                                                    className='field'
+                                                    className='field w-full'
                                                     id={field.field_name}
                                                     type={field.field_type} 
                                                     value={field.field_value}
@@ -126,8 +130,37 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI})
                                             field.field_type.includes('date')&&(
                                                 <DatePicker 
                                                     format="yyyy-MM-dd HH:mm"
-                                                    className='w-full shadow'
+                                                    className='w-full shadow '
                                                     onChange={(v)=>{updateField(index,v)}}
+                                                />
+                                            )
+                                        }
+                                        {
+                                            field.field_type.includes('boolean')&&(
+                                            <Toggle
+                                                onChange={v=>{updateField(index,v)}}
+                                            />  
+                                            )
+                                        }
+                                        {
+                                            field.field_type.includes('role')&&(
+                                                // <RolesField 
+                                                //     value={field.field_value}
+                                                //     onChange={v=>{updateField(index,v)}}
+                                                // /> 
+                                                <EntryTable
+                                                    headings={["Role","Quantity","Price"]}
+                                                    rowValues={field.field_value}
+                                                    update={(v)=>{updateField(index,v)}}
+                                                />
+                                            )
+                                        }
+                                        {
+                                            field.field_type.includes('product')&&(
+                                                <EntryTable
+                                                    headings={["Role","Quantity","Price"]}
+                                                    rowValues={field.field_value}
+                                                    update={(v)=>{updateField(index,v)}}
                                                 />
                                             )
                                         }
@@ -141,8 +174,6 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI})
                         })
                     }
                 </tbody>
-                
-                
             </table>
             {
                 postAPI&&(
@@ -150,6 +181,19 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI})
                         <button 
                             className='text-center my-5 p-1 bg-green-500 rounded-md'
                             onClick={handleSubmit}
+                        >
+                            Create
+                        </button>
+                    </div>
+                )
+                
+            }
+            {
+                onSubmit&&(
+                    <div className="w-full flex flex-row justify-center">
+                        <button 
+                            className='text-center my-5 p-1 bg-green-500 rounded-md text-white'
+                            onClick={()=>{onSubmit(Fields)}}
                         >
                             Create
                         </button>

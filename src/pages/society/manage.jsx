@@ -5,6 +5,7 @@ import { auth,deleteFile,storage } from '../../utils/firebasefunction';
 import AdminProductContainer from './product/AdminProductContainer';
 import FieldForArray from '../../components/FormComponents/FieldForArray';
 import AdminActivityContainer from './Activity/AdminActivityContainer';
+import AdminMemberContainer from './member/AdminMemberContainer';
 
 const Manage = () => {
     const {code} = useParams()
@@ -14,7 +15,7 @@ const Manage = () => {
     const [Member, setMember] = useState()
     const [Order, setOrder] = useState()
     const iconsize = 20;
-    const {Soc,currentUser} = useAuth()
+    const {Soc,currentUser,userDBInfo} = useAuth()
     
     const navigate = useNavigate()
     console.log(code)
@@ -56,6 +57,30 @@ const Manage = () => {
                 console.log("data.error",data)
                 
             }  
+        })
+    }
+    async function fetchMemberList(){
+        console.log("calling fetch member")
+        await fetch("/api/getmemberlist", { 
+            method: "POST",
+            body: JSON.stringify({
+                user:{
+                    token:await auth.currentUser.getIdToken(),
+                    _id:userDBInfo._id
+                },
+                data:{
+                    code:code
+                }
+            }),
+            headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode:'cors'
+        }).then(async res=>{
+            await res.json().then(v=>{
+                console.log("MemberList:",v)
+            })
         })
     }
     async function updateOrderStatus(order,val){
@@ -277,7 +302,7 @@ const Manage = () => {
 
     return (
     <div className={` w-full flex flex-row px-20 mainpage-i `}>
-            <div className={`LHS flex flex-col w-3/12 items-center justify-center `}>
+            <div className={`LHS flex flex-col w-3/12 items-center  `}>
                
                 
                 <div className="py-10">
@@ -376,10 +401,34 @@ const Manage = () => {
                     {Soc[code].session}
                     </div>
                 </div>
-                <div className=" flex flex-col py-5 w-full">
+                <div className=" flex flex-col w-full">
                     <div className=" w-full ">
-                        <p>payme link</p>
+                        payme link
+                        <FieldForArray
+                            key={`payme`}
+                            fieldName={`payme`} 
+                            fieldType={"text"} 
+                            className={""} 
+                            fieldValues={[""]} 
+                            multipleValue={false}
+                            // handleUpdate={SaveFieldValues}
+                            postAPI={"/api/postpayme"}
+                        />
                     </div>
+                    <div className=" w-full ">
+                        FPS link
+                        <FieldForArray
+                            key={`FPS`}
+                            fieldName={`fps`} 
+                            fieldType={"text"} 
+                            className={""} 
+                            fieldValues={[""]} 
+                            multipleValue={false}
+                            // handleUpdate={SaveFieldValues}
+                            postAPI={"/api/postfps"}
+                        />
+                    </div>
+                    
                     
                     {/* <div className=" w-10/12 justify-center">
                     
@@ -400,16 +449,8 @@ const Manage = () => {
                     
                     
                     </div> */}
-                    <FieldForArray
-                        key={`payme`}
-                        fieldName={`payme`} 
-                        fieldType={"text"} 
-                        className={""} 
-                        fieldValues={[""]} 
-                        multipleValue={false}
-                        // handleUpdate={SaveFieldValues}
-                        postAPI={"/api/postpayme"}
-                    />
+                    
+                    
                 </div>
                 
                 
@@ -445,38 +486,10 @@ const Manage = () => {
                 <div className="h-full w-full bg-slate-100 rounded-b-3xl rounded-tr-3xl">
                     <div className="p-5 ">
                         {tab==="Member"&&(
-                            <div className="flex flex-col">
-                                <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/editmembership`); navigate(`/society/${code}/editmembership`)}}>
-                                        Add member
-                                </button>
-                                {
-                                    Member&&(
-                                        <div className="flex flex-col">
-                                            <div className="flex flex-row justify-between ">
-                                                <p className='w-1/3 justify-center'>SID</p>
-                                                <p className='w-1/3 flex justify-center'>role </p>
-                                                <p className='w-1/3 flex justify-center'> </p>
-                                            </div>
-                                            {
-                                                Member.map(member=>{
-                                                    console.log(member.sid)
-                                                    return(
-                                                        
-                                                        <div className="flex flex-row w-full">
-                                                            <p className='w-1/3'>{member.sid}</p>
-                                                            <p className='w-1/3'>{member.role}</p>
-                                                        </div>
-                                                        
-                                                    )
-                                                })
-                                            }
-                                        </div>
-                                        
-                                        
-                                    )
-                                }
-                            </div>
-                            
+                            (<AdminMemberContainer 
+                                code={code}
+                                Member={Member}
+                            />)
                         )}
                         {tab==="Activity"&&(
                             Activity&&(
@@ -485,65 +498,6 @@ const Manage = () => {
                                     Activities={Activity}
                                 />
                             )
-                            
-                            // <div className="flex flex-col ">
-                            //     <div className="flex justify-center">
-                            //         <button className="bg-su-green w-2/3 text-white rounded-md p-3 m-3" onClick={()=>{console.log(`/society/${code}/creatactivity`); navigate(`/society/${code}/createactivity`)}}>
-                            //             Create Activity
-                            //         </button>
-                                   
-                            //     </div>  
-                            //     {Activity&&(
-                            //         <div className="flex flex-col ">
-                            //             <div className="flex flex-row justify-between ">
-                            //                 <p className='w-1/6 justify-center'>Date</p>
-                            //                 <p className='w-1/6 justify-center'>Single Date</p>
-                            //                 <p className='w-1/3 flex justify-center'>Activity </p>
-                            //                 <p className='w-1/3 flex justify-center'> Action </p>
-                            //             </div>
-                            //             <ul className='list-none'>             
-                            //                 {Activity.map(activity => {
-                            //                     activity.start_date = new Date(activity.start_date);
-                                                
-                            //                     console.log("activity",activity)
-                            //                     return(
-                            //                         <li key={activity._id}>
-                            //                             <div className="flex flex-row justify-between" >
-                            //                             <p className='w-1/6 justify-center'>{(activity.start_date.toISOString().substring(0, 10))}</p>
-                            //                             {
-                            //                                 activity.single_date?(
-                            //                                     <p className='w-1/6 justify-center'>Yes</p>
-                            //                                 ):(
-                            //                                     <p className='w-1/6 justify-center'>No</p>
-                            //                                 )
-                            //                             }
-                                                        
-                                                        
-                            //                             <p className='w-1/3 flex justify-center'>{activity.activity_name} </p>
-                            //                             <div className="w-1/3 flex justify-center">
-                            //                                 {/* <button className='w-1/3 flex justify-center items-center bg-blue-600 rounded-full m-2 text-white'> View </button> */}
-                            //                                 <button className='w-1/3 flex justify-center items-center bg-su-green rounded-full m-2 text-white ' value={activity._id}  onClick={(e)=>{navigate(`/society/${code}/manage/${e.target.value}/editactivity`,{state:{Product:Product}})}}> Manage </button>
-                            //                                 <button className='w-1/3 flex justify-center items-center bg-red-700 rounded-full m-2 text-white'
-                            //                                     onClick={()=>{removeActivity(activity._id)}}
-                            //                                 > 
-                            //                                     Delete 
-                            //                                 </button>
-                                                            
-                            //                             </div>
-                                                        
-                            //                         </div>
-                            //                         </li>
-                                                    
-                                                    
-                                                    
-                            //                     )
-                            //                 })}
-                            //             </ul>
-                            //         </div>
-                            //     )}
-                            // </div>
-                            
-                            
                         )}
 
                         {tab==="Product"&&(
@@ -551,7 +505,6 @@ const Manage = () => {
                                 code={code}
                                 Product={Product}
                             />
-                            
                         )}
 
                         {

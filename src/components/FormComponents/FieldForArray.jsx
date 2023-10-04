@@ -142,12 +142,12 @@ export default function FieldForArray(
                 
                 FieldValues?.map((value,i)=>{
                     return(  
-                        <div className="flex flex-row w-full my-1 gap-1" key={`${fieldName}-${i}`}>
+                        <div className="flex flex-row w-full  gap-1" key={`${fieldName}-${i}`}>
                             <input 
                                 type={fieldType} 
                                 // defaultValue={value}
                                 value={value}
-                                className="field bg-white"
+                                className="field bg-white w-full"
                                 onChange={(e)=>{
                                     FieldValues[i]=e.target.value
                                     setFieldValues([...FieldValues])
@@ -157,6 +157,15 @@ export default function FieldForArray(
                                     
                                 }}
                             /> 
+                            {postAPI&&!multipleValue&&(
+                                <button
+                                    className={AddButtonCSS||'p-1 my-2 bg-su-green rounded-md text-white'}
+                                    onClick={()=>{handleSubmit()}}
+                                    disabled={Submit}
+                                >
+                                    Save
+                                </button>  
+                            )}
                             {
                                 mutilpleField&&(// Add and Delete Button and for mutilpleField
                                         <button 
@@ -188,7 +197,7 @@ export default function FieldForArray(
                     )
                 }
                 {
-                    postAPI&&(
+                    postAPI&&multipleValue&&(
                         <button
                             className={AddButtonCSS||'p-1 my-2 bg-green-600 rounded-md'}
                             onClick={()=>{handleSubmit()}}

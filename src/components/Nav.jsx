@@ -133,7 +133,7 @@ const Nav = () => {
                                                         onClick={()=>{setToggleDropdown(prev=>!prev)}}
                                                     />
                                                 </button>
-                                                
+                                    
                                                 <div className="absolute right-2 w-60 text-base bg-white rounded-md">
                                                     <Link 
                                                         to={"/soclist"}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import SearchTool from './SearchTool'
+import SearchTool from '../table/SearchTool'
 import moment from 'moment/moment'
 import { Toggle } from 'rsuite'
 function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,DeletAPI}) {
