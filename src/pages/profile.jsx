@@ -8,7 +8,8 @@ import { useAuth } from '../components/session';
 import * as Info from '../model/info.js'
 import { onAuthStateChanged } from 'firebase/auth';
 import { Navigate, useNavigate } from 'react-router-dom';
-
+import { pickRadomColor } from '../utils/tailwindcss';
+import { postURL } from '../utils/fetch';
 const iconsize = 20;
 const Profile = () => {
   const [ProfileInfo, setProfileInfo] = useState(new Info.ProfileInfo())
@@ -19,6 +20,8 @@ const Profile = () => {
   const [Societies, setSocieties] = useState([])
   const navigate = useNavigate()
   const [Orders, setOrders] = useState([])
+  const [Memberships, setMemberships] = useState([])
+  
   console.log("societies",Soc)
   
   
@@ -51,6 +54,14 @@ const Profile = () => {
       
         
   }
+
+  async function getMembership(){
+    await postURL("/api/getusermembership",true).then(v=>{
+      setMemberships(v)
+    })
+    
+  }
+  
 
   useEffect(() => {
     
@@ -105,61 +116,17 @@ const Profile = () => {
     <div className="mainpage-1">
         {
           Societies&&userDBInfo&&currentUser&&(
-            <div className="flex flex-col md:flex-row ">
-              <div className="flex flex-col md:px-10 md:w-3/12 w-full  items-center p-5">
-                {/* <div className="py-10">
-                  <img 
-                    src     ="/assests/img/cow.png" 
-                    alt     = "promptation logo"
-                    width   = {300}
-                    height  = {300}
-                    className = "object-contain rounded-full "
-                  />
-                </div> */}
-                {/* <div className='flex justify-center pb-5'>
-                  <button className="bg-su-green text-white rounded-md px-4 py-2" >
-                    Edit Profile
-                  </button>
-                </div> */}
-                {/* <div className="flex flex-row w-full justify-between py-5">
-                  <button>
-                    <img 
-                      src     ="/assests/img/icon/icon_notifications.svg" 
-                      alt     = "promptation logo"
-                      width   = {iconsize}
-                      height  = {iconsize}
-                      className = "object-contain "
-                    />
-                  </button>
-                  <button>
-                    <img 
-                      src     ="/assests/img/icon/icon_date_add.svg" 
-                      alt     = "promptation logo"
-                      width   = {iconsize}
-                      height  = {iconsize}
-                      className = "object-contain "
-                    />
-                  </button>
-                  <button>
-                      <img 
-                      src     ="/assests/img/icon/icon_compose.svg" 
-                      alt     = "promptation logo"
-                      width   = {iconsize}
-                      height  = {iconsize}
-                      className = "object-contain "
-                    />
-                  </button>
-                  <button>
-                    <img 
-                      src     ="/assests/img/icon/icon_cog.svg" 
-                      alt     = "promptation logo"
-                      width   = {iconsize}
-                      height  = {iconsize}
-                      className = "object-contain rounded-full"
-                    />
-                  </button>
-                </div> */}
-                <div className="w-full">
+            <div className="flex flex-col md:flex-row">
+              
+              <div className="flex flex-col md:px-10 md:w-3/12 w-full  items-center p-5 ">
+                
+                <div className="w-full border-gray-200 border-t-su-green border-t-4 rounded-md p-2 ">
+                  <div className="text-black text-3xl">
+                    個人資料 
+                  </div>
+                  <div className="text-black text-3xl">
+                    Profile Information
+                  </div>
                   <div className=" flex flex-row py-5">
                     <div className=" w-2/12 ">
                       <button>
@@ -171,6 +138,7 @@ const Profile = () => {
                           className = "object-contain "
                         />
                       </button>
+                      {/* Major */}
                     </div>
                     
                   <div className=" w-10/12 flex justify-center major">
@@ -297,7 +265,8 @@ const Profile = () => {
                   <img src="./assests/img/BelongSociety.svg" alt="" />
                   {Societies?.length!==0?(
                     <div className="flex flex-row w-full ">
-                      <div className="flex md:flex-row flex-col w-full md:w-full my-20"> 
+                      {/* <div className="flex md:flex-row flex-col w-full md:w-full gap-2">  */}
+                      <div className="w-full grid grid-cols-8 gap-5 my-5"> 
                       {
 
                         Societies.map((soc)=>{
@@ -305,9 +274,16 @@ const Profile = () => {
                           
                           return(
                             // <li key={Object.keys(soc)[0] }>
-                            <div className="w-full my-5 md:my-0">
-                              <SocietyCard title={Soc[Object.keys(soc)[0]].society_chinese} type={Object.values(soc)[0]} managebutton={Object.values(soc)[0]!=="member"&&Object.values(soc)[0]!=="pending"} code={Soc[Object.keys(soc)[0]].code} />
-                            </div>
+                            // <div className="w-full my-5 md:my-0">
+                            
+                            <SocietyCard 
+                              title={Soc[Object.keys(soc)[0]].society_chinese} 
+                              type={Object.values(soc)[0]} 
+                              managebutton={Object.values(soc)[0]!=="member"&&Object.values(soc)[0]!=="pending"} 
+                              code={Soc[Object.keys(soc)[0]].code}
+                              color={pickRadomColor(2)}
+                            />
+                          
                               
                             // </li>
                             )

@@ -64,22 +64,22 @@ function CreateSingleProductContainer({onExit}) {
                     field_options:Categories
                     
                 },
-                {
-                    field_name:"parent",
-                    single:false,
-                    field_value:[], //given
-                    field_options:[],
-                    field_type:"select",
-                    field_props:"",
+                // {
+                //     field_name:"parent",
+                //     single:false,
+                //     field_value:[], //given
+                //     field_options:[],
+                //     field_type:"select",
+                //     field_props:"",
                     
-                },
-                {
-                    field_name:"unit_price",
-                    single:true,
-                    field_value:[], //given
-                    field_type:"number",
+                // },
+                // {
+                //     field_name:"unit_price",
+                //     single:true,
+                //     field_value:[], //given
+                //     field_type:"number",
                     
-                },
+                // },
                 {
                     field_name:"published",
                     single:true,
@@ -95,13 +95,13 @@ function CreateSingleProductContainer({onExit}) {
                     field_type:"text",
                     split_by:' '
                 },
-                {
-                    field_name:"has_variant",
-                    single:true,
-                    field_value:[], //given
-                    field_props:"multiple",
-                    field_type:"boolean",
-                },
+                // {
+                //     field_name:"has_variant",
+                //     single:true,
+                //     field_value:[], //given
+                //     field_props:"multiple",
+                //     field_type:"boolean",
+                // },
                 {
                     field_name:"published",
                     single:true,
@@ -112,6 +112,14 @@ function CreateSingleProductContainer({onExit}) {
                     field_name:"subproducts",
                     single:true,
                     field_value:[], //given
+                    /*
+                    {
+                        option:""
+                        unit price:0
+                        quantity:0
+                        img_url:[]
+                    }
+                    */
                     field_type:"products",
                 },
             ]
@@ -151,7 +159,8 @@ function CreateSingleProductContainer({onExit}) {
                             published:"Publish Now?",
                             session:"Session",
                             total_sales:"Sold",
-                            has_variant:"Has Variant"
+                            has_variant:"Has Variant",
+                            subproducts:"Product List"
 
                         }}
                         

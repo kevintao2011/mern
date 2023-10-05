@@ -6,6 +6,7 @@ import { DatePicker, Toggle } from 'rsuite';
 import SelectField from './SelectField';
 import RolesField from './RolesField';
 import EntryTable from '../table/EntryTable';
+import ProductCombination from './ProductCombination';
 
 
 function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,onSubmit}) {
@@ -157,8 +158,12 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                         }
                                         {
                                             field.field_type.includes('product')&&(
-                                                <EntryTable
-                                                    headings={["Role","Quantity","Price"]}
+                                                // <EntryTable
+                                                //     headings={["Options","Quantity","Price"]}
+                                                //     rowValues={field.field_value}
+                                                //     update={(v)=>{updateField(index,v)}}
+                                                // />
+                                                <ProductCombination 
                                                     rowValues={field.field_value}
                                                     update={(v)=>{updateField(index,v)}}
                                                 />

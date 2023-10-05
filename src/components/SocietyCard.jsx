@@ -1,37 +1,32 @@
 import React from 'react'
 import { auth } from '../utils/firebasefunction'
 import { useNavigate } from 'react-router-dom'
-
-const SocietyCard = (props) => {
+import { pickRadomColor } from '../utils/tailwindcss'
+const SocietyCard = ({title,color,type,code,managebutton}) => {
   console.log("createing soc card")
-  const title = props.title
-
-  const type = props.type
-  const code = props.code
-  const managebutton = props.managebutton
   const navigate = useNavigate();
-  console.log("title",props.title,"type,",props.type,"code",code)
+  console.log("title",title,"type,",type,"code",code)
 
-  
+  console.log(`${color}`)
   return (
-    <div className="md:m-5 md:m-5  h-full bg-su-green  rounded-3xl   my-10 ">
+    <div className={`bg-su-green h-full  rounded-md `}>
         
-        <div className="flex flex-row p-5">
-            <p className=' rounded-3xl text-white px-5 text-base '> 
-                {title}-{type}
-            </p>
-            {/* <p className=' rounded-full m-2 px-5 bg-slate-300 w-3/12'> 
-                
-            </p> */}
+        <div className="flex flex-col p-2 ">
+            <div className=' text-white  text-base border-b-2 border-white'> 
+                {title}
+            </div>
+            <div className='w-full h-full text-white  text-base text-center'> 
+                <div className="">{type}</div>
+            </div>
         </div>
         
-        <div className="flex-row-reverse flex p-2 justify-center">
+        {/* <div className="flex-row-reverse flex p-2 justify-center">
             {managebutton?(
                 <button onClick={()=>{navigate(`/society/${code}/manage`)}} className=' rounded-xl p-1 text-white'> manage society </button>)
                 :
                 (<></>)
             }
-        </div>
+        </div> */}
 
     </div>
     
