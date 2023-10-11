@@ -8,18 +8,17 @@ class ServerFunction{
     
 }
 async function postURL(postURL,needToken=false,data={}){
-    await auth.currentUser.getIdToken().then(async token=>{
+    console.log(`"****calling to "${postURL} *******`)
+    return await auth.currentUser.getIdToken().then(async token=>{
         console.log("token",token)
-        await fetch ({postURL},
+        return await fetch (postURL,
         {
             method:"POST",
             body:JSON.stringify({
                 user:{
                     token:token
                 },
-                data:{
-                    data
-                }
+                data
             }),
             data:data,
             headers: {
@@ -32,8 +31,8 @@ async function postURL(postURL,needToken=false,data={}){
             if(response.ok){
                 console.log("fetched Data from",postURL)
                 const data = await response.json()
-                console.log("data",data)
-                return data
+                console.log("data",data.data)
+                return data.data
             }else{
                 console.log("failed fetch user")
                 return false

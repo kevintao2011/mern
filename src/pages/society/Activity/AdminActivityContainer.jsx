@@ -45,16 +45,17 @@ function AdminActivityContainer({Activities,code}) {
                     </div>
                     <div className="w-1/2 py-1">
                         <div className="w-full flex flex-row gap-2 justify-end">
-                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createactivity`)}}>
+                            {/* <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createactivity`)}}> */}
                             
-                            {/* <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setshowDrawer(prev=>!prev)}}> */}
+                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setOpen(true)}}>
+                                {/* setshowDrawer(prev=>!prev) */}
                                 Create Activity
                             </button>
 
-                            <ButtonToolbar>
+                            {/* <ButtonToolbar>
                                 <Button onClick={() => setOpen(true)}>Create Activity</Button>
-                                {/* <Button onClick={() => setOpenWithHeader(true)}>Open with header</Button> */}
-                            </ButtonToolbar>
+                               
+                            </ButtonToolbar> */}
                             
                         </div>
                         
@@ -81,7 +82,7 @@ function AdminActivityContainer({Activities,code}) {
                 <div className="flex flex-col mt-5">
                     <div className="text-xl">Activity Calendar</div>
                 </div>
-                <CreateActivityContainer/>
+                {/* <CreateActivityContainer/> */}
                 <ActivityCalendar Activities={Activities}/>
 
                 

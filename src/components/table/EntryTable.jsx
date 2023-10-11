@@ -25,7 +25,7 @@ function EntryTable({headings,rowValues=[],update}) {
                                 {
                                 headings.map((heading,index)=>{
                                         return (
-                                            <td>
+                                            <td className='p-1'>
                                                 <input type="text" 
                                                     value={row[heading]}
                                                     placeholder={heading}

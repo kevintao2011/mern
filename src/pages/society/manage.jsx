@@ -301,14 +301,14 @@ const Manage = () => {
     
 
     return (
-    <div className={` w-full flex flex-row px-20 mainpage-i `}>
-            <div className={`LHS flex flex-col w-3/12 items-center  `}>
+    <div className={` w-full flex flex-row px-20 mainpage-i font-mincho `}>
+            <div className={`LHS flex flex-col w-3/12 items-center pr-5 `}>
                
                 
                 <div className="py-10">
                     <img 
-                        src     ="/assests/img/cow.png" 
-                        alt     = "promptation logo"
+                        src     = "/assests/img/cow.png" //{"https://scontent-hkg4-2.cdninstagram.com/v/t51.2885-19/347563459_208001788751385_6605325373386775824_n.jpg?stp=dst-jpg_s320x320&_nc_ht=scontent-hkg4-2.cdninstagram.com&_nc_cat=109&_nc_ohc=PREBQqPlMS8AX-Qvx_g&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfD8-XC42ekIzinnx-BC2oz5x0xx4jomh5lc0udljnhXbA&oe=652B1884&_nc_sid=8b3546"}//
+                        alt     = "ig logo"
                         width   = {300}
                         height  = {300}
                         className = "object-contain rounded-full "
@@ -467,7 +467,7 @@ const Manage = () => {
                 
                 
             </div>
-            <div className="RHS flex flex-col w-9/12 p-20 pr-0">
+            <div className="RHS flex flex-col w-9/12 ">
                 <div className="tab flex flex-row">
                     
                     <button onClick={()=>{settab("Activity")}} className='rounded-t-md  text-2xl bg-slate-200 px-5'>
@@ -483,7 +483,7 @@ const Manage = () => {
                         Order 
                     </button>
                 </div>
-                <div className="h-full w-full bg-slate-100 rounded-b-3xl rounded-tr-3xl">
+                <div className="w-full bg-slate-100 rounded-b-3xl rounded-tr-3xl">
                     <div className="p-5 ">
                         {tab==="Member"&&(
                             (<AdminMemberContainer 
@@ -509,43 +509,48 @@ const Manage = () => {
 
                         {
                             Order&&tab==="Order"&&(
-                                Order?.map(order=>{
-                                    return(
-                                      <div className=" bg-white p-1 rounded-md my-2">
-                                        <div className="flex flex-col md:flex-row">
-                                          <p className='overflow-x-auto'>訂單編號 {order._id}</p>
-                                          <p className='md:mx-10'>付款方式 {order.payment_method}</p>
-                                        </div>
-            
-                                        <div className="flex flex-col md:flex-row">
-                                          
-                                          <p className='md:mx-10'>狀態 </p>
-                                          <select name="" id="" defaultValue={order.status} onChange={(e)=>{updateOrderStatus(order,e.target.value)}}>
-                                            <option value="Confirmed">已確認付款</option>
-                                            <option value="To be confirmed">等待確認付款</option>
-                                            <option value="Processing">處理中</option>
-                                            <option value="Delivering">運送中</option>
-                                            <option value="Delivered">已運送</option>
-                                            <option value="Cancelled">已取消</option>
-                                          </select>
-                                        </div>
-                                        <p className='md:mx-10'>學生編號 {order.sid}</p>
-                                        <p className='md:mx-10'>學生姓名 {order.chi_name}</p>
-                                        <p className='md:mx-10'>聯絡電話 {order.contact}</p>
-                                        <p className='md:mx-10'>建立日期 {Date(order.create_at).substring(0,24)}</p>
-                                        
-                                        
-                                        <p className='py-2'>訂單物品</p>
-                                        {
-                                          order.products.map((item,i)=>{
+                                <div className="grid grid-cols-1 gap-4 font-mincho">
+                                    {
+                                        Order?.map(order=>{
                                             return(
-                                              <p>{i+1}.{item.product_name}-{item.option} x {item.quantity}</p>
+                                              <div className="field">
+                                                <div className="flex flex-col md:flex-row">
+                                                  <p className='overflow-x-auto'>訂單編號 {order._id}</p>
+                                                  <p className='md:mx-10'>付款方式 {order.payment_method}</p>
+                                                </div>
+                    
+                                                <div className="flex flex-col md:flex-row">
+                                                  
+                                                  <p className='md:mx-10'>狀態 </p>
+                                                  <select name="" id="" defaultValue={order.status} onChange={(e)=>{updateOrderStatus(order,e.target.value)}}>
+                                                    <option value="Confirmed">已確認付款</option>
+                                                    <option value="To be confirmed">等待確認付款</option>
+                                                    <option value="Processing">處理中</option>
+                                                    <option value="Delivering">運送中</option>
+                                                    <option value="Delivered">已運送</option>
+                                                    <option value="Cancelled">已取消</option>
+                                                  </select>
+                                                </div>
+                                                <p className='md:mx-10'>學生編號 {order.sid}</p>
+                                                <p className='md:mx-10'>學生姓名 {order.chi_name}</p>
+                                                <p className='md:mx-10'>聯絡電話 {order.contact}</p>
+                                                <p className='md:mx-10'>建立日期 {Date(order.create_at).substring(0,24)}</p>
+                                                
+                                                
+                                                <p className='py-2'>訂單物品</p>
+                                                {
+                                                  order.products.map((item,i)=>{
+                                                    return(
+                                                      <p>{i+1}.{item.product_name}-{item.option} x {item.quantity}</p>
+                                                    )
+                                                  })
+                                                }
+                                              </div>
                                             )
                                           })
-                                        }
-                                      </div>
-                                    )
-                                  })
+                                    }
+                                </div>
+                                
                             )
                         }
                     </div>

@@ -7,7 +7,10 @@ import ListTable from '../../../components/FormComponents/ListTable'
 import moment from 'moment'
 import FieldForArray from '../../../components/FormComponents/FieldForArray'
 import { postURL } from '../../../utils/fetch'
+import { useNavigate } from 'react-router-dom'
+
 function AdminMemberContainer({Member,code}) {
+    const navigate = useNavigate()
     const {Soc,currentUser,userDBInfo} = useAuth()
     const [Open, setOpen] = useState(false)
     const [DisplayCreate, setDisplayCreate] = useState(false)
@@ -68,8 +71,11 @@ function AdminMemberContainer({Member,code}) {
                 </div>
                 <div className="w-1/2 py-1">
                     <div className="w-full flex flex-row gap-2 justify-end">
-                        <button onClick={()=>{setDisplayCreate(true)}}>
+                        <button className='p-1 bg-su-green text-white rounded-md' onClick={()=>{setDisplayCreate(true)}}>
                             Add new member
+                        </button>
+                        <button className='p-1 bg-su-green text-white rounded-md' onClick={()=>{setDisplayCreate(true)} }>
+                            Edit Membership Option
                         </button>
                     </div>
                     

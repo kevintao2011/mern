@@ -16,7 +16,7 @@ function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,Del
     
     return (
         <div>
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-between ">
                 <SearchTool 
                     inputData={dataEntries}
                     updateOutput={handleFilter}
@@ -33,7 +33,7 @@ function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,Del
                 
             </div>
             <table className='w-full'>
-                <tbody>
+                <tbody className='font-mincho'>
                     <tr>
                         {
                             headings.map(heading=>{

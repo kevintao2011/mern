@@ -10,6 +10,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { pickRadomColor } from '../utils/tailwindcss';
 import { postURL } from '../utils/fetch';
+import moment from 'moment';
 const iconsize = 20;
 const Profile = () => {
   const [ProfileInfo, setProfileInfo] = useState(new Info.ProfileInfo())
@@ -56,7 +57,9 @@ const Profile = () => {
   }
 
   async function getMembership(){
+    
     await postURL("/api/getusermembership",true).then(v=>{
+      console.log("membershipdata:",v)
       setMemberships(v)
     })
     
@@ -96,6 +99,7 @@ const Profile = () => {
     async function doALL(){
       await fetchOrder()
       await fetchProfileInfo()
+      await getMembership()
     }
     
     // .then(l=>{
@@ -116,17 +120,20 @@ const Profile = () => {
     <div className="mainpage-1">
         {
           Societies&&userDBInfo&&currentUser&&(
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col md:flex-row font-mincho">
               
               <div className="flex flex-col md:px-10 md:w-3/12 w-full  items-center p-5 ">
                 
                 <div className="w-full border-gray-200 border-t-su-green border-t-4 rounded-md p-2 ">
-                  <div className="text-black text-3xl">
-                    個人資料 
+                  <div className="border-b-2 border-gray-500">
+                    <div className="text-black text-2xl">
+                      個人資料 
+                    </div>
+                    <div className="text-black text-2xl">
+                      Profile Information
+                    </div>
                   </div>
-                  <div className="text-black text-3xl">
-                    Profile Information
-                  </div>
+                  
                   <div className=" flex flex-row py-5">
                     <div className=" w-2/12 ">
                       <button>
@@ -200,7 +207,7 @@ const Profile = () => {
                       
                     <div className=" w-10/12 flex justify-center">
                       {"Join Date - "}
-                      {Date(userDBInfo.created).toString()}
+                      {moment(userDBInfo.created).format("DD-MM-YYYY")}
                     </div>
                   </div>
 
@@ -263,27 +270,36 @@ const Profile = () => {
               </div> 
               <div className="RHS w-full md:w-9/12 md:px-10 px-2">
                   <img src="./assests/img/BelongSociety.svg" alt="" />
-                  {Societies?.length!==0?(
+                  {Memberships?.length!==0?(
                     <div className="flex flex-row w-full ">
                       {/* <div className="flex md:flex-row flex-col w-full md:w-full gap-2">  */}
-                      <div className="w-full grid grid-cols-8 gap-5 my-5"> 
+                      <div className="w-full grid grid-cols-4 gap-5 my-5"> 
                       {
 
-                        Societies.map((soc)=>{
+                        Memberships.map((soc)=>{
                           console.log("card",soc)
                           
                           return(
                             // <li key={Object.keys(soc)[0] }>
                             // <div className="w-full my-5 md:my-0">
                             
+                            // <SocietyCard 
+                            //   title={Soc[Object.keys(soc)[0]].society_chinese} 
+                            //   type={Object.values(soc)[0]} 
+                            //   managebutton={Object.values(soc)[0]!=="member"&&Object.values(soc)[0]!=="pending"} 
+                            //   code={Soc[Object.keys(soc)[0]].code}
+                            //   color={pickRadomColor(2)}
+                            // />
                             <SocietyCard 
-                              title={Soc[Object.keys(soc)[0]].society_chinese} 
-                              type={Object.values(soc)[0]} 
-                              managebutton={Object.values(soc)[0]!=="member"&&Object.values(soc)[0]!=="pending"} 
-                              code={Soc[Object.keys(soc)[0]].code}
+                              title={soc.society.society_chinese?soc.society.society_chinese:soc.society.society_eng} 
+                              type={soc.role} 
+                              college={soc.society.college}
+                              session={soc.society.session}
+                              expiry_date={moment(soc.expiry_date).format("DD-MM-YYYY")}
+                              managebutton={soc.role!=="basic member"&&soc.role!=="pending"} 
+                              code={soc.society.code}
                               color={pickRadomColor(2)}
                             />
-                          
                               
                             // </li>
                             )

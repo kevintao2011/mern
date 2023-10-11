@@ -66,7 +66,7 @@ function AdminProductContainer({Product,code}) {
                     </div>
                     <div className="w-1/2 py-1">
                         <div className="w-full flex flex-row gap-2 justify-end">
-                        <ButtonToolbar>
+                        {/* <ButtonToolbar>
                             <Button  
                                 onClick={() =>setOpen(true)}
                                 appearance="primary"
@@ -74,7 +74,11 @@ function AdminProductContainer({Product,code}) {
                             >
                                 Create Product
                             </Button>
-                        </ButtonToolbar>
+                        </ButtonToolbar> */}
+                        <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setOpen(true)}}>
+                            {/* setshowDrawer(prev=>!prev) */}
+                            Create Product
+                        </button>
                             {/* <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}> */}
                             {/* <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{navigate(`/society/${code}/createproduct`)}}>
                                 Create Tree Product

@@ -5,6 +5,9 @@ module.exports = {
    
   ],
   theme: {
+    fontFamily:{
+      mincho:['Shippori Mincho', 'serif']
+    },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

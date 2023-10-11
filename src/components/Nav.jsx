@@ -117,7 +117,7 @@ const Nav = () => {
                     <div className="flex flex-row gap-x-5  w-2/3 md:w-1/3 justify-end">             
                     <div className="absolute top-1 right-5 ">
                             {currentUser&&userDBInfo&&Cart?(      // logged in               
-                                <div className="flex flex-col mt-4 mr-4 ">   
+                                <div className="flex flex-col mt-4 mr-4 font-mincho field border-2 border-gray-300">   
                                     {
                                         toggleDropdown?(
                                             <div className="w-full flex-col  ">
@@ -152,7 +152,7 @@ const Nav = () => {
                                                         className="flex   text-black "
                                                         onClick={async ()=>{setToggleDropdown(prev=>!prev);await uploadCart();}}
                                                     >
-                                                        <p>購物車 Cart</p>
+                                                        <div className="">購物車 Cart</div>
                                                         <div className="px-5">
 
                                                         
@@ -186,8 +186,8 @@ const Nav = () => {
                                                         </Link>
                                                         
                                                     )}
-                                                    <button 
-                                                        className=" "
+                                                    <Link 
+                                                        className="flex   text-black "
                                                         onClick={(e)=>{
                                                             e.preventDefault();
                                                             auth.signOut()
@@ -199,10 +199,9 @@ const Nav = () => {
                                                         }}
                     
                                                     >
-                                                        <p className=" text-base">
-                                                            登出 Log out
-                                                        </p>
-                                                    </button>
+                                                       
+                                                        登出 Log out
+                                                    </Link >
 
                                                     
                                         

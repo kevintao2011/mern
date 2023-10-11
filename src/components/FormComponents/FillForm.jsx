@@ -38,7 +38,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
         )
     }
     return (
-        <div className={`${className}`}>
+        <div className={`${className} font-mincho`}>
             <div className="">
                 <p className='text-2xl font-bold pb-5'>{title}</p>
                 <p className='my-2 text-base'>{description}</p>
