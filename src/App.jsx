@@ -38,12 +38,13 @@ import CreateSingleProductContainer from './pages/society/product/CreateSinglePr
 import 'rsuite/dist/rsuite.min.css';
 import Instagramauth from './pages/society/instagram/Instagramauth';
 import CreateForm from './components/FormComponents/CreateForm';
-
+import { InfoProvider } from './components/Contexts/InfoContexts';
 function App() {
   console.log("load app.jsx")
   return (
     
     <BrowserRouter>
+      <InfoProvider>
       <AuthProvider>
         <Routes>
           < Route path="/" element={<Nav/>}>
@@ -96,6 +97,7 @@ function App() {
           {/* <Route path="*" element={<App/>}/> */}
         </Routes>
         </AuthProvider>
+        </InfoProvider>
       {/* <Routes>
         <Route path="/error" element={<Error />} />
       </Routes> */}

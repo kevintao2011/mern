@@ -11,12 +11,14 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { pickRadomColor } from '../utils/tailwindcss';
 import { postURL } from '../utils/fetch';
 import moment from 'moment';
+import { useStaticInfo } from '../components/Contexts/InfoContexts';
+import { Calendar, Loader, Placeholder } from 'rsuite';
+import ActivityCalendar from '../components/ActivityCalendar';
 const iconsize = 20;
 const Profile = () => {
   const [ProfileInfo, setProfileInfo] = useState(new Info.ProfileInfo())
-  
-  
   const [init, setinit] = useState(false)
+  const {SocMap} = useStaticInfo()
   const {currentUser,userDBInfo,setuserDBInfo,Soc} = useAuth()
   const [Societies, setSocieties] = useState([])
   const navigate = useNavigate()
@@ -117,19 +119,21 @@ const Profile = () => {
   
   return (
     
-    <div className="mainpage-1">
+    <div className="mainpage-i">
         {
           Societies&&userDBInfo&&currentUser&&(
-            <div className="flex flex-col md:flex-row font-mincho">
+            <div className="flex flex-col md:flex-row font-mincho ">
               
-              <div className="flex flex-col md:px-10 md:w-3/12 w-full  items-center p-5 ">
+              
+              {/* <div className="flex flex-col md:px-5 md:w-3/12 w-full  items-center hidden">
                 
-                <div className="w-full border-gray-200 border-t-su-green border-t-4 rounded-md p-2 ">
+                <div className="w-full border-gray-200 border-t-su-green border-t-4 rounded-md div-2 ">
+
                   <div className="border-b-2 border-gray-500">
-                    <div className="text-black text-2xl">
+                    <div className="text-black text-xl">
                       個人資料 
                     </div>
-                    <div className="text-black text-2xl">
+                    <div className="text-black text-xl">
                       Profile Information
                     </div>
                   </div>
@@ -145,11 +149,11 @@ const Profile = () => {
                           className = "object-contain "
                         />
                       </button>
-                      {/* Major */}
+                    
                     </div>
                     
                   <div className=" w-10/12 flex justify-center major">
-                      {userDBInfo.major}
+                      {SocMap[userDBInfo.major].society_chinese?SocMap[userDBInfo.major].society_chinese:SocMap[userDBInfo.major].society_eng}
                     </div>
                   </div>
 
@@ -267,109 +271,202 @@ const Profile = () => {
                 
                 </div>
                 
-              </div> 
-              <div className="RHS w-full md:w-9/12 md:px-10 px-2">
-                  <img src="./assests/img/BelongSociety.svg" alt="" />
-                  {Memberships?.length!==0?(
-                    <div className="flex flex-row w-full ">
-                      {/* <div className="flex md:flex-row flex-col w-full md:w-full gap-2">  */}
-                      <div className="w-full grid grid-cols-4 gap-5 my-5"> 
-                      {
+              </div>  */}
+              <div className="RHS w-full  md:px-5 px-2 flex flex-col ">{/*md:w-9/12*/}
+                  {/* <img src="./assests/img/BelongSociety.svg" alt="" /> */}
+                  <div className="Upper flex flex-row gap-2">
+                <div className="card aspect-auto p-2 border-t-red-600">
+                      <div className="flex flex-row gap-2">
+                        <div className="flex flex-row items-center">
+                            <img src="/assests\img\icon\profileplacehodler.svg" alt=""  className='rounded-full' width={200}/>
+                        </div>
+                        <div className="flex flex-col w-full">
+                            <div className="text-black text-xl border-b-2 border-b-gray-200">
+                              個人資料 Information
+                            </div>
+                            <div className="flex flex-row justify-between">
+                              <div className="">Name: </div>
+                              {userDBInfo.username}
+                            </div>
+                            <div className="flex flex-row justify-between">
+                              <div className="">Gender: </div>
+                              {userDBInfo.gender}
+                            </div>
+                            <div className="flex flex-row justify-between">
+                              <div className="">Major: </div>
+                              {SocMap[userDBInfo.major].society_chinese}
+                            </div>
+                            <div className="flex flex-row justify-between">
+                              <div className="">SID: </div>
+                              {userDBInfo.sid}
+                            </div>
+                            <div className="flex flex-row justify-between">
+                              <div className="">Cohort: </div>
+                              {userDBInfo.cohort}
+                            </div>
+                            <div className="w-full flex flex-row justify-end items-center gap-2">
+                              <div className="">
+                                Edit Information
+                              </div>
+                              <button>
+                                <img src="\assests\img\signUp\NextButton.png" alt="" width={30}/>
+                              </button>
+                            </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <div className="flex flex-col">
+                        {Memberships?.length!==0?(
+                          <div className="flex flex-col w-full ">
+                            <div className="text-xl text-su-green font-bold">
+                              會籍 Memebership
+                            </div>
+                            <div className="w-full flex flex-auto gap-5 "> 
+                            {
 
-                        Memberships.map((soc)=>{
-                          console.log("card",soc)
-                          
-                          return(
-                            // <li key={Object.keys(soc)[0] }>
-                            // <div className="w-full my-5 md:my-0">
-                            
-                            // <SocietyCard 
-                            //   title={Soc[Object.keys(soc)[0]].society_chinese} 
-                            //   type={Object.values(soc)[0]} 
-                            //   managebutton={Object.values(soc)[0]!=="member"&&Object.values(soc)[0]!=="pending"} 
-                            //   code={Soc[Object.keys(soc)[0]].code}
-                            //   color={pickRadomColor(2)}
-                            // />
-                            <SocietyCard 
-                              title={soc.society.society_chinese?soc.society.society_chinese:soc.society.society_eng} 
-                              type={soc.role} 
-                              college={soc.society.college}
-                              session={soc.society.session}
-                              expiry_date={moment(soc.expiry_date).format("DD-MM-YYYY")}
-                              managebutton={soc.role!=="basic member"&&soc.role!=="pending"} 
-                              code={soc.society.code}
-                              color={pickRadomColor(2)}
-                            />
+                              Memberships.map((soc)=>{
+                                console.log("card",soc)
+                                
+                                return(
+                                  
+                                  <SocietyCard 
+                                    title={soc.society.society_chinese?soc.society.society_chinese:soc.society.society_eng} 
+                                    type={soc.role} 
+                                    college={soc.society.college}
+                                    session={soc.society.session}
+                                    expiry_date={moment(soc.expiry_date).format("DD-MM-YYYY")}
+                                    managebutton={soc.role!=="basic member"&&soc.role!=="pending"} 
+                                    code={soc.society.code}
+                                    color={pickRadomColor(2)}
+                                  />
+                                    
+                                  // </li>
+                                  )
+                              })
                               
-                            // </li>
-                            )
-                        })
+                              }
+                              
+                            </div>
+                                
+
+                          </div>
+                        ):(
+                          <div className=" flex flex-col  items-center rounded-3xl m-2  w-full">
+                            {/* <div
+                            className='div-10 text-white'
+                            >You have not join any society yet!</div>
+                            <button className='bg-slate-200 div-3 rounded-full m-5' onClick={()=>{navigate("../shop/product")}}>
+                              join now
+                            </button> */}
+                            <div>
+                              <Placeholder.Paragraph rows={8} />
+                              <Loader center content="loading" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 my-5">
+                    <div className="grid grid-cols-1 gap-2">
+                      <div className="Noti  flex flex-col card aspect-auto border-orange-700 text-orange-700">
+                        <div className="font-extrabold bg-orange-100 rounded-t-lg">
+                          <div className="px-5 py-2">
+                            <div className="text-xl">通知 </div>
+                            <div className="text-xl">Notification</div>
+                          </div>
+                        </div>
+                        <div className="text-gray-600 p-5">
+                          The Website is in development Mode, Profile Picture is not availible at this moment
+                        </div>
+                      </div>
+                      <div className="Orders">
+                      {/* <img src="./assests/img/MsgBoard.svg" alt="" className='' /> */}
+                      <div className="text-su-green flex flex-col card aspect-auto  ">
+                        <div className="font-extrabold bg-green-100 rounded-t-lg">
+                          <div className="p-5 pb-2">
+                            <div className="text-xl">訂單紀錄 </div>
+                            <div className="text-xl">Purchase Record</div>
+                          </div>
+                        </div>
                         
-                        }
+                        <div className="w-full   flex flex-col  p-5">
+                          {
+                            Orders?.map(order=>{
+                              return(
+                                <div className=" bg-gray-200 bg-opacity-20 div-1 rounded-md my-2 text-black flex flex-row">
+                                  <div className="flex  flex-col">
+                                    <div className="flex  flex-row">
+                                      <div className='overflow-x-auto'>訂單編號 {order._id}</div>
+                                      <div className='mx-10'>付款方式 {order.payment_method}</div>
+                                    </div>
+
+                                    <div className="flex flex-row">
+                                      {
+                                        Soc[order.code]['society_chinese']?(
+                                          <div className='overflow-x-auto'>學會 {Soc[order.code]['society_chinese']}</div>
+                                        ):(
+                                          <div className='overflow-x-auto'>學會 {Soc[order.code]['society_eng']}</div>
+                                        )
+                                      }
+                                      <div className='md:mx-10'>狀態 {order.status}</div>
+                                    </div>
+                                  
+                                    
+                                    
+                                    <div className='py-2'>訂單物品</div>
+                                    {
+                                      order.products.map((item,i)=>{
+                                        return(
+                                          <div>{i+1}.{item.product_name}-{item.option} x {item.quantity}</div>
+                                        )
+                                      })
+                                    }
+                                  </div>
+                                  
+                                </div>
+                                  
+                              )
+                            })
+                          }
+                        </div>
+                        </div>
                         
                       </div>
-                          
-
                     </div>
-                  ):(
-                    <div className=" flex flex-col bg-su-green items-center rounded-3xl m-2  w-full">
-                      <p
-                      className='p-10 text-white'
-                      >You have not join any society yet!</p>
-                      <button className='bg-slate-200 p-3 rounded-full m-5' onClick={()=>{navigate("../shop/product")}}>
-                        join now
-                      </button>
-                    </div>
-                  )}
-                  
-                  <img src="./assests/img/MsgBoard.svg" alt="" className='my-10' />
-                  
-                  <div className="w-full  bg-su-green rounded-3xl flex flex-col p-5">
-                    {
-                      Orders?.map(order=>{
-                        return(
-                          <div className=" bg-slate-100 p-1 rounded-md my-2">
-                            <div className="flex flex-col md:flex-row">
-                              <p className='overflow-x-auto'>訂單編號 {order._id}</p>
-                              <p className='md:mx-10'>付款方式 {order.payment_method}</p>
+                    
+                    <div className="grid grid-cols-1 gap-2">
+                      {/* <img src="./assests/img/MsgBoard.svg" alt="" className='' /> */}
+                      <div className="border-2 rounded-md">
+                    <div className="px-5 text-lg font-bold bg-sky-200 py-2 text-sky-900">My Calendar</div>
+                        <Calendar compact={true}  />
+                      </div>
+                      <div className="text-su-green flex flex-col  card  aspect-auto">
+                        <div className="rounded-t-md bg-gray-300 ">
+                          <div className="p-5 pb-2">
+                            <div className="font-bold text-gray-700">
+                              <div className="text-xl">活動紀錄 </div>
+                              <div className="text-xl">Purchase Record</div>
                             </div>
-
-                            <div className="flex flex-col md:flex-row">
-                              {
-                                Soc[order.code]['society_chinese']?(
-                                  <p className='overflow-x-auto'>學會 {Soc[order.code]['society_chinese']}</p>
-                                ):(
-                                  <p className='overflow-x-auto'>學會 {Soc[order.code]['society_eng']}</p>
-                                )
-                              }
-                              <p className='md:mx-10'>狀態 {order.status}</p>
-                            </div>
-                          
-                            
-                            
-                            <p className='py-2'>訂單物品</p>
-                            {
-                              order.products.map((item,i)=>{
-                                return(
-                                  <p>{i+1}.{item.product_name}-{item.option} x {item.quantity}</p>
-                                )
-                              })
-                            }
                           </div>
-                        )
-                      })
-                    }
+                          
+                        </div>
+                        
+                        
+                        <div className="w-full flex flex-col p-5">
+                        {
+                          
+                        }
+                      </div>
+                      </div>
+                      
+                    </div>
                   </div>
               </div>
             </div>
           )
-        }
-        
-        
-        
+        }   
     </div>
-          
-    
   )
 }
 

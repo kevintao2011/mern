@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../utils/firebasefunction';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useStaticInfo } from '../../components/Contexts/InfoContexts';
 
 const SignUp = () => {
       const [email, setEmail] = useState('');
@@ -15,6 +15,7 @@ const SignUp = () => {
       const [SameEmail, setSameEmail] = useState("")
       const navigate = useNavigate()
       const [success, setsuccess] = useState(false);
+      const {PrivacyPage} = useStaticInfo()
       
       const handleSubmit = async (e) => {
           console.log("Submitting signup form");
@@ -139,27 +140,36 @@ const SignUp = () => {
 
       return(
         AgreePage?(
-            <div className="">
-                <textarea >
-
-                </textarea>
-                <button onClick={()=>{navigate("/")}}>
+            <div className="p-20 grid grid-cols-1 gap-10">
+                <div className="">
                     <img 
-                        src="/assests/img/TermsnRegulations/NotUnderstand.png" 
+                        src="/assests/img/TermsnRegulations/TermsNRegulations.svg" 
                         alt="" 
-                    
                     />
-                    
-                </button>
-                <button onClick={()=>{setAgreePage(false)}}>
-                    <img 
-                        src="/assests/img/TermsnRegulations/NotUnderstand.png" 
-                        alt="" 
-                    
-                    />
-                    
-                    
-                </button>
+                </div>
+                <pre className='font-mincho'>
+                    {PrivacyPage}
+                </pre>
+                <div className="w-full flex flex-row justify-end">
+                    <button onClick={()=>{navigate("/")}}>
+                        <img 
+                            src="/assests/img/TermsnRegulations/disagree.svg" 
+                            alt="" 
+                            
+                        />
+                        
+                    </button>
+                    <button onClick={()=>{setAgreePage(false)}}>
+                        <img 
+                            src="/assests/img/TermsnRegulations/agree.svg" 
+                            alt="" 
+                        
+                        />
+                        
+                        
+                    </button>
+                </div>
+                
                 
             </div>
         ):(
@@ -195,7 +205,7 @@ const SignUp = () => {
                         className = "rounded-full"
                         
                     /> */}
-                    <div className="w-6/12 py-10 ">
+                    <div className="w-8/12 py-10 ">
                         <img 
                             src     ="/assests/img/signUp/PersonalInfo.png"
                             alt     = "profile"
@@ -205,7 +215,7 @@ const SignUp = () => {
                             
                         />
                     </div>
-                    <div className="w-6/12">
+                    <div className="w-8/12">
                         <form className="space-y-4 md:space-y-6 text-xs" onSubmit={(e)=>{handleSubmit(e)}} method="post">
                             <div className="grid grid-cols-2 gap-10">
                                 <div className="">

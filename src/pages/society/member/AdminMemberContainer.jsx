@@ -8,6 +8,7 @@ import moment from 'moment'
 import FieldForArray from '../../../components/FormComponents/FieldForArray'
 import { postURL } from '../../../utils/fetch'
 import { useNavigate } from 'react-router-dom'
+import EntryTable from '../../../components/table/EntryTable'
 
 function AdminMemberContainer({Member,code}) {
     const navigate = useNavigate()
@@ -16,6 +17,7 @@ function AdminMemberContainer({Member,code}) {
     const [DisplayCreate, setDisplayCreate] = useState(false)
     const [MemberList, setMemberList] = useState()
     const [AddSIDField, setAddSIDField] = useState()
+    const [MembershipFee, setMembershipFee] = useState([])
     async function fetchMemberList(){
         console.log("calling fetch member")
         await fetch("/api/getmemberlist", { 
@@ -61,22 +63,32 @@ function AdminMemberContainer({Member,code}) {
     
     
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col text-sm">
+            <div className="">
+                <EntryTable
+                    headings={["Membership Type","Price"]}
+                    rowValues={MembershipFee}
+                    update={(v)=>{setMembershipFee(v);console.log("MembershipFee:",MembershipFee)}}
+                />
+                <div className="flex flex-row justify-end ">
+                    <button className="bg-green-600 p-1 rounded-md text-white text-sm">Update</button>
+                </div>
+            </div>
             <div className="w-full flex flex-row justify-center">
                 <div className="w-1/2 flex flex-row">
                     
                     <div className="">
-                        <div className="text-3xl">Member</div>
+                        <div className="text-3xl">會員 Member</div>
                     </div>
                 </div>
                 <div className="w-1/2 py-1">
                     <div className="w-full flex flex-row gap-2 justify-end">
-                        <button className='p-1 bg-su-green text-white rounded-md' onClick={()=>{setDisplayCreate(true)}}>
-                            Add new member
-                        </button>
-                        <button className='p-1 bg-su-green text-white rounded-md' onClick={()=>{setDisplayCreate(true)} }>
-                            Edit Membership Option
-                        </button>
+                        {/* <button className='p-1 bg-su-green text-white rounded-md' onClick={()=>{setDisplayCreate(true)}}>
+                            新增會員 Add new member
+                        </button> */}
+                        {/* <button className='p-1 bg-su-green text-white rounded-md' onClick={()=>{setDisplayCreate(true)} }>
+                            編輯會員 Edit Membership Option
+                        </button> */}
                     </div>
                     
                 </div>
@@ -86,7 +98,7 @@ function AdminMemberContainer({Member,code}) {
 
             {
                 MemberList&&(
-                    <div className="flex flex-col">
+                    <div className="flex flex-col ">
                         
                         <div className="flex flex-col ">
                             <div className="flex flex-row gap-2 p-1">

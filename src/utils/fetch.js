@@ -9,14 +9,46 @@ class ServerFunction{
 }
 async function postURL(postURL,needToken=false,data={}){
     console.log(`"****calling to "${postURL} *******`)
-    return await auth.currentUser.getIdToken().then(async token=>{
-        console.log("token",token)
+    if(needToken){
+        return await auth.currentUser.getIdToken().then(async token=>{
+            console.log("token",token,"Data",data)
+            return await fetch (postURL,
+            {
+                method:"POST",
+                body:JSON.stringify({
+                    user:{
+                        token:token
+                    },
+                    data
+                }),
+                data:data,
+                headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    mode:'cors'
+                
+            }).then(async response =>{
+                if(response.ok){
+                    console.log("fetched Data from",postURL)
+                    const data = await response.json()
+                    console.log("data using fetch",data.data)
+                    return data.data
+                }else{
+                    console.log("failed fetch user")
+                    return false
+                }
+            })}
+            
+    
+        )
+    }else{
         return await fetch (postURL,
         {
             method:"POST",
             body:JSON.stringify({
                 user:{
-                    token:token
+                    token:"token"
                 },
                 data
             }),
@@ -37,10 +69,10 @@ async function postURL(postURL,needToken=false,data={}){
                 console.log("failed fetch user")
                 return false
             }
-        })}
-        
-
-    )
+        })
+    }
+    
+    
 }
 
 export default ServerFunction

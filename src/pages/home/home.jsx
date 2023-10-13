@@ -29,19 +29,22 @@ const Home = () => {
               mode:'cors'
         }
       ).then(async res=>{
-        const collection = await res.json()
-        // collection.forEach(doc => {
-        //   console.log(Object.keys(doc))
-        // });
-        console.log("collection",collection)
-        // Replace with recursive in future
-        collection.forEach(title=>{
-          if(title.name==="最新消息 Latest News"){
-            setlatestNews(title.content)
-          }else if (title.name==="最新活動 Latest Activities"){
-            setlatestActivity(title.content)
-          }
+        await res.json().then(collection=>{
+            // collection.forEach(doc => {
+            //   console.log(Object.keys(doc))
+            // });
+            collection=collection.data
+            console.log("collection",collection)
+            // Replace with recursive in future
+            collection.forEach(title=>{
+              if(title.name==="最新消息 Latest News"){
+                setlatestNews(title.content)
+              }else if (title.name==="最新活動 Latest Activities"){
+                setlatestActivity(title.content)
+              }
+            })
         })
+        
         
       })
     }

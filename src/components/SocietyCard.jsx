@@ -14,15 +14,15 @@ const SocietyCard = ({title,color,type,code,managebutton,college,session,expiry_
         <div className={`card`}>
             
                 <div className="flex flex-col p-2   text-base text-start">
-                    <div className='   text-lg font-b border-b-2 text-su-green'> 
+                    <div className='   text-lg font-bold font-b border-b-2 text-su-green'> 
                         {`${title}`}
                     </div>
                     {/* <div className='w-full h-full text-white  text-base text-start'> 
                         
                     </div> */}
-                    <div className="">{`Session: ${session}`}</div>
-                    <div className="">{`Role: ${type}`}</div>
-                    <div className="">{`Expiry date: ${expiry_date}`}</div>
+                    <div className="">{`屆數 Session: ${session}`}</div>
+                    <div className="">{`職位 Role: ${type}`}</div>
+                    <div className="">{`有效日期 Expiry date: ${expiry_date}`}</div>
                     {/* <div className="flex flex-row justify-end">
                         <button className='rounded-full bg-slate-400 px-2'>Extend </button>
                         <button className='rounded-full bg-slate-400 px-2'>Extend </button>

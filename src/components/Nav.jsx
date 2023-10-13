@@ -63,7 +63,8 @@ const Nav = () => {
     console.log("location.pathname",location.pathname)
     if(!loading){ //location.pathname==="/"
         return (
-            <div className="w-full bg-transparent ">
+            <div className="w-full bg-transparent 
+            ">
                   
                 <nav className="flex flex-row w-full  justify-between items-center">
                     
@@ -120,7 +121,7 @@ const Nav = () => {
                                 <div className="flex flex-col mt-4 mr-4 font-mincho field border-2 border-gray-300">   
                                     {
                                         toggleDropdown?(
-                                            <div className="w-full flex-col  ">
+                                            <div className="w-full flex-col ">
                                                 <button
                                                     className="justify-end items-end "
                                                 >
@@ -134,7 +135,7 @@ const Nav = () => {
                                                     />
                                                 </button>
                                     
-                                                <div className="absolute right-2 w-60 text-base bg-white rounded-md">
+                                                <div className="absolute right-5 w-60 top-14 text-base bg-white rounded-md p-2 shadow">
                                                     <Link 
                                                         to={"/soclist"}
                                                         className="flex   text-black"
@@ -229,7 +230,7 @@ const Nav = () => {
                                 
                                 
                             ):(   // not logged in 
-                                <div className="flex flex-row  gap-x-5 text-xs">
+                        <div className="flex flex-col  gap-y-1 text-xs ">
                                     {/* <Link 
                                         to={"/soclist"}
                                         className="flex  selectlink"
@@ -238,14 +239,14 @@ const Nav = () => {
                                     </Link> */}
                                     <Link 
                                         to={"/signup"}
-                                        className="flex  selectlink"
+                                        className="flex flex-row text-xs font-mincho bg-su-green text-white rounded-md text-center p-1"
                                     >
                                         註冊 Sign Up
                                     </Link>
                                     
                                     <Link 
                                         to={"/login"}
-                                        className="flex gap-2 selectlink "
+                                        className="flex flex-row text-xs font-mincho bg-su-green text-white rounded-md text-center p-1"
                                     >
                                         登入 Sign In
                                     </Link>

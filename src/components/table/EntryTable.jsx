@@ -20,8 +20,8 @@ function EntryTable({headings,rowValues=[],update}) {
                     {rowValues.map((row,i)=>{
                         
                         return (
-                            <>
-                            <tr>
+                            
+                            <tr className="items-center">
                                 {
                                 headings.map((heading,index)=>{
                                         return (
@@ -36,18 +36,22 @@ function EntryTable({headings,rowValues=[],update}) {
                                         )
                                     })
                                 }
-                                <button
-                                    onClick={
-                                        ()=>{
-                                            rowValues.splice(i,1)
-                                            update(rowValues)
+                                <div className="h-full items-center p-1">
+                                    <button
+                                        onClick={
+                                            ()=>{
+                                                rowValues.splice(i,1)
+                                                update(rowValues)
+                                            }
                                         }
-                                    }
-                                >
-                                    <img src="/assests/img/tablebutton/x-square.svg" alt="" />
-                                </button>
+                                    >
+                                        <img src="/assests/img/tablebutton/x-square.svg" alt="" />
+                                    </button>
+                                </div>
+                                
+                                
                             </tr>
-                            </>
+                        
                             
                             
                         )
@@ -69,6 +73,7 @@ function EntryTable({headings,rowValues=[],update}) {
                             update(rowValues)
                         }
                     }
+                    className='p-1 bg-blue-700 text-white rounded-md'
                 >
                     Add
                 </button>

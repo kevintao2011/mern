@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react"
 import { auth } from "../utils/firebasefunction"
 import { createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateEmail,updatePassword,updateProfile,sendPasswordResetEmail,sendEmailVerification } from "firebase/auth"
 
+
 const AuthContext = React.createContext()
 
 export function useAuth() {
@@ -14,6 +15,7 @@ export function AuthProvider({ children }) {
   const [userDBInfo, setuserDBInfo] = useState()
   const [Soc, setSoc] = useState()
   const [Cart, setCart] = useState()
+  
 
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth,email, password)
@@ -79,12 +81,8 @@ export function AuthProvider({ children }) {
         
 
     )
-    
-    
-        
-
   }
-
+  
   async function getSoc(){
     if(!Soc){
       await fetch ("/api/getsocieties",
