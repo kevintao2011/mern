@@ -6,7 +6,8 @@ function ProductCombination({headings,rowValues=[],update}) {
         { text: 'Size',option:["Yellow","Green"] },
         { text: 'Color' },
     ];
-    const [Data, setData] = useState(defaultData)
+    const [Data, setData] = useState([])
+    const [optionInput, setoptionInput] = useState("")
     const handleSortEnd = ({ oldIndex, newIndex }) =>
     setData(prvData => {
       const moveData = prvData.splice(oldIndex, 1);
@@ -14,99 +15,122 @@ function ProductCombination({headings,rowValues=[],update}) {
       newData.splice(newIndex, 0, moveData[0]);
       return newData;
     }, []);
-    return (
-        // <>
-        //   <table className='w-full'>   
-        //     <tr>
-        //         {/* {
-        //             headings.map(heading=>{
-        //                 return(
-        //                     <th>
-        //                         {heading}
-        //                     </th>
-                            
-        //                 )
-        //             })    
-        //         } */}
 
-        //         <th>
-        //           Option
-        //         </th>
-        //         <th>
-        //           unit price
-        //         </th>
-        //         <th>
-        //           quantity
-        //         </th>
-        //         <th>
-        //           Image
-        //         </th>
-        //     </tr>
-            
-        //         {rowValues.map((row,i)=>{
+
+    
+    function Variants({data}) {
+        const nOfType = data.length
+        var productNameList = []
+        return (
+            data[0].option.map((v,i)=>{
+                for (let index = 1; index < nOfType; index++) {
+                    data[i].option.forEach((o,index)=>{
+                        productNameList.push(v+)
+                    })
                     
-        //             return (
-        //                 <>
-        //                 <tr>
-        //                     {
-        //                     headings.map((heading,index)=>{
-        //                             return (
-        //                                 <td>
-        //                                     <input type="text" 
-        //                                         value={row[heading]}
-        //                                         placeholder={heading}
-        //                                         className='w-full'
-        //                                         onChange={(e)=>{rowValues[i][heading]=e.target.value;update(rowValues)}}
-        //                                     />
-        //                                 </td>   
-        //                             )
-        //                         })
-        //                     }
-        //                     <button
-        //                         onClick={
-        //                             ()=>{
-        //                                 rowValues.splice(i,1)
-        //                                 update(rowValues)
-        //                             }
-        //                         }
-        //                     >
-        //                         <img src="/assests/img/tablebutton/x-square.svg" alt="" />
-        //                     </button>
-        //                 </tr>
-        //                 </>
-        //             )
-        //         })}
-        //   </table> 
-        //   <div className="flex flex-row w-full justify-end px-2">
-        //       <button
-        //           onClick={
-        //               ()=>{
-        //                   const rowData = {}
-        //                   headings.forEach(h=>{
-        //                       rowData[h]=""
-        //                   })
-        //                   rowValues.push(rowData)
-        //                   update(rowValues)
-        //               }
-        //           }
-        //       >
-        //           Add
-        //       </button>
-        //   </div>
-        // </>
-        <div className="w-full grid grid-flow-row grid-cols-3 gap-2 text-sm border">
+                }
+            })
+        )
+    }
+    
+  
+   
+    
+    function OptionInput({option,index}) {
+        const [Input, setInput] = useState("")
+        console.log("optionInput",option)
+        return (
+                <>
+                    <div className="">{option["text"]}</div>
+                    <input 
+                        type="text" 
+                        placeholder='e.g blue, xl , s'
+                        value={Input}
+                        onChange={(e)=>{
+                            // console.log("input in option",e.target.value)
+                            setInput(e.target.value)
+                        }}
+                        onKeyDown={(e)=>{ 
+                            if(e.key=== 'Enter'){
+                                console.log("added sub option")
+                                Data[index]["option"].push(Input)
+                                console.log("Updated subdata:",Data)
+                                setData([...Data])
+                                setInput("")
+                            }
+                            
+                        }}
+                    />
+                    <div className="flex flex-row gap-2">
+                    {
+                        Data[index]["option"].map((opt,i)=>{
+                            return <div className="flex flex-row gap-1 ">
+                                {opt}
+                                <button className='text-red-600' 
+                                    onClick={()=>{
+                                        Data[index]["option"].splice(i,1)
+                                        setData([...Data])
+                                    }}
+                                >
+                                    x
+                                </button>
+                            </div>
+                        })
+                    }
+                    </div>
+                    
+                    
+                </>
+        )
+    }
+    
+    return (
+        <div className="w-full grid grid-flow-row grid-cols-3 gap-2 text-sm border rounded-lg">
             <div className="">
                 <div className="">Input</div>
                 <input 
                     type="text" 
                     placeholder='e.g size, color'
+                    value={optionInput}
+                    onChange={(e)=>{
+                        console.log("input",e.target.value)
+                        setoptionInput(e.target.value)
+                    }}
+                    onKeyDown={(e)=>{ 
+                        if(e.key=== 'Enter'){
+                            console.log("added option")
+                            Data.push({text:optionInput,option:[]})
+                            console.log("Data",Data)
+                            setData([...Data])
+                            setoptionInput("")
+                        }
+                        
+                    }}
                 />
                 <div className="">
-                <div className="">Combine</div>
+                    <div className="">Combine</div>
                     <List sortable onSort={handleSortEnd}>
                         {Data.map(({ text, disabled }, index) => (
-                            <List.Item key={index} index={index}>
-                                {text}
+                            <List.Item 
+                                key={index} 
+                                index={index}
+                                className='border rounded-lg'
+                                size='xs'
+                            >
+                                <div className="w-full flex flex-row justify-between">
+                                    <div className="">
+                                        {text}
+                                    </div>
+                                    <button
+                                        onClick={()=>{
+                                            Data.splice(index,1);
+                                            setData([...Data])
+                                        }}
+                                        className='text-red-600'
+                                    >
+                                        x
+                                    </button>
+                                </div>
                             </List.Item>
                         ))}
                     </List>
@@ -116,20 +140,21 @@ function ProductCombination({headings,rowValues=[],update}) {
             <div className="">
                 <div className="">Options</div>
                 {
-                    Data.map(({ text, disabled },index)=>{ //{ text, disabled } => key in object
-                        console.log(text, disabled)
+                    Data.map((option,index)=>{ //{ text, disabled } => key in object
+                        console.log("passed option",option)
                         return(
-                            <>
-                            <div className="">{text}</div>
-                            <input className='field' type="text" placeholder='varaints' />
-                            </>
+                            <OptionInput option={option} index={index}/>
                         )
                     })
                 }
                 
             </div>
             <div className="">
+                
                 <div className="">Quantity and Price</div>
+                
+                <Variants data={Data}/>
+                
             </div>
         </div>
     )

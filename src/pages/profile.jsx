@@ -119,7 +119,7 @@ const Profile = () => {
   
   return (
     
-    <div className="mainpage-i">
+    <div className="mainpage-i my-5">
         {
           Societies&&userDBInfo&&currentUser&&(
             <div className="flex flex-col md:flex-row font-mincho ">
@@ -274,8 +274,8 @@ const Profile = () => {
               </div>  */}
               <div className="RHS w-full  md:px-5 px-2 flex flex-col ">{/*md:w-9/12*/}
                   {/* <img src="./assests/img/BelongSociety.svg" alt="" /> */}
-                  <div className="Upper flex flex-row gap-2">
-                <div className="card aspect-auto p-2 border-t-red-600">
+                  <div className="Upper flex flex-row gap-4">
+                    <div className="card aspect-auto p-2 border-t-red-600">
                       <div className="flex flex-row gap-2">
                         <div className="flex flex-row items-center">
                             <img src="/assests\img\icon\profileplacehodler.svg" alt=""  className='rounded-full' width={200}/>
@@ -437,8 +437,8 @@ const Profile = () => {
                     
                     <div className="grid grid-cols-1 gap-2">
                       {/* <img src="./assests/img/MsgBoard.svg" alt="" className='' /> */}
-                      <div className="border-2 rounded-md">
-                    <div className="px-5 text-lg font-bold bg-sky-200 py-2 text-sky-900">My Calendar</div>
+                      <div className="border-2 rounded-md border-t-sky-900">
+                    <div className="px-5 text-lg font-bold bg-sky-200 py-2 text-sky-900 ">My Calendar</div>
                         <Calendar compact={true}  />
                       </div>
                       <div className="text-su-green flex flex-col  card  aspect-auto">
