@@ -111,13 +111,26 @@ function CreateSingleProductContainer({onExit}) {
                 {
                     field_name:"subproducts",
                     single:true,
-                    field_value:[], //given
+                    field_value:{}, //given
                     /*
                     {
-                        option:""
-                        unit price:0
-                        quantity:0
-                        img_url:[]
+                        data:[
+                            s-blue:{
+                                unit price:0
+                                quantity:0
+                                img_url:[]
+                            },
+                            s-yellow:{
+                                unit price:0
+                                quantity:0
+                                img_url:[]
+                            },
+                            
+                        ]
+                        option:{
+                            size:[s,m,l]
+                            color:[blue,red,yellow]
+                        }
                     }
                     */
                     field_type:"products",

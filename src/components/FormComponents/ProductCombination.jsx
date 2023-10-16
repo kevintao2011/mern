@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import FileField from './FileField'
 import { List } from 'rsuite';
-function ProductCombination({headings,rowValues=[],update}) {
+function ProductCombination({headings,productList={},update}) {
     const defaultData = [
         { text: 'Size',option:["Yellow","Green"] },
         { text: 'Color' },
     ];
-    const [Data, setData] = useState([])
+    const [Data, setData] = useState(Object.keys(productList.option.map(opt=>{
+        return(
+            {text:opt,option:productList.option[opt]}
+        )
+    })))
     const [optionInput, setoptionInput] = useState("")
     const handleSortEnd = ({ oldIndex, newIndex }) =>
     setData(prvData => {
@@ -18,7 +22,7 @@ function ProductCombination({headings,rowValues=[],update}) {
 
 
     
-    function Variants({data}) {
+    function Variants({data,priceList}) {
         const nOfType = data.length
         var variantOptions = []
         for (let index = 0; index < data.length; index++) {
@@ -47,12 +51,26 @@ function ProductCombination({headings,rowValues=[],update}) {
         }
         variantOptions = findCombinations(variantOptions)
         return(
-            variantOptions.map(options=>{
-                return <div className="">{options}</div>
-            })
+            <div className="flex flex-col">
+
+            
+                {variantOptions.map(options=>{
+                    return (
+                        <div className="grid grid-cols-3 gap-2 my-1">
+                            <div className="">{options}</div>
+                            <input type="number" name="" id="" placeholder='quantity' min={0}/>
+                            <input type="number" name="" id="" placeholder='price' min={0}/>
+                        </div>
+                    )
+                })}
+            </div>
         )
         
     }
+
+    
+   
+    
     
   
    
@@ -106,13 +124,13 @@ function ProductCombination({headings,rowValues=[],update}) {
     }
     
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col text-xs">
             <div className="w-full grid grid-flow-row grid-cols-3 gap-2 text-sm border rounded-lg">
                 <div className="">
-                    <div className="">Input</div>
+                    <div className="">Options</div>
                     <input 
                         type="text" 
-                        placeholder='e.g size, color'
+                        placeholder='e.g size, color, type and press enter to add'
                         value={optionInput}
                         onChange={(e)=>{
                             console.log("input",e.target.value)
@@ -130,7 +148,7 @@ function ProductCombination({headings,rowValues=[],update}) {
                         }}
                     />
                     <div className="">
-                        <div className="">Combine</div>
+                        <div className="">Option Level</div>
                         <List sortable onSort={handleSortEnd}>
                             {Data.map(({ text, disabled }, index) => (
                                 <List.Item 
@@ -160,12 +178,12 @@ function ProductCombination({headings,rowValues=[],update}) {
                 </div>
                 
                 <div className="">
-                    <div className="">Options</div>
+                    <div className="">Choice</div>
                     {
                         Data.map((option,index)=>{ //{ text, disabled } => key in object
                             console.log("passed option",option)
                             return(
-                                <OptionInput option={option} index={index}/>
+                                <OptionInput option={option} index={index} update={choices=>{update()}}/>
                             )
                         })
                     }

@@ -164,7 +164,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                 //     update={(v)=>{updateField(index,v)}}
                                                 // />
                                                 <ProductCombination 
-                                                    rowValues={field.field_value}
+                                                    productList={field.field_value}
                                                     update={(v)=>{updateField(index,v)}}
                                                 />
                                             )
