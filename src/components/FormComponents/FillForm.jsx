@@ -28,6 +28,15 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
         console.log("updated",newFields)
         
     }
+
+    function updateKVField(index,key,value){
+        console.log(Fields,"updating ",key,value)
+        var newFields  = Fields
+        newFields[index]["field_value"][key]=value
+        setFields([...newFields])
+        console.log("updated",newFields)
+        
+    }
     
     async function handleSubmit(){
         await fetch (
@@ -158,14 +167,10 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                         }
                                         {
                                             field.field_type.includes('product')&&(
-                                                // <EntryTable
-                                                //     headings={["Options","Quantity","Price"]}
-                                                //     rowValues={field.field_value}
-                                                //     update={(v)=>{updateField(index,v)}}
-                                                // />
+                                                
                                                 <ProductCombination 
-                                                    productList={field.field_value}
-                                                    update={(v)=>{updateField(index,v)}}
+                                                    productData={field.field_value}
+                                                    update={(k,v)=>{updateKVField(index,k,v)}}
                                                 />
                                             )
                                         }

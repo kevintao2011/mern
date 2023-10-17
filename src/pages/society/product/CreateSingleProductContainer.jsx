@@ -114,7 +114,7 @@ function CreateSingleProductContainer({onExit}) {
                     field_value:{}, //given
                     /*
                     {
-                        data:[
+                        data:{
                             s-blue:{
                                 unit price:0
                                 quantity:0
@@ -125,8 +125,7 @@ function CreateSingleProductContainer({onExit}) {
                                 quantity:0
                                 img_url:[]
                             },
-                            
-                        ]
+                        }
                         option:{
                             size:[s,m,l]
                             color:[blue,red,yellow]

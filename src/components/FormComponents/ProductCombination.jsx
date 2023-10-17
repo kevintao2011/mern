@@ -1,37 +1,52 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FileField from './FileField'
 import { List } from 'rsuite';
-function ProductCombination({headings,productList={},update}) {
+function ProductCombination({productData,update}) {
     const defaultData = [
         { text: 'Size',option:["Yellow","Green"] },
         { text: 'Color' },
     ];
-    const [Data, setData] = useState(Object.keys(productList.option.map(opt=>{
-        return(
-            {text:opt,option:productList.option[opt]}
-        )
-    })))
-    const [optionInput, setoptionInput] = useState("")
-    const handleSortEnd = ({ oldIndex, newIndex }) =>
-    setData(prvData => {
-      const moveData = prvData.splice(oldIndex, 1);
-      const newData = [...prvData];
-      newData.splice(newIndex, 0, moveData[0]);
-      return newData;
-    }, []);
-
-
-    
-    function Variants({data,priceList}) {
-        const nOfType = data.length
+    const [Option, setOption] = useState(
+        productData.option?productData.option:[]
+    )
+    const [Data, setData] = useState(
+        productData.data?productData.data:{}
+    )
+    const [PriceList, setPriceList] = useState([])
+    useEffect(() => {
         var variantOptions = []
-        for (let index = 0; index < data.length; index++) {
-            variantOptions.push(data[index].option.map(text=>{
+        for (let index = 0; index < Option.length; index++) {
+            variantOptions.push(Option[index].option.map(text=>{
                 return text
             }))
         }
-        
-        function findCombinations(arrays) {
+        const l = findCombinations(variantOptions)
+        console.log("l: ",l)
+        setPriceList(l)
+    }, [Option])
+    
+    useEffect(() => {
+        if(productData.option){
+            Object.keys(productData.option.map(opt=>{
+                return(
+                    {text:opt,option:productData.option[opt]}
+                )
+                }))
+        }
+    }, [])
+    
+    const [optionInput, setoptionInput] = useState("")
+    const handleSortEnd = ({ oldIndex, newIndex }) =>
+    setOption(prvData => {
+      const moveData = prvData.splice(oldIndex, 1);
+      const newData = [...prvData];
+      newData.splice(newIndex, 0, moveData[0]);
+      update("option", newData)
+      return newData;
+      
+    }, []);
+
+    function findCombinations(arrays) {
         function backtrack(currCombination, remainingArrays) {
             if (remainingArrays.length === 0) {
             combinations.push(currCombination.join(' '));//join('_')
@@ -47,35 +62,102 @@ function ProductCombination({headings,productList={},update}) {
         
         const combinations = [];
         backtrack([], arrays);
+        // const data = {}
+        // combinations.forEach(C=>{
+        //     data[C]={
+        //         quantity:0,
+        //         price:0,
+        //     }
+        // })
+        // update("data",data)
         return combinations;
-        }
-        variantOptions = findCombinations(variantOptions)
-        return(
-            <div className="flex flex-col">
-
-            
-                {variantOptions.map(options=>{
-                    return (
-                        <div className="grid grid-cols-3 gap-2 my-1">
-                            <div className="">{options}</div>
-                            <input type="number" name="" id="" placeholder='quantity' min={0}/>
-                            <input type="number" name="" id="" placeholder='price' min={0}/>
-                        </div>
-                    )
-                })}
-            </div>
-        )
-        
     }
+    
+    // function Variants({option=[],updatePriceList,priceListData}) {
+    //     // if(!data){
+    //     //     data=[]
+    //     // }
+    //     console.log("Variants",option)
+   
+    //     const [Vars, setVars] = useState([]) //All possible combination String
+    //     const [PriceList, setPriceList] = useState({})
+    //     useEffect(() => {
+    //         var variantOptions = []
+    //         function findCombinations(arrays) {
+    //             function backtrack(currCombination, remainingArrays) {
+    //                 if (remainingArrays.length === 0) {
+    //                 combinations.push(currCombination.join('_'));//join('_')
+    //                 return;
+    //                 }
+                
+    //                 const currentArray = remainingArrays[0];
+    //                 for (let i = 0; i < currentArray.length; i++) {
+    //                 const element = currentArray[i];
+    //                 backtrack(currCombination.concat(element), remainingArrays.slice(1));
+    //                 }
+    //             }
+                
+    //             const combinations = [];
+    //             backtrack([], arrays);
+    //             // const data = {}
+    //             // combinations.forEach(C=>{
+    //             //     data[C]={
+    //             //         quantity:0,
+    //             //         price:0,
+    //             //     }
+    //             // })
+    //             // update("data",data)
+    //             return combinations;
+    //         }
+    //         for (let index = 0; index < option.length; index++) {
+    //             variantOptions.push(option[index].option.map(text=>{
+    //                 return text
+    //             }))
+    //         }
+    //         console.log("updated combination")
+    //         setVars(findCombinations(variantOptions))
+    //     }, [option])
+        
+        
 
-    
-   
-    
-    
-  
-   
-    
-    function OptionInput({option,index}) {
+        
+        
+    //     return(
+    //         <div className="flex flex-col" >
+    //             {Vars.map(v=>{
+    //                 return (
+    //                     <div className="grid grid-cols-3 gap-2 my-1"key={v} >
+    //                         <div className="">{v}</div>
+    //                         <input 
+    //                         type="number" 
+    //                         name="" id="" 
+    //                         placeholder='quantity' 
+    //                         min={0} 
+    //                         value={productData["data"]?.[v]?.["quantity"]?productData["data"]?.[v]?.["quantity"]:0}
+    //                         onChange={(e)=>{
+    //                             console.log("productData",productData,v)
+    //                             // var obj = productData["data"]
+    //                             if(!productData["data"]){
+    //                                 productData["data"]={}
+                               
+    //                             }
+    //                             if(!productData["data"][v]){
+    //                                 productData["data"][v]={}
+    //                             }
+    //                             productData["data"][v]["quantity"]=Number(e.target.value)
+    //                             update("data", productData["data"])//productData["data"][v]
+    //                             }}
+    //                         />
+    //                         <input type="number" name="" id="" placeholder='price' min={0}/>
+    //                     </div>
+    //                 )
+    //             })}
+    //         </div>
+    //     )
+        
+    // }
+
+    function OptionInput({option,index,updateOptionChoice}) {
         const [Input, setInput] = useState("")
         console.log("optionInput",option)
         return (
@@ -92,9 +174,10 @@ function ProductCombination({headings,productList={},update}) {
                         onKeyDown={(e)=>{ 
                             if(e.key=== 'Enter'){
                                 console.log("added sub option")
-                                Data[index]["option"].push(Input)
-                                console.log("Updated subdata:",Data)
-                                setData([...Data])
+                                Option[index]["option"].push(Input)
+                                console.log("Updated subdata:",Option)
+                                updateOptionChoice([...Option])
+                                setOption([...Option])
                                 setInput("")
                             }
                             
@@ -102,13 +185,14 @@ function ProductCombination({headings,productList={},update}) {
                     />
                     <div className="flex flex-row gap-2">
                     {
-                        Data[index]["option"].map((opt,i)=>{
-                            return <div className="flex flex-row gap-1 ">
+                        Option[index]["option"].map((opt,i)=>{
+                            return <div className="flex flex-row gap-1 " key={opt}> 
                                 {opt}
                                 <button className='text-red-600' 
                                     onClick={()=>{
-                                        Data[index]["option"].splice(i,1)
-                                        setData([...Data])
+                                        Option[index]["option"].splice(i,1)
+                                        updateOptionChoice([...Option])
+                                        setOption([...Option])
                                     }}
                                 >
                                     x
@@ -139,9 +223,10 @@ function ProductCombination({headings,productList={},update}) {
                         onKeyDown={(e)=>{ 
                             if(e.key=== 'Enter'){
                                 console.log("added option")
-                                Data.push({text:optionInput,option:[]})
-                                console.log("Data",Data)
-                                setData([...Data])
+                                Option.push({text:optionInput,option:[]})
+                                console.log("Option",Option)
+                                update("option",[...Option])
+                                setOption([...Option])
                                 setoptionInput("")
                             }
                             
@@ -150,7 +235,7 @@ function ProductCombination({headings,productList={},update}) {
                     <div className="">
                         <div className="">Option Level</div>
                         <List sortable onSort={handleSortEnd}>
-                            {Data.map(({ text, disabled }, index) => (
+                            {Option.map(({ text, disabled }, index) => (
                                 <List.Item 
                                     key={index} 
                                     index={index}
@@ -163,8 +248,9 @@ function ProductCombination({headings,productList={},update}) {
                                         </div>
                                         <button
                                             onClick={()=>{
-                                                Data.splice(index,1);
-                                                setData([...Data])
+                                                Option.splice(index,1);
+                                                update("option",[...Option])
+                                                setOption([...Option])
                                             }}
                                             className='text-red-600'
                                         >
@@ -180,10 +266,15 @@ function ProductCombination({headings,productList={},update}) {
                 <div className="">
                     <div className="">Choice</div>
                     {
-                        Data.map((option,index)=>{ //{ text, disabled } => key in object
+                        Option.map((option,index)=>{ //{ text, disabled } => key in object
                             console.log("passed option",option)
                             return(
-                                <OptionInput option={option} index={index} update={choices=>{update()}}/>
+                                <OptionInput option={option} index={index}  key={`option-${index}`}
+                                    updateOptionChoice={
+                                        choices=>{productData["option"][index]=choices;
+                                        update("option",choices)}
+                                    }
+                                />
                             )
                         })
                     }
@@ -194,9 +285,59 @@ function ProductCombination({headings,productList={},update}) {
             <div className="">
                 
                 <div className="">Quantity and Price</div>
+                {/* <Variants option={productData.option?productData.option:{}} /> */}
                 
-                <Variants data={Data}/>
-                
+                <div className="flex flex-col" >
+                    {PriceList.map(v=>{
+                        return (
+                            <div className="grid grid-cols-3 gap-2 my-1"key={v} >
+                                <div className="">{v}</div>
+                                <input 
+                                type="number" 
+                                name="" id="" 
+                                placeholder='quantity' 
+                                min={0} 
+                                value={productData["data"]?.[v]?.["quantity"]?productData["data"]?.[v]?.["quantity"]:0}
+                                onChange={(e)=>{
+                                    console.log("productData",productData,v)
+                                    // var obj = productData["data"]
+                                    if(!productData["data"]){
+                                        productData["data"]={}
+                                
+                                    }
+                                    if(!productData["data"][v]){
+                                        productData["data"][v]={}
+                                    }
+                                    productData["data"][v]["quantity"]=Number(e.target.value)
+                                    update("data", productData["data"])//productData["data"][v]
+                                    }}
+                                />
+                                <input 
+                                    type="number" 
+                                    name="" 
+                                    id="" 
+                                    placeholder='price' 
+                                    min={0}
+                                    value={productData["data"]?.[v]?.["price"]?productData["data"]?.[v]?.["price"]:0}
+                                    onChange={(e)=>{
+                                        console.log("productData",productData,v)
+                                        // var obj = productData["data"]
+                                        if(!productData["data"]){
+                                            productData["data"]={}
+                                    
+                                        }
+                                        if(!productData["data"][v]){
+                                            productData["data"][v]={}
+                                        }
+                                        productData["data"][v]["price"]=Number(e.target.value)
+                                        update("data", productData["data"])//productData["data"][v]
+                                        }}
+                                />
+                            </div>
+                        )
+                    })}
+                </div>
+        
             </div>
         </div>
         
