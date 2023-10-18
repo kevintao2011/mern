@@ -1,7 +1,8 @@
 import React, { useEffect,useState } from 'react'
 import FillForm from '../../../components/FormComponents/FillForm'
+import { postURL } from '../../../utils/fetch'
 
-function CreateSingleProductContainer({onExit}) {
+function CreateSingleProductContainer({onExit,code}) {
     const [FormData, setFormData] = useState()
     const [Categories, setCategories] = useState()
     useEffect(() => {
@@ -40,6 +41,7 @@ function CreateSingleProductContainer({onExit}) {
                     field_type:"text",
                     single:true,
                     field_value:[], //given
+                    required:true
                     
                 },
                 {
@@ -47,13 +49,16 @@ function CreateSingleProductContainer({onExit}) {
                     single:true,
                     field_value:[], //given
                     field_type:"text",
-                    field_props:"paragraph"
+                    field_props:"paragraph",
+                    required:true
+                    
                 },
                 {
                     field_name:"product_img_url",
                     field_value:[], //given
                     field_type:"file",
                     single:true,
+                    required:false
                 },
                 {
                     field_name:"product_type",
@@ -61,7 +66,8 @@ function CreateSingleProductContainer({onExit}) {
                     field_value:[], //given
                     field_type:"select",
                     // field_props:"multiple search",//search 
-                    field_options:Categories
+                    field_options:Categories,
+                    required:true
                     
                 },
                 // {
@@ -81,11 +87,11 @@ function CreateSingleProductContainer({onExit}) {
                     
                 // },
                 {
-                    field_name:"published",
+                    field_name:"sku",
                     single:true,
-                    field_options:[{Now:true,Later:false}],
                     field_value:[], //given
-                    field_type:"number",
+                    field_type:"text",
+                    required:true
                 },
                 {
                     field_name:"tags",
@@ -93,7 +99,18 @@ function CreateSingleProductContainer({onExit}) {
                     field_value:[], //given
                     field_props:"multiple",
                     field_type:"text",
-                    split_by:' '
+                    split_by:' ',
+                    required:false
+                },
+                {
+                    field_name:"product_link",
+                    single:false,
+                    field_value:[], //given
+                    field_props:"multiple",
+                    field_type:"text",
+                    split_by:'field',
+                    is_kv:true,
+                    required:false
                 },
                 // {
                 //     field_name:"has_variant",
@@ -105,13 +122,15 @@ function CreateSingleProductContainer({onExit}) {
                 {
                     field_name:"published",
                     single:true,
-                    field_value:[], //given
+                    field_value:false, //given
                     field_type:"boolean",
+                    required:true
                 },
                 {
-                    field_name:"subproducts",
+                    field_name:"product_list",
                     single:true,
                     field_value:{}, //given
+                    required:true,
                     /*
                     {
                         data:{
@@ -141,7 +160,17 @@ function CreateSingleProductContainer({onExit}) {
         
     }, [Categories])
     
-    
+    async function handleSubmit(data){
+        console.log(data)
+        var obj={}
+        data.forEach(field => {
+            obj[field.field_name]=field.field_value
+        });
+        postURL('/api/createproduct',true,{
+            code:code,
+            ...obj
+        })
+    }
     return (
     <div className={`w-full blur-0 p-2 h-full flex flex-col justify-center`}>
             {/* <div className="flex flex-col">
@@ -154,9 +183,9 @@ function CreateSingleProductContainer({onExit}) {
                 FormData&&(
                     <FillForm 
                         fields={FormData} 
-                        title={"Products"}
+                        title={"Create Products"}
                         className={"w-full"}
-                        description={"A list of all the users in your account including their name, title, email and role."}   
+                        description={"SKU must be number and english"}   
                         TitleMap={{
                             product_name_chi:"Product Title/Name",
                             product_description_chi:"Product Description",
@@ -172,9 +201,13 @@ function CreateSingleProductContainer({onExit}) {
                             session:"Session",
                             total_sales:"Sold",
                             has_variant:"Has Variant",
-                            subproducts:"Product List"
+                            subproducts:"Product List",
+                            sku:"SKU",
+                            product_link:"Product Links",
+                            product_list:"Product List"
 
                         }}
+                        onSubmit={(data)=>{handleSubmit(data)}}
                         
                     />
                 )

@@ -73,10 +73,10 @@ function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' ',isKV
                         
                         values.map((tag,i)=>{
                             return(
-                                <div className="flex flex-row" key={crypto.randomUUID()}>
+                                <div className="flex flex-row my-1" key={crypto.randomUUID()}>
                             
                                     <button 
-                                        className='bg-red-500 text-white'
+                                        className='bg-gray-400 text-white rounded-md'
                                         onClick={
                                             ()=>{
                                                 values.splice(i,1)
@@ -84,8 +84,13 @@ function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' ',isKV
                                             }
                                         }
                                     >
+                                        <div className="flex flex-row">
+                                            <div className="p-1">{tag}</div>
+                                        </div>
                                         
-                                        {tag}x
+                                        
+                                      
+                                        
                                     </button>
                                 </div>
                             )

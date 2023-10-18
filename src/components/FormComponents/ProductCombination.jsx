@@ -284,7 +284,11 @@ function ProductCombination({productData,update}) {
             </div>
             <div className="">
                 
-                <div className="">Quantity and Price</div>
+                <div className="grid grid-cols-3">
+                    <div className="">Combination</div>
+                    <div className="">Quantity</div>
+                    <div className="">Price</div>
+                </div>
                 {/* <Variants option={productData.option?productData.option:{}} /> */}
                 
                 <div className="flex flex-col" >

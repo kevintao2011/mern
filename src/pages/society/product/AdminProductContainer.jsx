@@ -39,7 +39,7 @@ function AdminProductContainer({Product,code}) {
                     className={`absolute top-30 right-0 bg-transparent drawer ${showDrawer?'active':'inactive'} z-1` }
                     ref={sideBarRef}
                 >
-                    <CreateSingleProductContainer/>
+                    <CreateSingleProductContainer code={code}/>
                 </div>
             }
             <div className="">
@@ -47,7 +47,7 @@ function AdminProductContainer({Product,code}) {
 
                 <Drawer open={open} onClose={() => setOpen(false)}>
                     <Drawer.Body className=''>
-                        <CreateSingleProductContainer/>
+                        <CreateSingleProductContainer code={code}/>
                     </Drawer.Body>
                     
                     
@@ -112,7 +112,7 @@ function AdminProductContainer({Product,code}) {
                         }}
                     />
                 )}
-                <CreateSingleProductContainer/>
+                <CreateSingleProductContainer code={code}/>
             </div>
         </div>
         

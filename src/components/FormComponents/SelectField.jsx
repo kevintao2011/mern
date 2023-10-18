@@ -35,7 +35,7 @@ function SelectField({optionsMap,single,returnFunction,value,index}) {
     
     
     return (
-        <InputPicker data={MappedOptions} onChange={setSelectedValue} className='w-full'/>
+        <InputPicker data={MappedOptions} onChange={setSelectedValue} className='w-full' />
     )
 }
 

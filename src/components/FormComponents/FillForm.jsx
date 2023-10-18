@@ -11,7 +11,7 @@ import ProductCombination from './ProductCombination';
 
 function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,onSubmit}) {
     // const [Headings, setHeadings] = useState([])
-    
+    const [ErrorMsg, setErrorMsg] = useState("")
     const [Fields, setFields] = useState()
     useEffect(() => {
         console.log("Initing form")
@@ -19,7 +19,22 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
     }, [])
     
     // index: index of field, single: multiple objects, id : field id
-
+    function RequireValidation(){
+        var msg =""
+        Fields.forEach(field => {
+            if(field.required&&(field.field_value.length<1)){
+                msg+=`${TitleMap[field.field_name]} cannot be empty ! \n`
+            }
+        });
+        if(msg!==""){
+            setErrorMsg(msg)
+            return false
+        }else{
+            return true
+        }
+        
+        
+    }
     function updateField(index,values){
         console.log(Fields,"updating ",index,values)
         var newFields  = Fields
@@ -70,6 +85,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                     single={field.single}
                                                     value={field.field_value}
                                                     
+                                                    
                                                 />
                                             )
                                             
@@ -106,6 +122,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                         splitSymbol={field.split_by}
                                                         index={index}
                                                         isKV={field.is_kv}
+                                                    
                                                     />
                                                 )
                                                 
@@ -149,6 +166,8 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                             field.field_type.includes('boolean')&&(
                                             <Toggle
                                                 onChange={v=>{updateField(index,v)}}
+                                                defaultChecked={field.single_value}
+                                                onLoad={()=>{updateField(index,false)}}
                                             />  
                                             )
                                         }
@@ -203,13 +222,22 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                     <div className="w-full flex flex-row justify-center">
                         <button 
                             className='text-center my-5 p-1 bg-green-500 rounded-md text-white'
-                            onClick={()=>{onSubmit(Fields)}}
+                            onClick={()=>{
+                                if(RequireValidation()){
+                                    setErrorMsg("")
+                                    onSubmit(Fields)
+                                }
+                                
+                            }}
                         >
                             Create
                         </button>
                     </div>
                 )
             }
+            <div className="text-sm text-red-500">
+                <pre>{ErrorMsg}</pre>
+            </div>
             
             
         </div>
