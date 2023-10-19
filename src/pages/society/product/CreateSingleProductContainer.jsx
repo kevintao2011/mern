@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from 'react'
 import FillForm from '../../../components/FormComponents/FillForm'
 import { postURL } from '../../../utils/fetch'
-
+import { storage, uploadFile } from '../../../utils/firebasefunction';
 function CreateSingleProductContainer({onExit,code}) {
     const [FormData, setFormData] = useState()
     const [Categories, setCategories] = useState()
@@ -166,13 +166,27 @@ function CreateSingleProductContainer({onExit,code}) {
         data.forEach(field => {
             obj[field.field_name]=field.field_value
         });
-        postURL('/api/createproduct',true,{
-            code:code,
-            ...obj
+        async function convertAllURL(){
+            
+            
+        }
+        await Promise.all(
+            obj["product_img_url"].map(async (file,index)=>{
+                return await uploadFile(`Product/${code}/${obj["product_name_chi"]}/img`,`img-${index}`,file,storage)
+            })
+        ).then(async (urls)=>{
+            obj["product_img_url"]=urls
+            await postURL('/api/createproduct',true,{
+                code:code,
+                ...obj
+            }).then(
+                console.log("upload Done")
+            )
         })
+        
     }
     return (
-    <div className={`w-full blur-0 p-2 h-full flex flex-col justify-center`}>
+    <div className={`w-full blur-0 p-2  flex flex-col justify-center overflow-y-scroll`}>
             {/* <div className="flex flex-col">
                 <div className="w-full flex flex-row justify-end">
                     <button onClick={onExit}>X</button>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import FileField from './FileField'
-import { List } from 'rsuite';
+import { List, Toggle } from 'rsuite';
 function ProductCombination({productData,update}) {
     const defaultData = [
         { text: 'Size',option:["Yellow","Green"] },
@@ -284,7 +284,7 @@ function ProductCombination({productData,update}) {
             </div>
             <div className="">
                 
-                <div className="grid grid-cols-3">
+                <div className="grid grid-cols-4">
                     <div className="">Combination</div>
                     <div className="">Quantity</div>
                     <div className="">Price</div>
@@ -294,7 +294,7 @@ function ProductCombination({productData,update}) {
                 <div className="flex flex-col" >
                     {PriceList.map(v=>{
                         return (
-                            <div className="grid grid-cols-3 gap-2 my-1"key={v} >
+                            <div className="grid grid-cols-4 gap-2 my-1"key={v} >
                                 <div className="">{v}</div>
                                 <input 
                                 type="number" 

@@ -18,10 +18,10 @@ function AdminActivityContainer({Activities,code}) {
     
     return (
         <div className="">
-            <div className="">
+            <div className="w-80">
                 
 
-                <Drawer open={open} onClose={() => setOpen(false)}>
+                <Drawer open={open} onClose={() => setOpen(false)} >
                     <Drawer.Body>
                     <Placeholder.Paragraph />
                     </Drawer.Body>

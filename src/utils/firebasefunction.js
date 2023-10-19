@@ -53,7 +53,8 @@ export const storage = getStorage();
 connectStorageEmulator(storage, "127.0.0.1", 9199);
 
 export async function uploadFile(dir,filename,file,storage){
-    const storageRef = ref(storage,`${dir}${filename}`);
+    console.log("file",file)
+    const storageRef = ref(storage,`${dir}${filename}.${file.type.split('/')[1]}`);
     console.log("file size",file.size/1000,"kb")
     return await uploadBytes(storageRef, file).then(async (snapshot) => {
         console.log('Uploaded  a blob or file!',snapshot.ref);

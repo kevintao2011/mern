@@ -3,7 +3,7 @@ import ListTable from '../../../components/FormComponents/ListTable'
 import { useNavigate } from 'react-router-dom'
 import CreateSingleProductContainer from './CreateSingleProductContainer';
 import { Drawer, ButtonToolbar, Button, Placeholder } from 'rsuite';
-
+import {BrowserView, MobileView} from 'react-device-detect';
 function AdminProductContainer({Product,code}) {
     const navigate = useNavigate()
     const [showDrawer, setshowDrawer] = useState(false)
@@ -33,7 +33,7 @@ function AdminProductContainer({Product,code}) {
     }, [])
     
     return (
-        <div className="">
+        <div className="w-full ">
             {
                 <div 
                     className={`absolute top-30 right-0 bg-transparent drawer ${showDrawer?'active':'inactive'} z-1` }
@@ -42,16 +42,27 @@ function AdminProductContainer({Product,code}) {
                     <CreateSingleProductContainer code={code}/>
                 </div>
             }
-            <div className="">
+            <div className=''>
                 
-
-                <Drawer open={open} onClose={() => setOpen(false)}>
-                    <Drawer.Body className=''>
-                        <CreateSingleProductContainer code={code}/>
-                    </Drawer.Body>
-                    
-                    
-                </Drawer>
+                <BrowserView>
+                    <Drawer open={open} onClose={() => setOpen(false)} size='sm' >
+                        <Drawer.Body >
+                            <CreateSingleProductContainer code={code}/>
+                        </Drawer.Body>
+                        
+                        
+                    </Drawer>
+                </BrowserView>
+                <MobileView>
+                    <Drawer open={open} onClose={() => setOpen(false)} size='full' >
+                        <Drawer.Body >
+                            <CreateSingleProductContainer code={code}/>
+                        </Drawer.Body>
+                        
+                        
+                    </Drawer>
+                </MobileView>
+                
 
                 
             </div>

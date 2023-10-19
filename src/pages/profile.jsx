@@ -274,7 +274,7 @@ const Profile = () => {
               </div>  */}
               <div className="RHS w-full  md:px-5 px-2 flex flex-col ">{/*md:w-9/12*/}
                   {/* <img src="./assests/img/BelongSociety.svg" alt="" /> */}
-                  <div className="Upper flex flex-row gap-4">
+                  <div className="Upper flex flex-col gap-4 md:flex-row">
                     <div className="card aspect-auto p-2 border-t-red-600">
                       <div className="flex flex-row gap-2">
                         <div className="flex flex-row items-center">
