@@ -21,7 +21,7 @@ import ActivityForm from './components/ActivityForm';
 import EditActivity from './pages/society/EditActivity';
 import CreateProduct from './pages/society/product/CreateProduct';
 import CounterForm from './components/counterForm';
-import EditProduct from './pages/society/product/EditProduct';
+import EditProduct from './pages/society/product/EditProduct.bak';
 import Storage from './pages/storage/Storage';
 import Shop from './pages/shop/shop';
 import SocList from './pages/socList'
@@ -82,6 +82,7 @@ function App() {
             <Route path="society/:code/createsingleproduct" element={<CreateSingleProductContainer/>} />
         <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
         <Route exact path="society/:code/manage/:id/editproduct" element={<EditProduct />} />
+        <Route exact path="society/:code/manage/editproduct/:id" element={<EditProduct />} />
         <Route exact path="society/:code/editmembership" element={<EditMembership />} />
             
         <Route path="account">

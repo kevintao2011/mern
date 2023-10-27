@@ -36,6 +36,7 @@ export default function FieldForArray(
     const [dataSet, setdataSet] = useState([{fieldType:"text",content:""}])
     useEffect(() => { // has has imported values
         let values = []
+        console.log("fieldValues has",fieldValues)
         fieldValues.forEach(value => {
             values.push(value)
         });

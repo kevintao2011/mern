@@ -165,6 +165,7 @@ function ProductCombination({productData,update}) {
                     <div className="">{option["text"]}</div>
                     <input 
                         type="text" 
+                        className='w-full'
                         placeholder='e.g blue, xl , s'
                         value={Input}
                         onChange={(e)=>{
@@ -209,11 +210,12 @@ function ProductCombination({productData,update}) {
     
     return (
         <div className="flex flex-col text-xs">
-            <div className="w-full grid grid-flow-row grid-cols-3 gap-2 text-sm border rounded-lg">
+            <div className="w-full grid grid-flow-row grid-cols-2 gap-2 text-sm border rounded-lg">
                 <div className="">
                     <div className="">Options</div>
                     <input 
                         type="text" 
+                        className='w-full'
                         placeholder='e.g size, color, type and press enter to add'
                         value={optionInput}
                         onChange={(e)=>{
@@ -278,6 +280,7 @@ function ProductCombination({productData,update}) {
                             )
                         })
                     }
+                    
                     
                 </div>
                 

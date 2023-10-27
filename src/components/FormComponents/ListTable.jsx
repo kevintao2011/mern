@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import SearchTool from '../table/SearchTool'
 import moment from 'moment/moment'
 import { Toggle } from 'rsuite'
-function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,DeletAPI}) {
+import { useNavigate } from 'react-router-dom'
+function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,DeletAPI,onEdit}) {
     console.log("dataEntries.dataEntries",dataEntries)
     const headings = Object.keys(TitleMap)
     console.log("headings",headings)
+    const navigate = useNavigate()
     const [filteredResult, setfilteredResult] = useState(dataEntries)
     const [filterOption, setfilterOption] = useState(headings[0])
     
@@ -13,6 +15,10 @@ function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,Del
         // console.log("Filtered Result:",filteredArray)
         setfilteredResult(filteredArray)
     }
+    useEffect(() => {
+        setfilteredResult(dataEntries)
+    }, [dataEntries])
+    
     
     return (
         <div>
@@ -98,9 +104,10 @@ function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,Del
                                             )
                                         }
                                     })}
+                                    {/* console.log("nav to ",EditLink);navigate(`${EditLink}/${entry._id}` */}
                                     <td>
                                         <div className="flex flex-row gap-2">
-                                            <button onClick={()=>{}}>
+                                            <button onClick={()=>{onEdit(entry._id)}}>
                                                 <img src="/assests/img/tablebutton/pencil.svg" alt="" />
                                             </button>
                                             

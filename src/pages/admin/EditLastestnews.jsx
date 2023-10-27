@@ -54,7 +54,7 @@ export default function EditLastestnews() {
         //     }
         //   })
         // });
-        setStaticData(collection)
+        setStaticData(collection.data)
       })
     }
     fetchData()
@@ -77,24 +77,29 @@ export default function EditLastestnews() {
       {
         StaticData.map((doc,i) => {
           // console.log('e',doc)
-          return(
-            // <p>{doc.name}</p>
-            <div className="w-1/2" key={`edit-components-${i}`}>
-              <p key={`title-${i}`}>{`${doc.name}`}</p>
-              <FieldForArray
-                key={`${doc.name}`}
-                fieldName={doc.name} 
-                fieldType={doc.content_type} 
-                className={""} 
-                fieldValues={doc.content} 
-                multipleValue={doc.multiple_content}
-                handleUpdate={SaveFieldValues}
-                index={i}
-                postAPI={"/api/setwebsitestaticinfo"}
-              />
-              
-            </div>
-          )
+          if(Array.isArray(doc.content)){
+            return(
+              // <p>{doc.name}</p>
+              <div className="w-1/2" key={`edit-components-${i}`}>
+                <p key={`title-${i}`}>{`${doc.name}`}</p>
+                <FieldForArray
+                  key={`${doc.name}`}
+                  fieldName={doc.name} 
+                  fieldType={doc.content_type} 
+                  className={""} 
+                  fieldValues={doc.content} 
+                  multipleValue={doc.multiple_content}
+                  handleUpdate={SaveFieldValues}
+                  index={i}
+                  postAPI={"/api/setwebsitestaticinfo"}
+                />
+                
+              </div>
+            )
+          }else{
+            return
+          }
+          
         })
       }
     </div>

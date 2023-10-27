@@ -5,9 +5,10 @@ import { storage, uploadFile } from '../../../utils/firebasefunction';
 function CreateSingleProductContainer({onExit,code}) {
     const [FormData, setFormData] = useState()
     const [Categories, setCategories] = useState()
+    
     useEffect(() => {
         async function getCategories(){
-            await fetch('/api/getcatoption', { 
+            await fetch('/api/getcatshownoption', { 
                 method: "POST",
                 body: JSON.stringify({
                     
@@ -187,12 +188,7 @@ function CreateSingleProductContainer({onExit,code}) {
     }
     return (
     <div className={`w-full blur-0 p-2  flex flex-col justify-center overflow-y-scroll`}>
-            {/* <div className="flex flex-col">
-                <div className="w-full flex flex-row justify-end">
-                    <button onClick={onExit}>X</button>
-                </div>
-                
-            </div> */}
+            
             {
                 FormData&&(
                     <FillForm 
@@ -226,6 +222,13 @@ function CreateSingleProductContainer({onExit,code}) {
                     />
                 )
             }
+            <div >
+                Reminders
+            </div>
+            <ol className="list-disc" >
+                <li>SKU cannot be same with other product</li>
+                <li>Product image cannot be larger than 500kb</li>
+            </ol>
             
         </div>
 
