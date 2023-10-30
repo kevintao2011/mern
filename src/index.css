@@ -75,6 +75,13 @@ body {
   display: block;
 }
 
+.redtext{
+  color: #C02739;
+
+}
+.greentext{
+  color: #29C7AC; 
+}
 
 @layer components {
   .red_btn {
@@ -136,6 +143,8 @@ body {
   .text{
     @apply font-mincho
   }
+
+  
 
   .greensmalltxt{
     font-family: 'Tensentype RuiHei GB18030';

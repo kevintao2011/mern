@@ -52,18 +52,25 @@ setPersistence(auth, browserSessionPersistence)
 export const storage = getStorage();
 connectStorageEmulator(storage, "127.0.0.1", 9199);
 
-export async function uploadFile(dir,filename,file,storage){
+export async function uploadFile(dir,filename,file,limitKb=2000){
+    const storage = getStorage();
     console.log("file",file)
     const storageRef = ref(storage,`${dir}${filename}.${file.type.split('/')[1]}`);
-    console.log("file size",file.size/1000,"kb")
-    return await uploadBytes(storageRef, file).then(async (snapshot) => {
-        console.log('Uploaded  a blob or file!',snapshot.ref);
-        console.log(snapshot)
-        return await getDownloadURL(snapshot.ref)
-    });
+    console.log("file size",file.size/1000,"kb < ",limitKb)
+    if(file.size/1000<limitKb){
+        return await uploadBytes(storageRef, file).then(async (snapshot) => {
+            console.log('Uploaded  a blob or file!',snapshot.ref);
+            console.log(snapshot)
+            return await getDownloadURL(snapshot.ref)
+        });
+    }else{
+        console.log("fileSize Exceeded")
+    }
+
 }
 
-export async function deleteFile(dir,filename,storage){
+export async function deleteFile(dir,filename){
+    const storage = getStorage();
     const storageRef = ref(storage,`${dir}${filename}`);
     try{
         return await deleteObject(storageRef)
@@ -73,7 +80,7 @@ export async function deleteFile(dir,filename,storage){
     
 }
 
-export async function uploadFormImageFiles(e,dir,filename){
+export async function uploadFormImageFiles(e,dir,filename,limitKb=2000){
     const storage = getStorage();
     connectStorageEmulator(storage, "127.0.0.1", 9199);
     e.preventDefault()

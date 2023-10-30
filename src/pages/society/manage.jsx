@@ -501,7 +501,7 @@ const Manage = () => {
                         {tab==="Product"&&(
                             <AdminProductContainer
                                 code={code}
-                                Product={Product}
+                                session={Soc[code].session}
                             />
                         )}
                         {tab==="Order"&&(

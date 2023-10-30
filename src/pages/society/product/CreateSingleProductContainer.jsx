@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import FillForm from '../../../components/FormComponents/FillForm'
 import { postURL } from '../../../utils/fetch'
 import { storage, uploadFile } from '../../../utils/firebasefunction';
-function CreateSingleProductContainer({onExit,code}) {
+function CreateSingleProductContainer({onExit,code,session}) {
     const [FormData, setFormData] = useState()
     const [Categories, setCategories] = useState()
     
@@ -92,7 +92,8 @@ function CreateSingleProductContainer({onExit,code}) {
                     single:true,
                     field_value:[], //given
                     field_type:"text",
-                    required:true
+                    required:true,
+                    requirement:"only-letter-number"
                 },
                 {
                     field_name:"tags",
@@ -113,13 +114,7 @@ function CreateSingleProductContainer({onExit,code}) {
                     is_kv:true,
                     required:false
                 },
-                // {
-                //     field_name:"has_variant",
-                //     single:true,
-                //     field_value:[], //given
-                //     field_props:"multiple",
-                //     field_type:"boolean",
-                // },
+
                 {
                     field_name:"published",
                     single:true,
@@ -132,26 +127,6 @@ function CreateSingleProductContainer({onExit,code}) {
                     single:true,
                     field_value:{}, //given
                     required:true,
-                    /*
-                    {
-                        data:{
-                            s-blue:{
-                                unit price:0
-                                quantity:0
-                                img_url:[]
-                            },
-                            s-yellow:{
-                                unit price:0
-                                quantity:0
-                                img_url:[]
-                            },
-                        }
-                        option:{
-                            size:[s,m,l]
-                            color:[blue,red,yellow]
-                        }
-                    }
-                    */
                     field_type:"products",
                 },
             ]
@@ -173,7 +148,8 @@ function CreateSingleProductContainer({onExit,code}) {
         }
         await Promise.all(
             obj["product_img_url"].map(async (file,index)=>{
-                return await uploadFile(`Product/${code}/${obj["product_name_chi"]}/img`,`img-${index}`,file,storage)
+                console.log("upload to",`Product/${code}/${obj["sku"]}/`,`img-${index}`)
+                return await uploadFile(`Product/${code}/${obj["sku"]}/`,`img-${index}`,file,2000)
             })
         ).then(async (urls)=>{
             obj["product_img_url"]=urls

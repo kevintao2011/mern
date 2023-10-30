@@ -20,10 +20,19 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
     
     // index: index of field, single: multiple objects, id : field id
     function RequireValidation(){
+        function onlyLettersAndNumbers(str) {
+            return /^[A-Za-z0-9]*$/.test(str);
+          }
         var msg =""
         Fields.forEach(field => {
             if(field.required&&(field.field_value.length<1)){
                 msg+=`${TitleMap[field.field_name]} cannot be empty ! \n`
+            }
+            if(field.requirement?.includes('only-letter-number')){
+                if(!onlyLettersAndNumbers(TitleMap[field.field_name])){
+                    msg+=`${TitleMap[field.field_name]} can only include letters and number ! \n`
+                }
+                
             }
         });
         if(msg!==""){

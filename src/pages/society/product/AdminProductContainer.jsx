@@ -7,7 +7,7 @@ import {BrowserView, MobileView} from 'react-device-detect';
 import { auth } from '../../../utils/firebasefunction';
 import EditProduct from './EditProduct';
 
-function AdminProductContainer({code}) {//Product,
+function AdminProductContainer({code,session}) {//Product,
     const [DrawerContent, setDrawerContent] = useState()
     const navigate = useNavigate()
     const [showDrawer, setshowDrawer] = useState(false)
@@ -93,8 +93,8 @@ function AdminProductContainer({code}) {//Product,
                 <div className=''>
                     
                     <BrowserView>
-                        <Drawer open={open} onClose={() => setOpen(false)} size='sm' >
-                            <Drawer.Body >
+                        <Drawer open={open} onClose={() => setOpen(false)} size='md' >
+                            <Drawer.Body className=''>
                                 {DrawerContent}
                             </Drawer.Body>
                             
@@ -104,7 +104,7 @@ function AdminProductContainer({code}) {//Product,
                     <MobileView>
                         <Drawer open={open} onClose={() => setOpen(false)} size='full' >
                             <Drawer.Body >
-                                <CreateSingleProductContainer code={code}/>
+                                <CreateSingleProductContainer code={code} />
                             </Drawer.Body>
                             
                             
@@ -134,7 +134,7 @@ function AdminProductContainer({code}) {//Product,
                                     Create Product
                                 </Button>
                             </ButtonToolbar> */}
-                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setOpen(true);setDrawerContent(<CreateSingleProductContainer code={code}/>)}}>
+                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setOpen(true);setDrawerContent(<CreateSingleProductContainer code={code} session={session}/>)}}>
                                 {/* setshowDrawer(prev=>!prev) */}
                                 Create Product
                             </button>
