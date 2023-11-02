@@ -156,7 +156,9 @@ function AdminProductContainer({code,session}) {//Product,
                     </div>
                     {Array.isArray(Product)&&(
                         <ListTable 
-                            dataEntries={Product}
+                            dataEntries={
+                                Product.filter(p=>!p.hidden)
+                            }
                             TitleMap={{
                                 // _id:"_ID",
                                 sku:"SKU",

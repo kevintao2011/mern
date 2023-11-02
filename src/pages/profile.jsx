@@ -49,7 +49,7 @@ const Profile = () => {
                 const data = await response.json()
                 console.log("data",data)
                 setuserDBInfo(userDBInfo)
-                setSocieties(data.societies)
+                // setSocieties(data.societies)
             }
           })
         })
@@ -99,7 +99,7 @@ const Profile = () => {
       })
     }
     async function doALL(){
-      await fetchOrder()
+      // await fetchOrder()
       await fetchProfileInfo()
       await getMembership()
     }
@@ -121,7 +121,7 @@ const Profile = () => {
     
     <div className="mainpage-i my-5">
         {
-          Societies&&userDBInfo&&currentUser&&(
+          userDBInfo&&currentUser&&(//Societies&&
             <div className="flex flex-col md:flex-row font-mincho ">
               
               
@@ -294,7 +294,7 @@ const Profile = () => {
                             </div>
                             <div className="flex flex-row justify-between">
                               <div className="">Major: </div>
-                              {SocMap[userDBInfo.major].society_chinese}
+                              {userDBInfo.major.jupas_code}
                             </div>
                             <div className="flex flex-row justify-between">
                               <div className="">SID: </div>
@@ -391,7 +391,7 @@ const Profile = () => {
                         </div>
                         
                         <div className="w-full   flex flex-col  p-5">
-                          {
+                          {/* {
                             Orders?.map(order=>{
                               return(
                                 <div className=" bg-gray-200 bg-opacity-20 div-1 rounded-md my-2 text-black flex flex-row">
@@ -428,7 +428,7 @@ const Profile = () => {
                                   
                               )
                             })
-                          }
+                          } */}
                         </div>
                         </div>
                         

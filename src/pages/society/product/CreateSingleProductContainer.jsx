@@ -87,14 +87,14 @@ function CreateSingleProductContainer({onExit,code,session}) {
                 //     field_type:"number",
                     
                 // },
-                {
-                    field_name:"sku",
-                    single:true,
-                    field_value:[], //given
-                    field_type:"text",
-                    required:true,
-                    requirement:"only-letter-number"
-                },
+                // {
+                //     field_name:"sku",
+                //     single:true,
+                //     field_value:[], //given
+                //     field_type:"text",
+                //     required:true,
+                //     requirement:"only-letter-number"
+                // },
                 {
                     field_name:"tags",
                     single:false,
