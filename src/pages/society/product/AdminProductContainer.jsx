@@ -167,6 +167,7 @@ function AdminProductContainer({code,session}) {//Product,
                                 totalSales:"Total Sales"
                             }}
                             EditLink={`/society/${code}/manage/editproduct`}
+                            DeletAPI={`/api/${code}/manage/hideproduct`}
                             onEdit = {(id)=>{setDrawerContent(<EditProduct  pid={id}/>);setOpen(true)}}
                         />
                     )}
