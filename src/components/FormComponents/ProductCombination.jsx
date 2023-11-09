@@ -46,7 +46,7 @@ function ProductCombination({productData,update}) {
       
     }, []);
 
-    function findCombinations(arrays) {
+    function findCombinations(arrays) { 
         function backtrack(currCombination, remainingArrays) {
             if (remainingArrays.length === 0) {
             combinations.push(currCombination.join(' '));//join('_')

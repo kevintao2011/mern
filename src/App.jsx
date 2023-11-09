@@ -39,69 +39,78 @@ import 'rsuite/dist/rsuite.min.css';
 import Instagramauth from './pages/society/instagram/Instagramauth';
 import CreateForm from './components/FormComponents/CreateForm';
 import { InfoProvider } from './components/Contexts/InfoContexts';
+import { NotiProvider } from './components/Contexts/notificationContext';
+import { Toaster } from 'sonner';
+
 function App() {
   console.log("load app.jsx")
   return (
     
     <BrowserRouter>
       <InfoProvider>
-      <AuthProvider>
-        <Routes>
-          < Route path="/" element={<Nav/>}>
-            <Route index element={<Home />} /> 
-            <Route path="counter" element={<CounterForm />} />
-            <Route path="home" element={<Home />} />
-            <Route path="soclist" element={<SocList />} />
-            <Route path="structure">
-              <Route path="exco" element={<Exco />} />
-              <Route path="s" element={<Storage />} />
-              <Route path="deputation" element={<Deputation />} />
-              <Route path="judicial" element={<Judicial />} />
-              <Route path="editorialboard" element={<Editorialboard />} />
-            </Route>
-            <Route path="admin" element={<AdminPage />} />
-            <Route path="createform" element={<CreateForm />} />
-            <Route path="test" element={<FuntionalParentComponent />} />
-            
-            <Route path="shop" >
-              <Route exact path="product" element={<Shop/>}/>
-              <Route exact path="cart" element={<Cart/>}/>
-              <Route exact path="checkout" element={<CheckOut/>}/>
-              <Route exact path="product/:id" element={<Product />} />
-            </Route>
-            
-            
-            <Route exact path="society" element={<SocietyList />} />
-            <Route exact path="society/:code" element={<Society />} >  
-              {/* <Route path="manage" element={<Manage />} /> */}
-            </Route>
-            <Route path="/society/:code/manage" element={<Manage />} />
-            <Route path="/society/:code/manage/instagramauth" element={<Instagramauth />} />
-            <Route path="society/:code/createactivity" element={<ActivityForm />} />
-            <Route path="society/:code/createproduct" element={<CreateProductPage/>} />
-            <Route path="society/:code/createsingleproduct" element={<CreateSingleProductContainer/>} />
-        <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
-        <Route exact path="society/:code/manage/:id/editproduct" element={<EditProduct />} />
-        <Route exact path="society/:code/manage/editproduct/:id" element={<EditProduct />} />
-        <Route exact path="society/:code/editmembership" element={<EditMembership />} />
-            
-        <Route path="account">
-              <Route path="setup" element={<SetupAccount />} />
-            </Route>
-            <Route path='login' element={<Login/>}/>
-            <Route path="signup" element={<SignUp />} />
-            <Route path="profile" element={<Profile/>}/>
-            <Route path="*" element={<Error />} />
-            
-          </Route>
-          
-          {/* <Route path="*" element={<App/>}/> */}
-        </Routes>
+        <AuthProvider>
+          {/* <NotiProvider> */}
+       
+
+            <Routes>
+              < Route path="/" element={<Nav/>}>
+                <Route index element={<Home />} /> 
+                <Route path="counter" element={<CounterForm />} />
+                <Route path="home" element={<Home />} />
+                <Route path="soclist" element={<SocList />} />
+                <Route path="structure">
+                  <Route path="exco" element={<Exco />} />
+                  <Route path="s" element={<Storage />} />
+                  <Route path="deputation" element={<Deputation />} />
+                  <Route path="judicial" element={<Judicial />} />
+                  <Route path="editorialboard" element={<Editorialboard />} />
+                </Route>
+                <Route path="admin" element={<AdminPage />} />
+                <Route path="createform" element={<CreateForm />} />
+                <Route path="test" element={<FuntionalParentComponent />} />
+                
+                <Route path="shop" >
+                  <Route exact path="product" element={<Shop/>}/>
+                  <Route exact path="cart" element={<Cart/>}/>
+                  <Route exact path="checkout" element={<CheckOut/>}/>
+                  <Route exact path="product/:id" element={<Product />} />
+                </Route>
+                
+                
+                <Route exact path="society" element={<SocietyList />} />
+                <Route exact path="society/:code" element={<Society />} >  
+                  {/* <Route path="manage" element={<Manage />} /> */}
+                </Route>
+                <Route path="/society/:code/manage" element={<Manage />} />
+                <Route path="/society/:code/manage/instagramauth" element={<Instagramauth />} />
+                <Route path="society/:code/createactivity" element={<ActivityForm />} />
+                <Route path="society/:code/createproduct" element={<CreateProductPage/>} />
+                <Route path="society/:code/createsingleproduct" element={<CreateSingleProductContainer/>} />
+            <Route exact path="society/:code/manage/:id/editactivity" element={<EditActivity />} />
+            <Route exact path="society/:code/manage/:id/editproduct" element={<EditProduct />} />
+            <Route exact path="society/:code/manage/editproduct/:id" element={<EditProduct />} />
+            <Route exact path="society/:code/editmembership" element={<EditMembership />} />
+                
+            <Route path="account">
+                  <Route path="setup" element={<SetupAccount />} />
+                </Route>
+                <Route path='login' element={<Login/>}/>
+                <Route path="signup" element={<SignUp />} />
+                <Route path="profile" element={<Profile/>}/>
+                <Route path="*" element={<Error />} />
+                
+              </Route>
+              
+              {/* <Route path="*" element={<App/>}/> */}
+            </Routes>
+        
+          {/* </NotiProvider> */}
         </AuthProvider>
-        </InfoProvider>
+      </InfoProvider>
       {/* <Routes>
         <Route path="/error" element={<Error />} />
       </Routes> */}
+      <Toaster richColors/>
     </BrowserRouter>
     
   );

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function FileField({imgs, fieldTitle, updatePhoto,index,single}) {
+function FileField({imgs, fieldTitle, updatePhoto,index,single,w=100, h=100}) {
   function updatefileList(files){
     // const f = new File(files[0],files[0].name)
     // console.log(`uploading ${f} to ${imgs}`)
@@ -14,7 +14,7 @@ function FileField({imgs, fieldTitle, updatePhoto,index,single}) {
   return (
     <div className="">
       {/* <div className="">{fieldTitle}</div> */}
-      <div className="flex flex-row">
+      <div className="flex flex-row gap-1">
         {
           imgs.map((img,i)=>{
             console.log("showing img",img)
@@ -22,8 +22,8 @@ function FileField({imgs, fieldTitle, updatePhoto,index,single}) {
               <img 
                 src={URL.createObjectURL(img)} 
                 alt="" 
-                width="100"
-                height="100"
+                width={w}
+                height={h}
                 onClick={()=>{imgs.splice(i,1);updatePhoto(index,imgs)}}
               />
             )

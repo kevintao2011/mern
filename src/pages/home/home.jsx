@@ -3,6 +3,7 @@
 
 import { useState,useEffect} from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 
 const Home = () => {
@@ -14,6 +15,7 @@ const Home = () => {
   const [latestNews, setlatestNews] = useState([])
   const [newsCounter, setnewsCounter] = useState(0)
   useEffect(() => {
+    // toast.success("Hello")
     async function fetchData(){
       await fetch(
         "/api/websitestaticinfo",

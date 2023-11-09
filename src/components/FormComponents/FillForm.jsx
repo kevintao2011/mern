@@ -7,6 +7,8 @@ import SelectField from './SelectField';
 import RolesField from './RolesField';
 import EntryTable from '../table/EntryTable';
 import ProductCombination from './ProductCombination';
+import { toast } from 'sonner';
+import { classifyValue } from '../../utils/basicFunction';
 
 
 function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,onSubmit}) {
@@ -24,23 +26,26 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
             return /^[A-Za-z0-9]*$/.test(str);
           }
         var msg =""
+        console.log(Fields)
         Fields.forEach(field => {
-            if(field.required&&(field.field_value.length<1)){
-                msg+=`${TitleMap[field.field_name]} cannot be empty ! \n`
+            console.log(field.field_name,classifyValue(field.field_value))
+            if(field.required&&(field.field_value.length<1 || (classifyValue(field.field_value)==='object' && Object.keys(field.field_value).length===0))){
+                msg+=`${TitleMap[field.field_name]} cannot be empty ! `//\n
             }
             if(field.requirement?.includes('only-letter-number')){
                 if(!onlyLettersAndNumbers(TitleMap[field.field_name])){
-                    msg+=`${TitleMap[field.field_name]} can only include letters and number ! \n`
+                    msg+=`${TitleMap[field.field_name]} can only include letters and number ! `//\n
                 }
                 
             }
         });
-        if(msg!==""){
-            setErrorMsg(msg)
-            return false
-        }else{
-            return true
-        }
+        // if(msg!==""){
+        //     setErrorMsg(msg)
+        //     return false
+        // }else{
+        //     return true
+        // }
+        return msg
         
         
     }
@@ -232,9 +237,14 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                         <button 
                             className='text-center my-5 p-1 bg-green-500 rounded-md text-white'
                             onClick={()=>{
-                                if(RequireValidation()){
-                                    setErrorMsg("")
+                                const msg = RequireValidation()
+                                if(msg===""){
+                                    // setErrorMsg("")
                                     onSubmit(Fields)
+                                }else{
+                                    toast.error(msg,{
+                                        position:"top-right"
+                                    })
                                 }
                                 
                             }}
@@ -244,9 +254,9 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                     </div>
                 )
             }
-            <div className="text-sm text-red-500">
+            {/* <div className="text-sm text-red-500">
                 <pre>{ErrorMsg}</pre>
-            </div>
+            </div> */}
             
             
         </div>

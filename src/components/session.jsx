@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react"
 import { auth } from "../utils/firebasefunction"
 import { createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateEmail,updatePassword,updateProfile,sendPasswordResetEmail,sendEmailVerification } from "firebase/auth"
+import {  toast } from "sonner"
 
 
 const AuthContext = React.createContext()
@@ -71,7 +72,7 @@ export function AuthProvider({ children }) {
                   sessionStorage.setItem("Cart",JSON.stringify({[auth.currentUser.email]:data.cart}))
                 }
                 
-                
+                toast.success("log in successfull")
                 
                 
             }else{

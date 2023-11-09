@@ -93,7 +93,7 @@ function AdminProductContainer({code,session}) {//Product,
                 <div className=''>
                     
                     <BrowserView>
-                        <Drawer open={open} onClose={() => setOpen(false)} size='md' >
+                        <Drawer open={open} onClose={() => setOpen(false)} size='lg' >
                             <Drawer.Body className=''>
                                 {DrawerContent}
                             </Drawer.Body>
@@ -103,8 +103,8 @@ function AdminProductContainer({code,session}) {//Product,
                     </BrowserView>
                     <MobileView>
                         <Drawer open={open} onClose={() => setOpen(false)} size='full' >
-                            <Drawer.Body >
-                                <CreateSingleProductContainer code={code} />
+                              <Drawer.Body className=''>
+                                {DrawerContent}
                             </Drawer.Body>
                             
                             
@@ -134,7 +134,7 @@ function AdminProductContainer({code,session}) {//Product,
                                     Create Product
                                 </Button>
                             </ButtonToolbar> */}
-                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setOpen(true);setDrawerContent(<CreateSingleProductContainer code={code} session={session}/>)}}>
+                            <button className="bg-su-green  text-white rounded-md p-1 " onClick={()=>{setOpen(true);setDrawerContent(<CreateSingleProductContainer code={code} session={session} close={()=>{setOpen(false)}}/>)}}>
                                 {/* setshowDrawer(prev=>!prev) */}
                                 Create Product
                             </button>
@@ -170,7 +170,7 @@ function AdminProductContainer({code,session}) {//Product,
                             }}
                             EditLink={`/society/${code}/manage/editproduct`}
                             DeletAPI={`/api/${code}/manage/hideproduct`}
-                            onEdit = {(id)=>{setDrawerContent(<EditProduct  pid={id}/>);setOpen(true)}}
+                            onEdit = {(id)=>{setDrawerContent(<EditProduct  pid={id} close={()=>{setOpen(false)}}/>);setOpen(true)}}
                         />
                     )}
                     {/* <CreateSingleProductContainer code={code}/> */}

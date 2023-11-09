@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react"
 import { useAuth } from "../session"
 import { auth } from "../../utils/firebasefunction"
+import { toast } from "sonner"
 export default function FieldForArray(
     {
         fieldType,
@@ -23,16 +24,12 @@ export default function FieldForArray(
         postAPI,
     }) {
     const [mutilpleField, setmutilpleField] = useState(false) //multipleField: can add new field for multiple input
-    const {currentUser,userDBInfo,loading,setuserDBInfo,Cart,setCart} = useAuth()
+    const {userDBInfo} = useAuth()
     const [FieldValues, setFieldValues] = useState([])
     const [updateMsg, setupdateMsg] = useState("")
-    const fieldPropertyExample ={
-        
-    }
+
 
     // for multiple
-    const [CSS, setCSS] = useState("")
-    const [fieldCounter, setfieldCounter] = useState()
     const [dataSet, setdataSet] = useState([{fieldType:"text",content:""}])
     useEffect(() => { // has has imported values
         let values = []
@@ -47,13 +44,6 @@ export default function FieldForArray(
         }
     }, [fieldValues])
 
-    // useEffect(() => { // while fieldValues changed
-    //     if(returnFunction&&FieldValues){
-    //         returnFunction(index,FieldValues)
-    //     }
-        
-
-    // }, [FieldValues])
     
     const [Submit, setSubmit] = useState(false)
     useEffect(() => {
@@ -96,12 +86,11 @@ export default function FieldForArray(
         
         if (response.ok){
             // updated
-            setupdateMsg("Updated")
             
+            toast.success("Updated")
             
         }else{
-            setupdateMsg("Update Failed")
-            
+            toast.error("Update Failed")
         }  
         
     })
@@ -113,7 +102,7 @@ export default function FieldForArray(
     
     //console.log("field content_type",fieldType)
     return (
-        <div className="w-full">
+        <div className="w-full ">
             
             <div className={className}>
                 <div className="flex flex-row ">
@@ -160,7 +149,7 @@ export default function FieldForArray(
                             /> 
                             {postAPI&&!multipleValue&&(
                                 <button
-                                    className={AddButtonCSS||'p-1 my-2 bg-su-green rounded-md text-white'}
+                                    className={AddButtonCSS||'p-1  bg-web-green rounded-md text-white'}
                                     onClick={()=>{handleSubmit()}}
                                     disabled={Submit}
                                 >
@@ -170,7 +159,7 @@ export default function FieldForArray(
                             {
                                 mutilpleField&&(// Add and Delete Button and for mutilpleField
                                         <button 
-                                            className={DeleteButtonCSS||'p-1  bg-red-600 rounded-md '}
+                                            className={DeleteButtonCSS||'p-1  bg-web-red text-white rounded-md '}
                                             onClick={()=>{handleDelete()}}
                                         >
                                             Delete
@@ -186,21 +175,21 @@ export default function FieldForArray(
                     mutilpleField&&(
                         <div className="">
                             <button
-                                className={AddButtonCSS||'p-1 my-2 bg-blue-600 rounded-md'}
+                                className={AddButtonCSS||'p-1  bg-blue-600 rounded-md'}
                                 onClick={()=>{handleAddField("")}}
                             >
                                 Add 
                             </button>  
                             
                         </div>
-                        
+                        // tmr handle inventory issue
                         
                     )
                 }
                 {
                     postAPI&&multipleValue&&(
                         <button
-                            className={AddButtonCSS||'p-1 my-2 bg-green-600 rounded-md'}
+                            className={AddButtonCSS||'p-1  bg-green-600 rounded-md'}
                             onClick={()=>{handleSubmit()}}
                             disabled={Submit}
                         >
@@ -211,7 +200,7 @@ export default function FieldForArray(
                 <p className="text-red-500">{updateMsg}</p>
             </div>
             
-        </div>
+        </div> 
        
     )
  

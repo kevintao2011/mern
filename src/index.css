@@ -83,6 +83,8 @@ body {
   color: #29C7AC; 
 }
 
+
+
 @layer components {
   .red_btn {
     @apply rounded-full border-red-600 bg-red-600 py-5 px-5 text-white transition-all hover:bg-white hover:text-red-600  
@@ -138,7 +140,7 @@ body {
   }
 
   .field{
-    @apply rounded-md shadow focus:border-blue-400 bg-white p-1
+    @apply rounded-md shadow focus:border-blue-400 bg-white 
   }
   .text{
     @apply font-mincho
@@ -158,6 +160,10 @@ body {
     
     @apply font-mincho aspect-video border-t-su-green border-t-2 text-black rounded-md shadow
     
+  }
+
+  .greenbg{
+    @apply background-color: bg-web-green; 
   }
     
 }

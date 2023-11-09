@@ -4,6 +4,7 @@ import { auth } from '../../utils/firebasefunction';
 import { useNavigate } from 'react-router-dom';
 import { sendEmailVerification } from 'firebase/auth';
 import { useAuth } from '../../components/session';
+import {  toast } from 'sonner';
 const Login = () => {
     
     const navigate = useNavigate();
@@ -74,7 +75,8 @@ const Login = () => {
             //     }
                 
             // });
-            navigate("/home" ,false)
+            navigate("/profile" ,false)
+            
             
         }catch(e){
             auth.signOut()
@@ -226,6 +228,7 @@ const Login = () => {
                         ):(<></>)
                     }
                 </form>
+               
             </div>
             
         )

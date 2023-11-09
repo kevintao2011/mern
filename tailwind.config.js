@@ -16,6 +16,9 @@ module.exports = {
       },
       colors: {
         'su-green': '#20615b',
+        'web-green': '#29C7AC',
+        'web-red': '#C02739',
+        'web-pink': '#E49393',
       },
     },
   },

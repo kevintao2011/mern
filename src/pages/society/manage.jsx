@@ -15,7 +15,8 @@ import MagicIcon from '@rsuite/icons/legacy/Magic';
 import GearCircleIcon from '@rsuite/icons/legacy/GearCircle';
 import ToggleList from '../admin/ToggleList';
 import AdminQuestionairContainer from './questionaire/AdminQuestionairContainer';
-
+// import { useNoti } from '../../components/Contexts/notificationContext';
+import { toast } from 'sonner';
 const Manage = () => {
     const {code} = useParams()
     const [tab, settab] = useState('Activity')
@@ -25,6 +26,7 @@ const Manage = () => {
     const [Order, setOrder] = useState()
     const iconsize = 20;
     const {Soc,currentUser,userDBInfo} = useAuth()
+    // const {popMessage} = useNoti()
     
     const navigate = useNavigate()
     console.log(code)
@@ -314,6 +316,15 @@ const Manage = () => {
 
     }, [Product])
     
+    useEffect(() => {
+        // toast.info('You are now in Society Page',{
+        //     position:"top-right",
+        
+        // });
+        // popMessage("warning","tl","Hiwae awewaeawe aw")
+    }, [])
+    
+    
     const panelStyles = {
         padding: '15px 20px',
         color: '#aaa'
@@ -546,6 +557,7 @@ const Manage = () => {
                 
                 
             </div>
+           
         </div>
     )
 }

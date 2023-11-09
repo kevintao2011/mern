@@ -2,10 +2,17 @@ import React, { useEffect,useState } from 'react'
 import FillForm from '../../../components/FormComponents/FillForm'
 import { postURL } from '../../../utils/fetch'
 import { storage, uploadFile } from '../../../utils/firebasefunction';
-function CreateSingleProductContainer({onExit,code,session}) {
+import { toast } from 'sonner';
+
+  
+function CreateSingleProductContainer({onExit,code,session,close}) {
     const [FormData, setFormData] = useState()
     const [Categories, setCategories] = useState()
-    
+
+    const [Type, setType] = useState('info')
+ 
+
+
     useEffect(() => {
         async function getCategories(){
             await fetch('/api/getcatshownoption', { 
@@ -142,24 +149,34 @@ function CreateSingleProductContainer({onExit,code,session}) {
         data.forEach(field => {
             obj[field.field_name]=field.field_value
         });
-        async function convertAllURL(){
-            
-            
-        }
-        await Promise.all(
-            obj["product_img_url"].map(async (file,index)=>{
-                console.log("upload to",`Product/${code}/${obj["sku"]}/`,`img-${index}`)
-                return await uploadFile(`Product/${code}/${obj["sku"]}/`,`img-${index}`,file,2000)
+        
+        await postURL('/api/getnextsku',true,{code:code}).then(async sku=>{
+            obj.sku=sku
+            await Promise.all(
+                obj["product_img_url"].map(async (file,index)=>{
+                    console.log("obj",obj)
+                    console.log("upload to",`Product/${code}/${code}-${session}-${sku}/`,`img-${index}`)
+                    return await uploadFile(`Product/${code}/${obj["sku"]}/`,`img-${index}`,file,2000)
+                })
+            ).then(async (urls)=>{
+                toast.success("Product has been created successfully")
+
+                obj["product_img_url"]=urls
+                await postURL('/api/createproduct',true,{
+                    code:code,
+                    ...obj
+                }).then((success)=>{
+                    if(success){
+                        toast.success("Product is Created")
+                        close()
+                    }else{
+                        toast.error("Something Wrong")
+                    }
+                })
             })
-        ).then(async (urls)=>{
-            obj["product_img_url"]=urls
-            await postURL('/api/createproduct',true,{
-                code:code,
-                ...obj
-            }).then(
-                console.log("upload Done")
-            )
         })
+        
+        
         
     }
     return (

@@ -14,6 +14,7 @@ import moment from 'moment';
 import { useStaticInfo } from '../components/Contexts/InfoContexts';
 import { Calendar, Loader, Placeholder } from 'rsuite';
 import ActivityCalendar from '../components/ActivityCalendar';
+
 const iconsize = 20;
 const Profile = () => {
   const [ProfileInfo, setProfileInfo] = useState(new Info.ProfileInfo())
@@ -466,6 +467,7 @@ const Profile = () => {
             </div>
           )
         }   
+      
     </div>
   )
 }

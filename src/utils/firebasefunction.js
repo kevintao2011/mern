@@ -22,6 +22,27 @@ import { getStorage , connectStorageEmulator,ref,uploadBytes,listAll,list ,getDo
 
   
 //   };
+
+/*
+    ref obj example
+
+    Object { _service: {…}, _location: {…} }
+
+    _location: Object { bucket: "website-10a80.appspot.com", path_: "Product/207/207-30-02" }
+    ​​
+    bucket: "website-10a80.appspot.com"
+    ​​
+    path_: "Product/207/207-30-02"
+    ​​
+    <prototype>: Object { … }
+    ​
+    _service: Object { _firebaseVersion: "9.23.0", _host: "127.0.0.1:9199", _protocol: "http", … }
+    ​
+    <prototype>: Object { … }
+    EditProduct.jsx:102
+
+
+*/
 const firebaseConfig = {
 
     apiKey: "AIzaSyDbbnw-dv3GdWcL80A3ArLuYG4XADXpQWU",
@@ -146,8 +167,32 @@ export function checkFileSize(e,limitinKb){
     
 } 
 // firebase cloud storage 
-
-
+/*
+const paragraph = 'http://127.0.0.1:9199/v0/b/website-10a80.appspot.com/o/Product%2F207%2Fundefined%2Fimg-0.webp?alt=media&token=40b705fb-60e9-4d92-93c7-e75f4b693672';
+const regex = /img-\w/g;
+const found = paragraph.match(regex);
+*/
+export function analyzeURL(url,target){
+    //e.g http://127.0.0.1:9199/v0/b/website-10a80.appspot.com/o/Product%2F207%2Fundefined%2Fimg-0.webp?alt=media&token=40b705fb-60e9-4d92-93c7-e75f4b693672
+    var regex
+    switch (target) {
+        
+        case "filename":
+            regex = /img-\w/g;
+            return url.slice(url.search(regex)).split("?")[0]
+        case "dir":
+            regex = /Product/g;
+            return url.slice(url.search(regex)).split("?")[0].replaceAll("%2F","/")
+        case "index":
+            regex = /img-\w/g;
+            return url.slice(url.search(regex)).split(".")[0].split("-")[1]
+        default://dir
+            regex = /Product/g;
+            return url.slice(url.search(regex)).split("?")[0].replaceAll("%2F","/")
+    }
+    
+    
+} 
 
 
 
