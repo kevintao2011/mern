@@ -61,9 +61,12 @@ const Profile = () => {
 
   async function getMembership(){
     
-    await postURL("/api/getusermembership",true).then(v=>{
-      console.log("membershipdata:",v)
-      setMemberships(v)
+    await postURL("/api/getusermembership",true).then(result=>{
+      if(result.success){
+        console.log("membershipdata:",result.data)
+        setMemberships(result.data)
+      }
+      
     })
     
   }

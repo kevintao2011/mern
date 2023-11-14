@@ -23,6 +23,19 @@ function ProductCombination({productData,update}) {
         const l = findCombinations(variantOptions)
         console.log("l: ",l)
         setPriceList(l)
+        if(!productData.data){
+            update("data", {})
+        }else{
+            l.forEach(subProdName=>{
+                const searchList = Object.keys(productData.data)
+                const match =  new RegExp(`${subProdName}`,"gm") 
+                if(searchList.findIndex(([val]) => match.test(val))=== -1){
+                    productData.data[subProdName] = {quantity:0,price:0}
+                }
+            })
+            update("data", productData.data)
+            
+        }
     }, [Option])
     
     useEffect(() => {

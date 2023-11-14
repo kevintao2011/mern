@@ -12,12 +12,60 @@ async function postURL(postURL,needToken=false,data={}){
     if(needToken){
         return await auth.currentUser.getIdToken().then(async token=>{
             console.log("token",token,"Data",data)
+            try {
+                return await fetch (postURL,
+                {
+                    method:"POST",
+                    body:JSON.stringify({
+                        user:{
+                            token:token
+                        },
+                        data
+                    }),
+                    data:data,
+                    headers: {
+                        "Content-Type": "application/json",
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        mode:'cors'
+                    
+                }).then(async response =>{
+                    
+                    if(response.ok){
+                        
+                        return await response.json().then(data=>{
+                            console.log("(Authed)requested data of",postURL,data)
+                            return data
+                        })
+                        
+                    }else{
+                        return await response.json().then(data=>{
+                            console.log("request failed",postURL,data.data)
+                            return data
+                        })
+                    }
+                })
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    return {success:false,data:error.name}
+                } else {
+                    return {success:false,data:error.name}
+                }
+            
+            }
+            
+        }
+            
+    
+        )
+    }else{
+        try {
             return await fetch (postURL,
             {
                 method:"POST",
                 body:JSON.stringify({
                     user:{
-                        token:token
+                        token:"token"
                     },
                     data
                 }),
@@ -30,46 +78,27 @@ async function postURL(postURL,needToken=false,data={}){
                 
             }).then(async response =>{
                 if(response.ok){
-                    console.log("fetched Data from",postURL)
-                    const data = await response.json()
-                    console.log("data using fetch",data.data)
-                    return data.data
+                        
+                    return await response.json().then(data=>{
+                        console.log("requested data of",postURL,data.data)
+                        return data
+                    })
+                    
                 }else{
-                    console.log("failed fetch user")
-                    return false
+                    return await response.json().then(data=>{
+                        console.log("request failed",postURL,data.data)
+                        return data
+                    })
                 }
-            })}
-            
-    
-        )
-    }else{
-        return await fetch (postURL,
-        {
-            method:"POST",
-            body:JSON.stringify({
-                user:{
-                    token:"token"
-                },
-                data
-            }),
-            data:data,
-            headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                mode:'cors'
-            
-        }).then(async response =>{
-            if(response.ok){
-                console.log("fetched Data from",postURL)
-                const data = await response.json()
-                console.log("data",data.data)
-                return data.data
-            }else{
-                console.log("failed fetch user")
-                return false
+            })
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                return {success:false,data:error.name}
+            } else {
+                return {success:false,data:error.name}
             }
-        })
+        }
+        
     }
     
     

@@ -19,24 +19,28 @@ export function InfoProvider({ children }) {
     
     async function getStaticInfo(){
         if(loading){
-            await postURL("/api/websitestaticinfo",false,{}).then(docs=>{
-                docs.forEach(doc=>{
-                    if(doc.id==="registerDeclaration"){
-                        setPrivacyPage(doc.content)
-                    }
-                    else if (doc.id==="socMap"){
-                        console.log("Soc Map is set to",doc.content)
-                        setSocMap(doc.content)
-                    }
-                    else if (doc.id==="latestActivities"){
-                        setlatestActivities(doc.content)
-                    }
-                    else if (doc.id==="registerDeclaration"){
-                        setlatestNews(doc.content)
-                    }
-                })
+            await postURL("/api/websitestaticinfo",false,{}).then(result=>{
+                if(result.success){
+                    const docs = result.data
+                    docs.forEach(doc=>{
+                        if(doc.id==="registerDeclaration"){
+                            setPrivacyPage(doc.content)
+                        }
+                        else if (doc.id==="socMap"){
+                            console.log("Soc Map is set to",doc.content)
+                            setSocMap(doc.content)
+                        }
+                        else if (doc.id==="latestActivities"){
+                            setlatestActivities(doc.content)
+                        }
+                        else if (doc.id==="registerDeclaration"){
+                            setlatestNews(doc.content)
+                        }
+                    })
 
-                setloading(false)
+                    setloading(false)
+                }
+                
             })
         }
         

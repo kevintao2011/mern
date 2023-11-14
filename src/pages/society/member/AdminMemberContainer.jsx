@@ -117,7 +117,11 @@ function AdminMemberContainer({Member,code}) {
                                         sid:AddSIDField,
                                         code:code
                                     }
-                                )}}
+                                ).then(result=>{
+                                    if(result.success){
+                                        
+                                    }
+                                })}}
                              >
                                 Add
                              </button >

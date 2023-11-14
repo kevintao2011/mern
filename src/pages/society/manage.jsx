@@ -15,6 +15,7 @@ import MagicIcon from '@rsuite/icons/legacy/Magic';
 import GearCircleIcon from '@rsuite/icons/legacy/GearCircle';
 import ToggleList from '../admin/ToggleList';
 import AdminQuestionairContainer from './questionaire/AdminQuestionairContainer';
+import AdminStockContainer from './stock/AdminStockContainer';
 // import { useNoti } from '../../components/Contexts/notificationContext';
 import { toast } from 'sonner';
 const Manage = () => {
@@ -377,7 +378,7 @@ const Manage = () => {
           },
           "虛擬貨倉 Virtual Inventory":{ 
             expanded:true,
-            value:"Inventory",
+            value:"Stock",
             subIndex:{
               
               
@@ -527,6 +528,11 @@ const Manage = () => {
                         )}
                         {tab==="Questionaires"&&(
                             <AdminQuestionairContainer
+                                code={code}
+                            />
+                        )}
+                        {tab==="Stock"&&(
+                            <AdminStockContainer
                                 code={code}
                             />
                         )}

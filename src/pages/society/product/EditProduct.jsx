@@ -30,10 +30,17 @@ function EditProduct({pid,close}) {
     const navigate = useNavigate();
     async function getproduct(){
         console.log("fetch")
-        await postURL("/api/editsocproduct",true,{id:pid}).then(prod=>{
-            console.log("prod",prod)
-            setProduct({...prod})
-            setOriginal(shallowCopy(prod))
+        await postURL("/api/editsocproduct",true,{id:pid}).then(result=>{
+            console.log("editing prod",{...result.data})
+            if(result.success){
+                const prod = result.data
+                console.log("prod",prod)
+                setProduct(prod)
+                setOriginal(shallowCopy(prod))
+            }else{
+                toast.error(result.data)
+            }
+            
 
         })
     } 
@@ -159,12 +166,19 @@ function EditProduct({pid,close}) {
                 })
             })
         }
-        await postURL("/api/updateproduct",true,Product).then(()=>{
-            toast.success("Product Information Updated",{
-                duration:3000
-            })
-            setProduct({...Product})
-            close()
+        await postURL("/api/updateproduct",true,Product).then((result)=>{
+            if(result.success){
+                toast.success("Product Information Updated",{
+                    duration:3000
+                })
+                setProduct({...Product})
+                close()
+            }else{
+                toast.error(result.data,{
+                    duration:3000
+                })
+            }
+            
         })
         
     }

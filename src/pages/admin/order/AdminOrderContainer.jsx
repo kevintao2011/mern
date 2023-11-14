@@ -5,7 +5,9 @@ function AdminOrderContainer({code}) {
     const [Order, setOrder] = useState()
     async function getOrders(){
         await postURL("/api/getordersbysoc",true,{code:code}).then(result=>{
-            setOrder(result)
+            if(result.success){
+                setOrder(result)
+            }
         })
     }
     useEffect(() => {

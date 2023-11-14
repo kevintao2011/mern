@@ -150,30 +150,38 @@ function CreateSingleProductContainer({onExit,code,session,close}) {
             obj[field.field_name]=field.field_value
         });
         
-        await postURL('/api/getnextsku',true,{code:code}).then(async sku=>{
-            obj.sku=sku
-            await Promise.all(
-                obj["product_img_url"].map(async (file,index)=>{
-                    console.log("obj",obj)
-                    console.log("upload to",`Product/${code}/${code}-${session}-${sku}/`,`img-${index}`)
-                    return await uploadFile(`Product/${code}/${obj["sku"]}/`,`img-${index}`,file,2000)
+        await postURL('/api/getnextsku',true,{code:code,session:session}).then(async result=>{
+            console.log("result",result)
+            if(result.success){
+                const sku = result.data
+                obj.sku=sku
+                toast(sku)
+                await Promise.all(
+                    obj["product_img_url"].map(async (file,index)=>{
+                        console.log("obj",obj)
+                        console.log("upload to",`Product/${code}/${sku}/`,`img-${index}`)
+                        return await uploadFile(`Product/${code}/${sku}/`,`img-${index}`,file,2000)
+                    })
+                ).then(async (urls)=>{
+                    toast.success("Photo created successfully")
+                    obj["product_img_url"]=urls
+                    await postURL('/api/createproduct',true,{
+                        code:code,
+                        ...obj
+                    }).then((result)=>{
+                        if(result.success){
+                            console.log("result",result)
+                            toast.success(result.data)
+                            close()
+                        }else{
+                            toast.error(result.data)
+                        }
+                    })
                 })
-            ).then(async (urls)=>{
-                toast.success("Product has been created successfully")
-
-                obj["product_img_url"]=urls
-                await postURL('/api/createproduct',true,{
-                    code:code,
-                    ...obj
-                }).then((success)=>{
-                    if(success){
-                        toast.success("Product is Created")
-                        close()
-                    }else{
-                        toast.error("Something Wrong")
-                    }
-                })
-            })
+            }else{
+                toast.error("(outside)cannot get sku")
+            }     
+            
         })
         
         
