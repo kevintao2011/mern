@@ -8,7 +8,7 @@ import AdminActivityContainer from './Activity/AdminActivityContainer';
 import AdminMemberContainer from './member/AdminMemberContainer';
 import AdminOrderContainer from '../admin/order/AdminOrderContainer';
 import AdminSocietyInfoPage from './SocietyInfo/AdminSocietyInfoPage';
-import { Sidenav, Nav } from 'rsuite';
+import { Sidenav, Nav, InputPicker } from 'rsuite';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import GroupIcon from '@rsuite/icons/legacy/Group';
 import MagicIcon from '@rsuite/icons/legacy/Magic';
@@ -434,23 +434,41 @@ const Manage = () => {
                         管理頁面 Pages
                     </div>
                 </div>
-                
-                <div className='bg-white  grid grid-cols-5 text-sm ' >
-                    {
-                        Object.keys(Indexs).map(index=>{
-                            return (
-                                <button
-                                    onClick={()=>{settab(Indexs[index].value)}}
-                                    className='text-start mx-2'
-                                >
-                                    {index}
-                                </button>
+                { 
+                    window.innerWidth<720?(
+                        <div>
+                             <InputPicker 
+                                data={Object.keys(Indexs).map(index=>{
+                                    return (
+                                        {label:index ,value:Indexs[index].value}
+                                    )  
+                                })}
+                                className={'text-black font-base'}
+                                onChange={(e)=>settab(e)}
                                 
-                            )  
-                        })
-                    }
-                    
-                </div>
+                            />
+                        </div>
+                    ):(
+                        <div className='bg-white  grid grid-cols-5 text-sm ' >
+                            {
+                                Object.keys(Indexs).map(index=>{
+                                return (
+                                            <button
+                                                onClick={()=>{settab(Indexs[index].value)}}
+                                                className='text-start mx-2'
+                                            >
+                                                {index}
+                                            </button>
+                                            
+                                        )  
+                                    })
+                            }
+                            
+                        </div>
+                    )
+                }
+               
+                
             </div>
             <div className="flex flex-col  shadow  rounded-xl p-5 text-base border-2">
                 <div className="profile   flex flex-row ">

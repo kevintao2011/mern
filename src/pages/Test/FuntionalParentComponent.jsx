@@ -1,12 +1,24 @@
 import React, { useState,useEffect, Component } from 'react'
 import FunctionalChildComponent from './FunctionalChildComponent'
+import { RGBHex2Dec, getRGBPerceivedBrightness } from '../../utils/colorFunction'
 const FuntionalParentComponent = () => {
     
     const [parNum, setparNum] = useState(0)
     const [Content, setContent] = useState([])
     const [Clicked, setClicked] = useState(false)
-
-
+    const [ColorArray, setColorArray] = useState(["#29C7AC","#28BCA3","#27B09A","#26A591","#259A88","#248E7F","#238376","#22786D","#216C64","#20615B"])
+    const backgroundColor = 'bg-#FF0000'; 
+    useEffect(() => {
+        const colors = ["#29C7AC","#28BCA3","#27B09A","#26A591","#259A88","#248E7F","#238376","#22786D","#216C64","#20615B"]
+        colors.forEach(color=>{
+            console.log(color)
+            console.log(RGBHex2Dec(color))
+            console.log(getRGBPerceivedBrightness(color))
+        })
+        console.log(getRGBPerceivedBrightness("#E49393"))
+        
+    }, [])
+    
     useEffect(() => {
         function updateForm(){
             let data = []
@@ -36,7 +48,7 @@ const FuntionalParentComponent = () => {
     
     return (
         <div className="">
-            <div>FuntionalParentComponent</div>
+            {/* <div>FuntionalParentComponent</div>
             <button onClick={()=>{
                     setparNum(parNum-1);
                     console.log(parNum);
@@ -64,7 +76,23 @@ const FuntionalParentComponent = () => {
                 Content.map((c,i)=>{
                    return (<FunctionalChildComponent number={c} index={i} deleteFunction={handleRemove} />)
                 })
-            }
+            } */}
+            <div className="">Test Page</div>
+            <div className={`w-full grid grid-cols-${ColorArray.length}`}>
+                {
+                    ColorArray.map(color=>{
+                        return(
+                            <div className={`bg-${color} bg-red-100  h-2 w-full`}>
+                                
+                            </div>
+                            
+                        )
+                    })
+                }
+            </div>
+            <div className={`${backgroundColor} bg-#FF0000 h-2 w-full`}>
+                This div will have the specified background color using the hex code.
+            </div>
         </div>
     )
 }
