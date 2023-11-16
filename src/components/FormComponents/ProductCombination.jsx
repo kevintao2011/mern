@@ -62,7 +62,9 @@ function ProductCombination({productData,update}) {
     function findCombinations(arrays) { 
         function backtrack(currCombination, remainingArrays) {
             if (remainingArrays.length === 0) {
-            combinations.push(currCombination.join(' '));//join('_')
+                if(currCombination.join(' ')!==""){
+                    combinations.push(currCombination.join(' '));//join('_')
+                }
             return;
             }
         
@@ -123,6 +125,7 @@ function ProductCombination({productData,update}) {
                                 <button className='text-red-600' 
                                     onClick={()=>{
                                         Option[index]["option"].splice(i,1)
+                                        console.log("option",Option)
                                         updateOptionChoice([...Option])
                                         setOption([...Option])
                                     }}
@@ -159,6 +162,7 @@ function ProductCombination({productData,update}) {
                                 Option.push({text:optionInput,option:[]})
                                 console.log("Option",Option)
                                 update("option",[...Option])
+                                
                                 setOption([...Option])
                                 setoptionInput("")
                             }
@@ -182,7 +186,9 @@ function ProductCombination({productData,update}) {
                                         <button
                                             onClick={()=>{
                                                 Option.splice(index,1);
+                                                console.log("option",Option)
                                                 update("option",[...Option])
+
                                                 setOption([...Option])
                                             }}
                                             className='text-red-600'

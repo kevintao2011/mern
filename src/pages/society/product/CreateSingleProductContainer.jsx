@@ -3,6 +3,7 @@ import FillForm from '../../../components/FormComponents/FillForm'
 import { postURL } from '../../../utils/fetch'
 import { storage, uploadFile } from '../../../utils/firebasefunction';
 import { toast } from 'sonner';
+import { findCombinations } from '../../../utils/basicFunction';
 
   
 function CreateSingleProductContainer({onExit,code,session,close}) {
@@ -149,7 +150,13 @@ function CreateSingleProductContainer({onExit,code,session,close}) {
         data.forEach(field => {
             obj[field.field_name]=field.field_value
         });
-        
+        const OptionsArr = obj.product_list.option.map(opt=>{
+            return opt.option
+        })  
+        const filterList = findCombinations(OptionsArr)      
+        Object.keys(obj.product_list.data).filter(name=>!filterList.includes(name)).forEach(k=>{
+            delete obj.product_list.data[k]
+        })
         await postURL('/api/getnextsku',true,{code:code,session:session}).then(async result=>{
             console.log("result",result)
             if(result.success){

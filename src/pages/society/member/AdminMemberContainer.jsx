@@ -53,8 +53,12 @@ function AdminMemberContainer({Member,code}) {
             }
         })
     }
+    function fetchMembershipProduct(){
+
+    }
     useEffect(() => {
         fetchMemberList()
+        fetchMembershipProduct()
     }, [])
 
     useEffect(() => {
@@ -74,6 +78,8 @@ function AdminMemberContainer({Member,code}) {
                     <button className="bg-green-600 p-1 rounded-md text-white text-sm">Update</button>
                 </div>
             </div>
+
+            {/* Add Member */}
             <div className="w-full flex flex-row justify-center">
                 <div className="w-1/2 flex flex-row">
                     
@@ -95,7 +101,7 @@ function AdminMemberContainer({Member,code}) {
                 
                 
             </div>
-
+            {/* Member List */}
             {
                 MemberList&&(
                     <div className="flex flex-col ">

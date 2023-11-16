@@ -6,6 +6,7 @@ import { auth } from '../../../utils/firebasefunction'
 import SearchTool from '../../../components/table/SearchTool'
 import { BrowserView, MobileView } from 'react-device-detect'
 import CreateStockContainer from './CreateStockContainer'
+import StockCard from './StockCard'
 
 function AdminStockContainer({code}) {
     const [Stocks, setStocks] = useState()
@@ -14,6 +15,7 @@ function AdminStockContainer({code}) {
     const [InputMap, setInputMap] = useState([])//[...{label: sku+name ,value: sku}]
     const [SelectedProduct, setSelectedProduct] = useState() //SKU
     const [showDrawer, setshowDrawer] = useState(false)
+    const [DrawerContent, setDrawerContent] = useState(<></>)
     const [open, setOpen] = useState(false);
     useEffect(() => {
         postURL('/api/findsocietystock',true,{code:code}).then(result=>{
@@ -117,15 +119,28 @@ function AdminStockContainer({code}) {
                 <MobileView>
                     <Drawer open={open} onClose={() => setOpen(false)} size='full' >
                             <Drawer.Body className=''>
-                            <CreateStockContainer close={()=>{setOpen(false)}} Product={SelectedProduct}/>
-                        </Drawer.Body>
+                            {DrawerContent}
+                    </Drawer.Body>
                         
                         
                     </Drawer>
                 </MobileView>
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-row gap-2">
-                        <InputPicker data={InputMap} placeholder={"Select a product here"} onChange={(e)=>{setSelectedProduct(Product[e]);updateFilter(e)}} size='sm'/>
+                        <InputPicker data={InputMap} placeholder={"Select a product here"} 
+                            onChange={
+                                (e)=>{  setSelectedProduct(Product[e]);
+                                        updateFilter(e)
+                                        setDrawerContent(
+                                            <CreateStockContainer close={()=>{
+                                                setOpen(false)
+                                                setDrawerContent(<></>)
+                                            }} Product={Product[e]}/>
+                                        )
+                                    }
+                            } 
+                        size='sm'
+                        />
                         {
                             SelectedProduct&&(
                                 <div className="flex flex-col justify-center">
@@ -140,7 +155,7 @@ function AdminStockContainer({code}) {
                         {
                             SelectedProduct&&(
                                 <div className="Product Profile">
-                                    <div className="grid grid-cols-4 gap-2">
+                                    <div className="grid grid-cols-6 gap-2">
                                         {/* {
                                             SelectedProduct.options.map(optionObj=>{
                                                 return(
@@ -160,7 +175,7 @@ function AdminStockContainer({code}) {
                                         {
                                             SelectedProduct.product_list.map(subproduct=>{
                                                 return(
-                                                    <div className="card">
+                                                    <div className=" border-gray-200 border-t-su-green border-t-2 rounded-md p-1">
                                                         <div className="">{subproduct.name}</div>
                                                         <div className="">SKU {subproduct.sku}</div>
                                                         <div className="">Total Sales {subproduct.total_sales} </div>
@@ -190,30 +205,7 @@ function AdminStockContainer({code}) {
                             {
                                 SelectedStock.map(s=>{
                                     return(
-                                        <div className="w-full rounded-md shadow border-gray-200 p-1 border-t-su-green border-t-4 grid md:grid-cols-2 grid-cols-1">
-                                            <div className="">
-                                                <div className="underline font-bold">{s.sku}</div>
-                                                <div className="flex flex-row justifty-between">
-                                                    貨存 {s.spot_goods?("In Stock"):("需要預訂 Require Order")}
-                                                </div>
-                                                <div className="flex flex-row justifty-between">
-                                                    建立者 Created by {s.created_by.sid}
-                                                </div>
-                                                <div className="flex flex-row justifty-between">
-                                                    買家 Owner {s.owner?(s.owner):(" / ")}
-                                                </div>
-                                                <div className="flex flex-row justifty-between gap-2">
-                                                    狀態 
-                                                    <div className={`${s.status==="for-sale"?'text-green-500':''}`}>
-                                                        {s.status}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <div className="">Remark 備註</div>
-                                            </div>
-
-                                        </div>
+                                        <StockCard stock={s}/>
                                     )
                                 })
                             }
