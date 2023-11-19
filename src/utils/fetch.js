@@ -1,3 +1,4 @@
+import { toast } from "sonner"
 import { useAuth } from "../components/session"
 import { auth } from "./firebasefunction"
 
@@ -30,20 +31,25 @@ async function postURL(postURL,needToken=false,data={}){
                         mode:'cors'
                     
                 }).then(async response =>{
-                    
-                    if(response.ok){
+                    try {
+                        if(response.ok){
                         
-                        return await response.json().then(data=>{
-                            console.log("(Authed)requested data of",postURL,data)
-                            return data
-                        })
-                        
-                    }else{
-                        return await response.json().then(data=>{
-                            console.log("request failed",postURL,data.data)
-                            return data
-                        })
+                            return await response.json().then(data=>{
+                                console.log("(Authed)requested data of",postURL,data)
+                                return data
+                            })
+                            
+                        }else{
+                            return await response.json().then(data=>{
+                                console.log("request failed",postURL,data.data)
+                                return data
+                            })
+                        }
+                    } catch (error) {
+                        console.log(error)
+                        toast.warning(error.name)
                     }
+                    
                 })
             } catch (error) {
                 if (error.name === 'AbortError') {
