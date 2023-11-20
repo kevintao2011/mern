@@ -19,7 +19,7 @@ function AdminMemberContainer({Member,code}) {
     const [MemberList, setMemberList] = useState()
     const [AddSIDField, setAddSIDField] = useState()
     const [MembershipFee, setMembershipFee] = useState()
-    const [Membership, setMembership] = useState(true)
+    const [Membership, setMembership] = useState(false)
     const [Creating, setCreating] = useState(false)
     const [NewMemberType, setNewMemberType] = useState({
             "name": "",
@@ -27,7 +27,7 @@ function AdminMemberContainer({Member,code}) {
     })
     async function updateMembershipProductList(newOrOldsubDoc){
         try{ //{product:Membership,newSubprod:NewMemberType}
-            await postURL('/api/addmembertype',true,newOrOldsubDoc).then(result=>{
+            await postURL('/api/addmembertype',true,{doc:{...newOrOldsubDoc},sku:Membership.sku}).then(result=>{
                 if(result.succes){
                     setMembership(result.data)
                     return result.succes
@@ -36,8 +36,8 @@ function AdminMemberContainer({Member,code}) {
                     return result.succes
                 }
             })
-        }catch{
-            toast.error("Failed to create new membership type")
+        }catch(error){
+            toast.error(error.name)//"Failed to create new membership type"
         }
         
     }
@@ -100,12 +100,13 @@ function AdminMemberContainer({Member,code}) {
         <div className="flex flex-col text-sm gap-2 my-2">
             {/* List for membership information */}
             {
-                Membership?(
-                    <div className="w-full border-2 border-t-su-green border-t-2 rounded-md p-1">
-                        <div className="flex flex-row gap-2 ">
+                Membership?(//Membership
+                    <div className="w-full border-2 border-t-su-green border-t-2 rounded-md ">
+                        <div className="flex flex-col gap-1">
+                            <div className="flex flex-row gap-2 ">
                             <div className="text-lg font-bold ">會費資料</div>
                             <div className="">
-                                <button onClick={()=>{setCreating(true)}} className='my-0.5 p-0.5 bg-su-green rounded-md text-white'>New type</button>
+                                <button onClick={()=>{setCreating(true)}} className='my-0.5 p-0.5 bg-su-green rounded-md text-white'>添加 Add </button>
                             </div>
                             {
                                 Creating&&(
@@ -129,54 +130,83 @@ function AdminMemberContainer({Member,code}) {
                             <div className="">會員類型</div>
                             <div className="">會費</div>
                             <div className=""></div>
-                            <div className="">基本會員</div>
-                            <div className="">$30</div>
-                            <div className="flex flex-row justify-center">
-                                <button 
-                                    className='rounded-md bg-web-green text-sm text-white my-0.5 px-1' 
-                                    onClick={()=>{setCreating(false)}}
-                                >
-                                    Update
-                                </button>
-                            </div>
-                            
+                            {
+                                Membership.product_list.map((memprod,i)=>{
+                                    return(
+                                        <>
+                                       
+                                            <input 
+                                                type="text" 
+                                                className='rounded-md border' 
+                                                defaultValue={memprod.name}
+                                                name="" 
+                                                id="" 
+                                                onChange={(e)=>{
+                                                    memprod.product_list[i].name=e.target.value
+                                                }}
+                                            />
+                                            <input 
+                                                type="number" 
+                                                className='rounded-md border' 
+                                                name="" 
+                                                id="" 
+                                                defaultValue={memprod.price}
+                                                onChange={
+                                                    (e)=>{memprod.product_list[i].price=e.target.value
+                                                }}
+                                            />
+                                            <div className="">
+                                                <button 
+                                                    className='bg-su-green p-1 text-white rounded-md'
+                                                onClick={()=>{}}
+                                                >
+                                                    Update
+                                                </button>
+                                            </div>
+                                        </>
+                                    )
+                                })
+                            }
+                            {
+                                Creating&&(
+                                    <>
+                                        <input type="text" placeholder='New Type' defaultValue={NewMemberType.name} name="" id=""  className='rounded-md border ' onChange={(e)=>{
+                                            NewMemberType.name=e.target.value
+                                            setNewMemberType({...NewMemberType})
+                                        }}/>
+                                        <input type="number" placeholder='Price' defaultValue={NewMemberType.price} name="" id="" className='rounded-md border ' onChange={(e)=>{
+                                            NewMemberType.price=e.target.value
+                                            setNewMemberType({...NewMemberType})
+                                        }}/>
+                                        <div className="flex flex-row justify-start">
+                                            <button  className="rounded-md bg-blue-600 text-sm text-white p-1" onClick={
+                                                async ()=>{
+                                                    setCreating(false);
+                                                    await updateMembershipProductList({...NewMemberType}).then(success=>{
+                                                        if(success){
+                                                            setNewMemberType({
+                                                                "name": "",
+                                                                "price": 0,
+                                                            })
+                                                        }else{
+                                                            
+                                                        }
+                                                    })
+                                                    
+                                                }
+                                            }>
+                                                Add
+                                            </button>
+                                        </div>
+                                    </>   
+                                    
+                                )
+                            }
                             
                         </div> 
-                        {
-                            Creating&&(
-                                <div className="grid grid-cols-3">
-                                    <input type="text" placeholder='New Type' defaultValue={NewMemberType.name} name="" id=""  className='rounded-md border me-2' onChange={(e)=>{
-                                        NewMemberType.name=e.target.value
-                                        setNewMemberType({...NewMemberType})
-                                    }}/>
-                                    <input type="number" placeholder='Price' defaultValue={NewMemberType.price} name="" id="" className='rounded-md border me-2' onChange={(e)=>{
-                                        NewMemberType.price=e.target.value
-                                        setNewMemberType({...NewMemberType})
-                                    }}/>
-                                    <div className="flex flex-row justify-center">
-                                        <button  className="rounded-md bg-blue-600 text-sm text-white my-0.5 px-1" onClick={
-                                            async ()=>{
-                                                setCreating(false);
-                                                await updateMembershipProductList({NewMemberType}).then(success=>{
-                                                    if(success){
-                                                        setNewMemberType({
-                                                            "name": "",
-                                                            "price": 0,
-                                                        })
-                                                    }else{
-                                                        
-                                                    }
-                                                })
-                                                
-                                            }
-                                        }>
-                                            Add
-                                        </button>
-                                    </div>
-                                    
-                                </div>
-                            )
-                        }
+                        
+                        </div>
+                        
                     </div>
                     
                 ):(
@@ -185,7 +215,18 @@ function AdminMemberContainer({Member,code}) {
                             <div className="">No MemberShip Yet</div>
                         </div>
                         <div className="w-full flex flex-row justify-center">
-                            <button className="bg-su-green text rounded-md text-white px-1">Create</button>
+                            <button 
+                            onClick={async()=>{
+                                await postURL("/api/createmembershipproduct",true,{code:code})
+                                .then(result=>{
+                                if(result.success){
+                                    
+                                }else{
+                                    toast(result.data)
+                                }
+                                })
+                            }} 
+                            className="bg-su-green text rounded-md text-white px-1">Create</button>
                         </div>
                     </div>
                 )
