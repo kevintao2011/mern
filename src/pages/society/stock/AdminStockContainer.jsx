@@ -6,6 +6,7 @@ import { auth } from '../../../utils/firebasefunction'
 import SearchTool from '../../../components/table/SearchTool'
 import { BrowserView, MobileView } from 'react-device-detect'
 import CreateStockContainer from './CreateStockContainer'
+
 import StockCard from './StockCard'
 
 function AdminStockContainer({code}) {
@@ -125,6 +126,7 @@ function AdminStockContainer({code}) {
                         
                     </Drawer>
                 </MobileView>
+             
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-row gap-2">
                         <InputPicker data={InputMap} placeholder={"Select a product here"} 

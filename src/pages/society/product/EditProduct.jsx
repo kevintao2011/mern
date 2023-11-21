@@ -474,7 +474,8 @@ function EditProduct({pid,close}) {
                                             return(
                                                 <div className="grid grid-cols-4 gap-2">
                                                     <div className="">{subproduct.name}</div>
-                                                    <input type="number" name="" id="" value={subproduct.quantity} 
+                                                    <input type="number" 
+                                                    disabled={!subproduct.is_limited} name="" id="" value={subproduct.quantity} 
                                                         onChange={(e)=>{
                                                             Product.product_list[i].quantity=e.target.value
                                                             setProduct({...Product})

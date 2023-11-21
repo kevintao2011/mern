@@ -67,7 +67,7 @@ function EntryTable({headings,rowValues=[],update}) {
                         ()=>{
                             const rowData = {}
                             headings.forEach(h=>{
-                                rowData[h]=""
+                                    rowData[h]=""
                             })
                             rowValues.push(rowData)
                             update(rowValues)

@@ -3,11 +3,41 @@ import { SelectPicker } from 'rsuite'
 
 
 
-function RolesField(value,onChange) {
-
+function RolesField({subprods,onChange}) {
+    console.log("subprods",subprods)
     return (
-        
-        <></>
+        <div className="">
+            <div className="grid grid-cols-3 gap-2">
+                <div className="">
+                    Role
+                </div>
+                <div className="">
+                    Price
+                </div>
+                <div className="">
+                    Quantity
+                </div>
+                {
+                    subprods.map(subprod=>{
+                        return(
+                        <>
+                            <input type="text" defaultValue={subprod.price} name="" id="" />
+                            <input type="number" defaultValue={subprod.price} name="" id="" />
+                            <input type="number" defaultValue={subprod.quantity} name="" id=""/>  
+                        </>
+                        )
+                    })
+                }
+                <div className=""></div>
+                <button 
+                    className="w-full bg-blue-600 text-center text-white rounded-md"
+                    onClick={()=>{subprods.push({name:"",price:0,quantity:0});onChange(subprods)}}
+                >
+                    Add
+                </button>
+                <div className=""></div>
+            </div>
+        </div>
     )
 }
 

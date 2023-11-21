@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import SearchTool from '../../../components/table/SearchTool'
-import { ButtonToolbar,Button } from 'rsuite'
+import { ButtonToolbar,Button, Toggle } from 'rsuite'
 import { useAuth } from '../../../components/session'
 import FillForm from '../../../components/FormComponents/FillForm'
 import ListTable from '../../../components/FormComponents/ListTable'
@@ -25,15 +25,18 @@ function AdminMemberContainer({Member,code}) {
             "name": "",
             "price": 0,
     })
+    async function changeProductPublish(sku,b){
+
+    }
     async function updateMembershipProductList(newOrOldsubDoc){
         try{ //{product:Membership,newSubprod:NewMemberType}
             await postURL('/api/addmembertype',true,{doc:{...newOrOldsubDoc},sku:Membership.sku}).then(result=>{
-                if(result.succes){
+                if(result.success){
+                    toast.success("Updated Membership")  
                     setMembership(result.data)
-                    return result.succes
                 }else{
+                    console.log("why failed",result)
                     toast.error(result.data)
-                    return result.succes
                 }
             })
         }catch(error){
@@ -77,12 +80,14 @@ function AdminMemberContainer({Member,code}) {
         })
     }
     async function fetchMembershipProduct(){
-        await postURL("/api/gettypeproduct",true,{code:code,category:"membership"}).then(MembershipProduct=>{
-            if(MembershipProduct===null){
-                console.log("MembershipProduct",MembershipProduct)
-            }else{
+        await postURL("/api/gettypeproduct",true,{code:code,category:"membership"}).then(result=>{
+            if(result.success){
+                const MembershipProduct = result.data
                 setMembership(MembershipProduct)
+            }else{
+                toast.warning("error")
             }
+            
             
         })
     }
@@ -107,6 +112,7 @@ function AdminMemberContainer({Member,code}) {
                             <div className="text-lg font-bold ">會費資料</div>
                             <div className="">
                                 <button onClick={()=>{setCreating(true)}} className='my-0.5 p-0.5 bg-su-green rounded-md text-white'>添加 Add </button>
+                                <Toggle defaultChecked={Membership.published} onClick={async(e)=>{await changeProductPublish(e)}}/>
                             </div>
                             {
                                 Creating&&(
@@ -142,7 +148,7 @@ function AdminMemberContainer({Member,code}) {
                                                 name="" 
                                                 id="" 
                                                 onChange={(e)=>{
-                                                    memprod.product_list[i].name=e.target.value
+                                                    Membership.product_list[i].name=e.target.value
                                                 }}
                                             />
                                             <input 
@@ -152,13 +158,13 @@ function AdminMemberContainer({Member,code}) {
                                                 id="" 
                                                 defaultValue={memprod.price}
                                                 onChange={
-                                                    (e)=>{memprod.product_list[i].price=e.target.value
+                                                    (e)=>{Membership.product_list[i].price=e.target.value
                                                 }}
                                             />
                                             <div className="">
                                                 <button 
                                                     className='bg-su-green p-1 text-white rounded-md'
-                                                onClick={()=>{}}
+                                                onClick={()=>{updateMembershipProductList( Membership.product_list[i])}}
                                                 >
                                                     Update
                                                 </button>
@@ -220,7 +226,7 @@ function AdminMemberContainer({Member,code}) {
                                 await postURL("/api/createmembershipproduct",true,{code:code})
                                 .then(result=>{
                                 if(result.success){
-                                    
+                                    setMembership(result.data)
                                 }else{
                                     toast(result.data)
                                 }
@@ -288,7 +294,9 @@ function AdminMemberContainer({Member,code}) {
                                     }
                                 ).then(result=>{
                                     if(result.success){
-                                        
+                                        toast.success("Updated Membership")
+                                    }else{
+                                        toast.error(result.data)
                                     }
                                 })}}
                              >

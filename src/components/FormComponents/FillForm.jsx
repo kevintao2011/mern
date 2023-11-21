@@ -22,6 +22,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
     
     // index: index of field, single: multiple objects, id : field id
     function RequireValidation(){
+        
         function onlyLettersAndNumbers(str) {
             return /^[A-Za-z0-9]*$/.test(str);
           }
@@ -187,15 +188,16 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                         }
                                         {
                                             field.field_type.includes('role')&&(
-                                                // <RolesField 
-                                                //     value={field.field_value}
-                                                //     onChange={v=>{updateField(index,v)}}
-                                                // /> 
-                                                <EntryTable
-                                                    headings={["Role","Quantity","Price"]}
-                                                    rowValues={field.field_value}
-                                                    update={(v)=>{updateField(index,v)}}
-                                                />
+                                                <RolesField 
+                                                    subprods={field.field_value}
+                                                    onChange={v=>{updateField(index,v)}}
+                                                /> 
+                                                // <EntryTable
+                                                //     headings={["Role","Quantity","Price"]}
+                                                //     rowValues={field.field_value}
+                                                //     update={(v)=>{updateField(index,v)}}
+                                                //     HeadingMap={{"Role":"name","Quantity":"quantity","Price":"price"}}
+                                                // />
                                             )
                                         }
                                         {

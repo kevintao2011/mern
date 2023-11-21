@@ -524,6 +524,7 @@ const Manage = () => {
                                 <AdminActivityContainer 
                                     code={code}
                                     Activities={Activity}
+                                    session={Soc[code].session}
                                 />
                             )
                         )}

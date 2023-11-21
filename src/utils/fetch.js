@@ -35,19 +35,19 @@ async function postURL(postURL,needToken=false,data={}){
                         if(response.ok){
                         
                             return await response.json().then(data=>{
-                                console.log("(Authed)requested data of",postURL,data)
+                                console.log("(Authed)Return requested data of",postURL,data)
                                 return data
                             })
                             
                         }else{
                             return await response.json().then(data=>{
-                                console.log("request failed",postURL,data.data)
+                                console.log("(Authed)request Return failed",postURL,data.data)
                                 return data
                             })
                         }
                     } catch (error) {
                         console.log(error)
-                        toast.warning(error.name)
+                        // toast.warning(error.name)
                     }
                     
                 })
@@ -86,13 +86,13 @@ async function postURL(postURL,needToken=false,data={}){
                 if(response.ok){
                         
                     return await response.json().then(data=>{
-                        console.log("requested data of",postURL,data.data)
+                        console.log("requested Return data of",postURL,data.data)
                         return data
                     })
                     
                 }else{
                     return await response.json().then(data=>{
-                        console.log("request failed",postURL,data.data)
+                        console.log("request Return failed",postURL,data.data)
                         return data
                     })
                 }

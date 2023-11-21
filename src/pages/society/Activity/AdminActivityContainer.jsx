@@ -7,7 +7,7 @@ import moment from 'moment';
 import ActivityCalendar from '../../../components/ActivityCalendar';
 import CreateActivityContainer from './CreateActivityContainer';
 
-function AdminActivityContainer({Activities,code}) {
+function AdminActivityContainer({Activities,code,session}) {
     const navigate = useNavigate()
     const [showDrawer, setshowDrawer] = useState(false)
     const [open, setOpen] = useState(false);
@@ -29,7 +29,7 @@ function AdminActivityContainer({Activities,code}) {
 
                 <Drawer open={open} onClose={() => setOpen(false)}>
                     <Drawer.Body className=''>
-                        <CreateActivityContainer/>
+                        <CreateActivityContainer close={()=>{setOpen(false)}} code={code} session={session}/>
                     </Drawer.Body>
                    
                     
@@ -83,7 +83,7 @@ function AdminActivityContainer({Activities,code}) {
                     <div className="text-xl">Activity Calendar</div>
                 </div>
                 {/* <CreateActivityContainer/> */}
-                <ActivityCalendar Activities={Activities}/>
+                <ActivityCalendar Activities={Activities} code={code}/>
 
                 
             </div>
