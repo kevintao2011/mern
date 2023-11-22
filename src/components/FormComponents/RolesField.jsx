@@ -18,12 +18,12 @@ function RolesField({subprods,onChange}) {
                     Quantity
                 </div>
                 {
-                    subprods.map(subprod=>{
+                    subprods.map((subprod,i)=>{
                         return(
                         <>
-                            <input type="text" defaultValue={subprod.price} name="" id="" />
-                            <input type="number" defaultValue={subprod.price} name="" id="" />
-                            <input type="number" defaultValue={subprod.quantity} name="" id=""/>  
+                            <input type="text" defaultValue={subprod.name} name="" id="" onChange={(e)=>{subprods[i].name=e.target.value;onChange(subprods)}}/>
+                            <input type="number" defaultValue={subprod.price} name="" id="" onChange={(e)=>{subprods[i].price=e.target.value;onChange(subprods)}}/>
+                            <input type="number" defaultValue={subprod.quantity} name="" id=""onChange={(e)=>{subprods[i].quantity=parseInt(e.target.value);onChange(subprods)}}/>  
                         </>
                         )
                     })
