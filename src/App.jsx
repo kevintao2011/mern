@@ -73,7 +73,7 @@ function App() {
                   <Route exact path="product" element={<Shop/>}/>
                   <Route exact path="cart" element={<Cart/>}/>
                   <Route exact path="checkout" element={<CheckOut/>}/>
-                  <Route exact path="product/:id" element={<Product />} />
+                  <Route exact path="product/:sku" element={<Product />} />
                 </Route>
                 
                 

@@ -4,6 +4,7 @@ import SearchField from '../../components/FormComponents/SSelectFieldWithSearch'
 import ToggleList from './ToggleList'
 import MembershipManagement from './Membership/MembershipManagement'
 import CategoryTable from './shop/CategoryTable'
+import ProductGroupTree from './ProductGroupTree'
 /*
   Index tree 
   {
@@ -149,7 +150,7 @@ export default function AdminPage() {
         </div>
       </div>
 
-        
+      <ProductGroupTree/>
     </div>
     
   )

@@ -487,7 +487,7 @@ function EditProduct({pid,close}) {
                                                         id="" 
                                                         value={subproduct.price}
                                                         onChange={(e)=>{
-                                                            Product.product_list[i].price=e.target.value
+                                                            Product.product_list[i].price=parseInt(e.target.value)
                                                             setProduct({...Product})
                                                         }}
                                                     />

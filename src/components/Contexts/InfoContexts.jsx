@@ -58,7 +58,7 @@ export function InfoProvider({ children }) {
   
 
     const value = {
-        SocMap,
+        SocMap, //code:name
         PrivacyPage,
         latestActivities,
         latestNews,

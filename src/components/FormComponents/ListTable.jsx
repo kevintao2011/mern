@@ -40,7 +40,7 @@ function ListTable({dataEntries,horizontalEntry,TitleMap,TableTitle,EditLink,Del
             </div>
             <table className='w-full'>
                 <tbody className='font-mincho'>
-                    <tr>
+                    <tr className='text-xs'>
                         {
                             headings.map(heading=>{
                                 if(TitleMap[heading]){

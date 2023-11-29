@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
    
@@ -19,6 +20,8 @@ module.exports = {
         'web-green': '#29C7AC',
         'web-red': '#C02739',
         'web-pink': '#E49393',
+        'apple-gray': '#FAFAFC',
+        'btn-blue': '#0271E4',
         ///* Coolors Exported Palette - https://coolors.co/20615b-39736d-52847f-6a9692-83a7a4-9cb9b6-b5cac8-cddcdb-e6eded-ffffff 'caribbean_current' 'hookers_green' 'cambridge_blue' 'anti-flash_white'*/
         'caribbean_current': { DEFAULT: '#20615B', 100: '#061312', 200: '#0d2624', 300: '#133936', 400: '#194d47', 500: '#20615b', 600: '#33998f', 700: '#53c6ba', 800: '#8cd9d1', 900: '#c6ece8' }, 'myrtle_green': { DEFAULT: '#39736D', 100: '#0b1716', 200: '#172e2c', 300: '#224642', 400: '#2e5d58', 500: '#39736d', 600: '#4fa199', 700: '#78bcb5', 800: '#a5d3ce', 900: '#d2e9e6' }, 
         'hookers_green': { DEFAULT: '#52847F', 100: '#101a19', 200: '#213533', 300: '#314f4c', 400: '#426965', 500: '#52847f', 600: '#6da49e', 700: '#92bbb7', 800: '#b6d1cf', 900: '#dbe8e7' }, 'dark_cyan': { DEFAULT: '#6A9692', 100: '#151e1d', 200: '#2a3c3a', 300: '#3f5a57', 400: '#557774', 500: '#6a9692', 600: '#88aaa7', 700: '#a5c0bd', 800: '#c3d5d3', 900: '#e1eae9' }, 
