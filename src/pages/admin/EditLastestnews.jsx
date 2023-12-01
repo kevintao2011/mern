@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import FieldForArray from '../../components/FormComponents/FieldForArray'
+import { postURL } from '../../utils/fetch'
 
 export default function EditLastestnews() {
   const [StaticData, setStaticData] = useState()
@@ -20,42 +21,47 @@ export default function EditLastestnews() {
   
   useEffect(() => {
     async function fetchData(){
-      await fetch(
-        "/api/websitestaticinfo",
-        {
-          method:"POST",
-          body:JSON.stringify({
-              
-          }),
-          headers: {
-              "Content-Type": "application/json",
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              mode:'cors'
+      await postURL("/api/websitestaticinfo",true).then(result=>{
+        if(result.success){
+          setStaticData(result.data)
         }
-      ).then(async res=>{
-        const collection = await res.json()
-        // collection.forEach(doc => {
-        //   console.log(Object.keys(doc))
-        // });
-        console.log("collection",collection)
-        // Replace with recursive in future
-        let data = {}
-        let title = {}
-        let content = []
-        // collection.forEach(doc => {
-        //   const keys = (Object.keys(doc))
-        //   keys.forEach((key,i)=>{
-        //     console.log("element in ",key,":",doc[key])
-        //     if (Array.isArray(doc[key])) {
-        //       doc[key].forEach(element=>{
-        //         console.log(`array element in ${key}`,element)
-        //       })
-        //     }
-        //   })
-        // });
-        setStaticData(collection.data)
       })
+      // await fetch(
+      //   "/api/websitestaticinfo",
+      //   {
+      //     method:"POST",
+      //     body:JSON.stringify({
+              
+      //     }),
+      //     headers: {
+      //         "Content-Type": "application/json",
+      //         // 'Content-Type': 'application/x-www-form-urlencoded',
+      //         },
+      //         mode:'cors'
+      //   }
+      // ).then(async res=>{
+      //   const collection = await res.json()
+      //   // collection.forEach(doc => {
+      //   //   console.log(Object.keys(doc))
+      //   // });
+      //   console.log("collection",collection)
+      //   // Replace with recursive in future
+      //   let data = {}
+      //   let title = {}
+      //   let content = []
+      //   // collection.forEach(doc => {
+      //   //   const keys = (Object.keys(doc))
+      //   //   keys.forEach((key,i)=>{
+      //   //     console.log("element in ",key,":",doc[key])
+      //   //     if (Array.isArray(doc[key])) {
+      //   //       doc[key].forEach(element=>{
+      //   //         console.log(`array element in ${key}`,element)
+      //   //       })
+      //   //     }
+      //   //   })
+      //   // });
+        
+      // })
     }
     fetchData()
     

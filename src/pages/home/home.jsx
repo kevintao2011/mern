@@ -4,6 +4,7 @@
 import { useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { postURL } from "../../utils/fetch";
 
 
 const Home = () => {
@@ -17,38 +18,52 @@ const Home = () => {
   useEffect(() => {
     // toast.success("Hello")
     async function fetchData(){
-      await fetch(
-        "/api/websitestaticinfo",
-        {
-          method:"POST",
-          body:JSON.stringify({
-              
-          }),
-          headers: {
-              "Content-Type": "application/json",
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              mode:'cors'
+      await postURL("/api/websitestaticinfo",false).then(result=>{
+        if(result.success){
+          const collection=result.data
+          console.log("collection",collection)
+          // Replace with recursive in future
+          collection.forEach(title=>{
+            if(title.name==="最新消息 Latest News"){
+              setlatestNews(title.content)
+            }else if (title.name==="最新活動 Latest Activities"){
+              setlatestActivity(title.content)
+            }
+          })
         }
-      ).then(async res=>{
-        await res.json().then(collection=>{
-            // collection.forEach(doc => {
-            //   console.log(Object.keys(doc))
-            // });
-            collection=collection.data
-            console.log("collection",collection)
-            // Replace with recursive in future
-            collection.forEach(title=>{
-              if(title.name==="最新消息 Latest News"){
-                setlatestNews(title.content)
-              }else if (title.name==="最新活動 Latest Activities"){
-                setlatestActivity(title.content)
-              }
-            })
-        })
-        
-        
       })
+      // await fetch(
+      //   "/api/websitestaticinfo",
+      //   {
+      //     method:"POST",
+      //     body:JSON.stringify({
+              
+      //     }),
+      //     headers: {
+      //         "Content-Type": "application/json",
+      //         // 'Content-Type': 'application/x-www-form-urlencoded',
+      //         },
+      //         mode:'cors'
+      //   }
+      // ).then(async res=>{
+      //   await res.json().then(collection=>{
+      //       // collection.forEach(doc => {
+      //       //   console.log(Object.keys(doc))
+      //       // });
+      //       collection=collection.data
+      //       console.log("collection",collection)
+      //       // Replace with recursive in future
+      //       collection.forEach(title=>{
+      //         if(title.name==="最新消息 Latest News"){
+      //           setlatestNews(title.content)
+      //         }else if (title.name==="最新活動 Latest Activities"){
+      //           setlatestActivity(title.content)
+      //         }
+      //       })
+      //   })
+        
+        
+      // })
     }
     fetchData()
     

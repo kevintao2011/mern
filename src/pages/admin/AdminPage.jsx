@@ -139,18 +139,18 @@ export default function AdminPage() {
             
           </div>
         </div>
-        
+        <ProductGroupTree/>
       </div>
       <div className="w-9/12">
         
         <div className="flex flex-col">  
-            <CategoryTable/>
-            <EditLastestnews/>
+            {/* <CategoryTable/> */}
+            {/* <EditLastestnews/> */}
             {/* <button> End of Admin Page </button> */}
         </div>
       </div>
 
-      <ProductGroupTree/>
+     
     </div>
     
   )
