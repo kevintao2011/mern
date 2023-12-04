@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Tree, TreePicker } from 'rsuite';
+import { CheckTree, InputPicker, Tree, TreePicker } from 'rsuite';
 import { mockTreeData } from './mock.js';
 import { postURL } from '../../utils/fetch.js';
 import { toast } from 'sonner';
 //https://www.mongodb.com/docs/manual/tutorial/model-tree-structures-with-ancestors-array/ readthis
 function ProductGroupTree() {
     const [ProductGroups, setProductGroups] = useState()
+    const [ProductGroupsForRs, setProductGroupsForRs] = useState()
     const [ProductTrees, setProductTrees] = useState([])
+    const [NewGroup, setNewGroup] = useState()
     async function getProductGroups(){
-        await postURL('/api/getproductgroups',false,{ids:["product_group_tree"]}).then(result=>{
+        await postURL('/api/getproductgroups',false,{}).then(result=>{
             if(result.success){
                 setProductGroups(result.data)
                 console.log("ProductGroup",result.data)
@@ -17,10 +19,21 @@ function ProductGroupTree() {
             }
         })
     }
+    async function getProductGroupsForRs(){
+        await postURL('/api/getproductgroupsforrsbydb',false,{}).then(result=>{
+            if(result.success){
+                setProductGroupsForRs(result.data)
+                console.log("ProductGroupForRs",result.data)
+            }else{
+                toast.warning(result.data)
+            }
+        })
+    }
     useEffect(() => {
         getProductGroups()
+        getProductGroupsForRs()
         getProductTree()
-      
+        
     }, [])
 
     async function getProductTree(){
@@ -39,6 +52,9 @@ function ProductGroupTree() {
             // }
         })
     }
+    async function handleAdd(){
+        await postURL('/api/addProductGroup',true,{}).then
+    } 
     
 
     const [TreeData, setTreeData] = useState([
@@ -147,8 +163,21 @@ function ProductGroupTree() {
     return (
         <div>
             <TreePicker defaultExpandAll data={ProductTrees} style={{ width: 246 }} />
+
+            
+            <div className="flex flex-col p-4 border rounded-md gap-2">
+                <div className="text-md font-bold">產品分類 Product Group</div>
+                <input type="text" placeholder='Type a new Product Group' className='rounded-md'/>
+                <div className="text-md font-bold">附屬於產品 Parent Products</div>
+                <CheckTree data={ProductTrees}  defaultExpandAll onChange={e=>{console.log(e)}} />
+                <div className="flex flex-row justify-center">
+                    <button className=' bg-btn-blue text-white rounded-md px-2' onClick={async ()=>{handleAdd()}}>Save</button>
+                </div>
+                
+            </div>
+            
             <div className="flex flex-col">
-            {
+            {/* {
                 ProductGroups?.map(group=>{
                     return (
                         <div className="">
@@ -161,9 +190,9 @@ function ProductGroupTree() {
                         
                     )
                 })
-            }
+            } */}
             </div>
-            <button className="" onClick={async ()=>{ await refreshTree()}}>Refresh Tree</button>
+            <button className="bg-btn-blue text-white rounded-md px-2 py-0.5" onClick={async ()=>{ await refreshTree()}}>Click this To Regenerate Product Tree </button>
         </div>
     )
 }

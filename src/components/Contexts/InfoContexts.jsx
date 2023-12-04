@@ -19,9 +19,10 @@ export function InfoProvider({ children }) {
     
     async function getStaticInfo(){
         if(loading){
-            await postURL("/api/websitestaticinfo",false,{}).then(result=>{
+            await postURL("/api/websitestaticinfo",false,{ids:["info","registerDeclaration","socMap","latestActivities","registerDeclaration"]}).then(result=>{
                 if(result.success){
                     const docs = result.data
+                    console.log("info",docs)
                     docs.forEach(doc=>{
                         if(doc.id==="registerDeclaration"){
                             setPrivacyPage(doc.content)
