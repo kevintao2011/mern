@@ -82,8 +82,12 @@ body {
 .greentext{
   color: #29C7AC; 
 }
+.fade-in-image { animation: fadeIn 1s; }
 
-
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
 
 @layer components {
   .red_btn {
