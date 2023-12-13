@@ -32,7 +32,7 @@ function CreateSingleProductContainer({onExit,code,session,close}) {
                     await response.json().then(data=>{
                         setCategories(data.map(d=>{
                             console.log("Categories",d)
-                            return {[d.catergory_name]:d.id}
+                            return {[d.category_name]:d.id}
                         }))
                     })
                 }

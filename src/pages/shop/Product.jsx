@@ -12,12 +12,12 @@ const Product = () => {
     const [ProductInfo, setProductInfo] = useState() // product info
     const [SubProducts, setSubProducts] = useState() //array of vars
     const [SelectedOption, setSelectedOption] = useState(0) //chosen index inside SubProducts List not product index
-    const [Filter, setFilter] = useState([])
+    const [Filter, setFilter] = useState()
     const [displaySubProduct, setdisplaySubProduct] = useState([])
-    const [NumberOfVariant, setNumberOfVariant] = useState() //NumberOfVariant
     const [Quantity, setQuantity] = useState(0)
     const [CurrentImageURL, setCurrentImageURL] = useState()
     const {SocMap} = useStaticInfo()
+    const [SelectedProduct, setSelectedProduct] = useState()
 
     function updateFilter(selectedLabels,i){
         console.log(i,"ori",Filter[i],"label to be insert",selectedLabels)//bug
@@ -26,41 +26,44 @@ const Product = () => {
         console.log("Filter to be set",Filter)
         setFilter([...arr])
     }
+
     useEffect(() => {
-        console.log("Filter updated")
+        setSelectedProduct()
         console.log("Filter updated")
         if(Filter!==undefined){
-            console.log("Filter Str",Filter)
+            console.log("Filter ",Filter)
             //1.flatten label group into arr of labels
             var filters = []
+            console.log(ProductInfo.options)
             Filter.forEach((labelIndexGroup,i)=>{
-                // if(labelIndexGroup.length>0){
-                //     labelIndexGroup.forEach(index=>{
-                //         console.log("add to filters",ProductInfo.options[i]['option'][index])
-                //         filters.push(ProductInfo.options[i]['option'][index])
-                //     })
-                // }
                 labelIndexGroup.forEach(index=>{
-                    console.log(i,index,"add to filters",ProductInfo.options[i]['option'][index])
+                    //console.log(i,index,"add to filters",ProductInfo.options[i]['option'][index])
                     filters.push(ProductInfo.options[i]['option'][index])
                 })
             })
             console.log('filters',filters)
+            function recursiveFilter(subproducts,filters){
+                if(filters.length<1){
+                    return subproducts
+                }else{
+                    const arr =subproducts.filter(subprod=>{
+                        if (subprod.name.split(" ").some(str => filters[0]===str)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
+                    console.log("arr after",arr)
+                    filters.shift()
+                    console.log("filters",filters)
+                    return recursiveFilter(arr,filters)
+                }
+            }
             if(filters.length<1){
+                console.log("display all products")
                 setdisplaySubProduct(SubProducts)
             }else{
-                setdisplaySubProduct(SubProducts.filter(subprod=>{
-                    if(()=>{
-                        subprod.name.split(" ").forEach(str=>{
-                            return filters.includes(str)
-                        })
-                        return false
-                    }){
-                        return true
-                    }else{
-                        return false
-                    }
-                }))
+                setdisplaySubProduct(recursiveFilter(SubProducts,filters))
             }
         }
         
@@ -79,51 +82,31 @@ const Product = () => {
     }, [ProductInfo])
     
 
-    function SelectedButton({onUpdate=()=>{return false},label=""}){//Selected=false,
-        const [Checked, setChecked] = useState(false)
-        const firstLoad = useRef(true)
-        useEffect(() => {
-            if(!firstLoad.current){
-                onUpdate(Checked);
-                toast(Checked?"true":"false")
-            }
-            firstLoad.current = false
-        }, [Checked])
+    function SelectedButton({Selected=false,onUpdate=()=>{return false},label=""}){
         useEffect(() => {
             console.log("SelectedButton Rendered")
         }, [])
-        
-        
         return(
             <button 
-                className={`${Checked?"bg-btn-blue text-white":"bg-gray-200"}  p-1 rounded-md w-fit`}
+                className={`${Selected?"bg-btn-blue text-white":"bg-gray-200"}  p-1 rounded-md w-fit`}
                 onClick={()=>{
-                    setChecked(prev=>!prev);
+                    onUpdate(!Selected)
                 }}
             >
                 {label}
             </button>
         )
     }
-    function SelectButtonGroup({Option,onChange=()=>{return []}}) { //Group of Select Button
-        const [SelectedIndex, setSelectedIndex] = useState([])// should be in shape of ["label",....]
-        const firstLoad = useRef(true)
-        useEffect(() => {
-            if(!firstLoad.current){
-                console.log("Button gps",SelectedIndex)
-                onChange(SelectedIndex)
-            }
-            firstLoad.current=false
+    function SelectButtonGroup({Option,selectedIndexs,onChange=()=>{return []}}) { //Group of Select Button
+        // should be in shape of ["label",....]
 
-        }, [SelectedIndex])
         return (
-            
                 <div className="">
                 <div className="font-bold">{Option.text}</div>
                 <div className="flex flex-row gap-2">
                     {
                         Option.option.map((op,i)=>{
-                            if(SelectedIndex.includes(i)){
+                            if(selectedIndexs.includes(i)){
                                 console.log(op,"is selected")
                             }else{
                                 console.log(op,"is not selected")
@@ -131,20 +114,21 @@ const Product = () => {
                             return (
                                 <SelectedButton 
                                     label={op} 
-                                    // Selected={SelectedIndex.includes(i)}
+                                    Selected={selectedIndexs.includes(i)}
                                     onUpdate={
                                         (selected)=>{
                                             console.log("toogled")
                                             if(selected){
-                                                SelectedIndex.push(i);
-                                                setSelectedIndex([...SelectedIndex])
-                                                console.log("added",SelectedIndex)
+                                                selectedIndexs.push(i);
+                                                console.log("added",selectedIndexs)
+                                                onChange(selectedIndexs)
                                             }
                                             else{
-                                                setSelectedIndex(SelectedIndex.filter(index=>{
+                                                onChange(selectedIndexs.filter(index=>{
                                                     console.log("remove")
                                                     return index!==i
                                                 }))
+                                                
                                             }
                                         }
                                     }
@@ -159,43 +143,46 @@ const Product = () => {
     }
     
 
-    async function addToCart (product){
-        // {
-        //     _id:ProductInfo._id,
-        //     option:SubProducts[SelectedOption].name,
-        //     quantity:Quantity
-        // }
-        var TempCart
+    // async function addToCart (product){
+    //     // {
+    //     //     _id:ProductInfo._id,
+    //     //     option:SubProducts[SelectedOption].name,
+    //     //     quantity:Quantity
+    //     // }
+    //     var TempCart
         
-        console.log(Cart)
-        var duplicate = false
-        if(product.quantity===0){
-            product.quantity=1
-        }
-        Cart.forEach((i,index) => {
-            if (i._id === product._id && (i.option === product.option)){
-                Cart[index]["quantity"]=parseInt(i.quantity)+parseInt(product.quantity)
-                duplicate = true
-                setCart(Cart)
-                TempCart = Cart
+    //     console.log(Cart)
+    //     var duplicate = false
+    //     if(product.quantity===0){
+    //         product.quantity=1
+    //     }
+    //     Cart.forEach((i,index) => {
+    //         if (i._id === product._id && (i.option === product.option)){
+    //             Cart[index]["quantity"]=parseInt(i.quantity)+parseInt(product.quantity)
+    //             duplicate = true
+    //             setCart(Cart)
+    //             TempCart = Cart
                 
-                return
-            }
+    //             return
+    //         }
             
-        });
+    //     });
 
         
-        if (!duplicate){
+    //     if (!duplicate){
             
-            setCart([...Cart,product])
-            TempCart = [...Cart,product]
+    //         setCart([...Cart,product])
+    //         TempCart = [...Cart,product]
             
-        }
-        console.log(Cart)
+    //     }
+    //     console.log(Cart)
         
-        sessionStorage.setItem("Cart",JSON.stringify({[currentUser.email]:TempCart}))
-        console.log("session",JSON.parse(sessionStorage.getItem("Cart")))
+    //     sessionStorage.setItem("Cart",JSON.stringify({[currentUser.email]:TempCart}))
+    //     console.log("session",JSON.parse(sessionStorage.getItem("Cart")))
         
+    // }
+    async function addToCart(productsku){
+        postURL('/api/addtocart',true,productsku)
     }
     useEffect(() => {
         async function fetchProductInfo (){
@@ -258,7 +245,7 @@ const Product = () => {
                         </div>
                     </div>
                     <div className="w-1/2 product-description  p-2 rounded-md">
-                        <div className=" flex flex-col gap-2">
+                        <div className=" flex flex-col gap-5">
                             {/* <div className="">
                                 {SocMap[ProductInfo]}
                             </div> */}
@@ -270,66 +257,118 @@ const Product = () => {
                                 <div className="text-lg font-bold">產品介紹</div>
                                 <pre className="pl-2">{ProductInfo.product_description_chi}</pre>
                             </div>
-                            <div className="text-lg font-bold">
-                                Options 選項
-                            </div>
-                            <div className="grid grid-cols-2 gap-2">
-                                {ProductInfo.options.map((opt,i)=>{
-                                    return(
-                                        <SelectButtonGroup Option={opt} onChange={(selectedLabels)=>{//selectedIndexs={Filter[i]}
-                                            // console.log(i,"ori",Filter[i],"label to be insert",selectedLabels)//bug
-                                            // const arr = Filter
-                                            // arr[i]=selectedLabels
-                                            // console.log("Filter to be set",Filter)
-                                            // setFilter([...arr])
-                                            updateFilter(selectedLabels,i)
-                                        }}/>
-                                     
+                            <div className="flex flex-col gap-2">
+                                <div className="text-lg font-bold">
+                                    Options 選項
+                                </div>
+                                {
+                                    Filter&&(
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {ProductInfo.options.map((opt,i)=>{
+                                                return(
+                                                    <SelectButtonGroup 
+                                                        Option={opt}
+                                                        selectedIndexs={Filter[i]} 
+                                                        onChange={(selectedLabels)=>{
+                                                            updateFilter(selectedLabels,i)
+                                                        }
+                                                    }/>
+                                                
+                                                )
+                                                // return(
+                                                    
+                                                // )
+                                            })}
+                                        </div>
                                     )
-                                    // return(
-                                        
-                                    // )
-                                })}
+                                }
+                                <div className="flex flex-col">
+                                    <div className="">已選 Selected Filter </div>
+                                    <div className="flex flex-row gap-2">
+                                        {
+                                            Filter?.map((group,optionsIndexs)=>{
+                                                return(
+                                                    <div className="flex flex-row gap-2">
+                                                        {
+                                                            group.map((index,optionIndex)=>{
+                                                                return <div className="rounded-md bg-btn-blue px-1 py-0.5 text-white">{ProductInfo.options[optionsIndexs]['option'][index]}</div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                )
+                                                
+                                            })
+                                        }
+                                    </div>
+                                </div>
                             </div>
+                            
                             <div className="">
                                 <div className="text-lg font-bold">產品 Product</div>
-                                <div className="grid grid-cols-3 gap-2">
+                                <div className="grid grid-cols-4 gap-2">
                                 {
                                     displaySubProduct?.map((subproduct,i)=>{
                                         return(
                                             // <div className="">{subproduct.name}</div>
-                                            <button className='bg-web-green p-1 rounded-md text-white'>{subproduct.name}</button>
+                                            <button 
+                                                className={`bg-white  p-1 rounded-md text-gray-600 border-2 flex flex-row justify-center ${subproduct.name===SelectedProduct?.name?'border-sky-600 border-2':''}`}
+                                                onClick={()=>{
+                                                    if(subproduct.name===SelectedProduct?.name){
+                                                        setSelectedProduct()
+                                                    }else{
+                                                        setSelectedProduct(subproduct)
+                                                    }
+                                                    
+                                                }}
+                                            >
+                                                <div className=" flex flex-row gap-2 justify-between">
+                                                    <div className="">
+                                                        {subproduct.name}
+                                                    </div>
+                                                    <div className="">
+                                                        ${subproduct.price}
+                                                    </div>
+                                                </div>
+                                            </button>
                                         )
                                     })
                                 }
                                 </div>
                                 
                             </div>
-                            <div className="flex flex-col">
-                                <div className="">已選</div>
-                                {
-                                    Filter?.map(group=>{
-                                        return(
-                                            <div className="">
-                                                Selected {
-                                                    group.map(label=>{
-                                                        return label
-                                                    })
-                                                }
-                                            </div>
-                                        )
-                                        
-                                    })
-                                }
-                            </div>
+                            {
+                                // SelectedProduct?(
+                                //     <div className="w-full flex flex-row justify-center">
+                                //         <button className="bg-web-green text-white rounded-md p-1">
+                                //             Add To Cart
+                                //         </button>
+                                //     </div>
+                                // ):(
+                                //     <div className="w-full flex flex-row justify-center">
+                                //         <div className="h-8">
+                                //             {}
+                                //         </div>
+                                //     </div>
+                                // )
+                                <div className="w-full flex flex-row justify-center">
+                                    <button disabled={!SelectedProduct} className="bg-web-green text-white rounded-md p-1 disabled:bg-gray-500"
+                                        onClick={()=>{addToCart(SelectedProduct.sku)}}
+                                    >
+                                        Add To Cart
+                                    </button>
+                                </div>
+                            }
+                            
+                        </div>
+                        <div className="text-lg font-bold">
+                            其他產品
                         </div>
                     </div>
+                    
                 </div>
                 
             }
-            <div className="text-lg font-bold">
-                類似產品
-            </div>
+            
         </div>
         )
         

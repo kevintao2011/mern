@@ -26,7 +26,7 @@ function ProductCard({product}) {
                 </button>
                 <div className="w-full flex flex-row gap-2 ">
                     
-                <div className="w-full flex flex-row gap-2">
+                <div className="w-full flex flex-row gap-2 overflow-hidden">
                     {
                     product.product_list.map(subprod=>{
                         // const col = Math.round(Math.random()*9)*100
@@ -35,7 +35,7 @@ function ProductCard({product}) {
                         // console.log(getRandomColorString[col]) //${bgColor} ${textColor}
                         
                         return (
-                        <div className={`rounded px-0.5 text-xs ${twcolorMap[subprod.name]?twcolorMap[subprod.name]:twcolorMap["other"]} `}>{subprod.name}</div>
+                        <div className={`rounded px-0.5 text-xs whitespace-nowrap  ${twcolorMap[subprod.name]?twcolorMap[subprod.name]:twcolorMap["other"]} `}>{subprod.name}</div>
                         )
                     })
                     }

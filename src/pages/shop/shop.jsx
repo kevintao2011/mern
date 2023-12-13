@@ -219,7 +219,7 @@ const Shop = () => {
               next
               first
               size="md"
-              total={MaxPage*IPP}
+              total={(MaxPage+1)*IPP}
               limit={IPP}
               activePage={CurrentPage+1}
               onChangePage={e=>{loadProduct(e-1,IPP)}}
