@@ -1,6 +1,6 @@
 import React, { useEffect,useRef,useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useAuth } from '../../components/session'
+import { useAuth } from '../../components/Contexts/session'
 import { postURL } from '../../utils/fetch'
 import { toast } from 'sonner'
 import { useStaticInfo } from '../../components/Contexts/InfoContexts'

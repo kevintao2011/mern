@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useAuth } from '../../components/session'
+import { useAuth } from '../../components/Contexts/session'
 import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {

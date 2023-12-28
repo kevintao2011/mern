@@ -13,7 +13,7 @@ import Editorialboard from './pages/structure/editorialboard';
 // import Error from './pages/error';
 import Manage from './pages/society/manage';
 import './App.css';
-import { AuthProvider } from './components/session';
+import { AuthProvider } from './components/Contexts/session';
 import SetupAccount from './pages/account/setupAccount';
 import Society from './pages/society/society';
 import SocietyList from './pages/society/societyList';

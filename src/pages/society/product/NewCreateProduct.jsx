@@ -1,6 +1,6 @@
 import React, { useEffect, useState,useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAuth } from '../../../components/session'
+import { useAuth } from '../../../components/Contexts/session'
 import ProtoTypes from "prop-types";
 
 

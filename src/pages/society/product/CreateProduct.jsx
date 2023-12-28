@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useMemo} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { auth } from '../../../utils/firebasefunction'
-import { useAuth } from '../../../components/session'
+import { useAuth } from '../../../components/Contexts/session'
 import { Inputblock } from './productInputBlock'
 
 

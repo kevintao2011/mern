@@ -3,7 +3,7 @@ import { loginfirebase } from '../../utils/firebasefunction';
 import { auth } from '../../utils/firebasefunction';
 import { useNavigate } from 'react-router-dom';
 import { sendEmailVerification } from 'firebase/auth';
-import { useAuth } from '../../components/session';
+import { useAuth } from '../../components/Contexts/session';
 import {  toast } from 'sonner';
 const Login = () => {
     

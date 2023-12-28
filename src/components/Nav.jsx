@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link,Outlet,useLocation,useNavigate } from "react-router-dom";
 import { auth } from "../utils/firebasefunction";
 import DropdownComponent from "./dropdown";
-import { useAuth } from "./session";
+import { useAuth } from "./Contexts/session";
 
 // from context
 

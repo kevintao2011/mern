@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import { auth } from '../../utils/firebasefunction'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../components/session'
+import { useAuth } from '../../components/Contexts/session'
 const SetupAccount = () => {
     
     const [Submit, setSubmit] = useState(true)

@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import { useParams , useNavigate, useLocation} from 'react-router-dom'
 import { auth } from '../../utils/firebasefunction'
 
-import { useAuth } from '../../components/session'
+import { useAuth } from '../../components/Contexts/session'
 import { storage,uploadFile } from '../../utils/firebasefunction'
 
 const EditActivity = () => {

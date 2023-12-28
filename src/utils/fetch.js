@@ -1,5 +1,5 @@
 import { toast } from "sonner"
-import { useAuth } from "../components/session"
+import { useAuth } from "../components/Contexts/session"
 import { auth } from "./firebasefunction"
 
 class ServerFunction{

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation,useNavigate } from 'react-router-dom'
-import { useAuth } from '../../components/session';
+import { useAuth } from '../../components/Contexts/session'
 import { uploadFile } from '../../utils/firebasefunction';
 import { storage } from '../../utils/firebasefunction';
 

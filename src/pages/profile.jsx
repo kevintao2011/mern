@@ -4,7 +4,7 @@ import React, { useEffect,useState } from 'react'
 import { auth } from '../utils/firebasefunction'
 import SocietyCard from '../components/SocietyCard';
 import ProductCard from '../components/ProductCard';
-import { useAuth } from '../components/session';
+import { useAuth } from '../components/Contexts/session';
 import * as Info from '../model/info.js'
 import { onAuthStateChanged } from 'firebase/auth';
 import { Navigate, useNavigate } from 'react-router-dom';
