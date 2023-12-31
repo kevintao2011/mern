@@ -9,6 +9,11 @@ import React from 'react'
 //     shown_name:String,
 //     activated:{type:String,default:false}
 // }
+const FPSSchema = [
+  {field_name:"qr code",type:"",value:""},
+]
+  
+
 
 function FPSDetails({details}) {
   return (

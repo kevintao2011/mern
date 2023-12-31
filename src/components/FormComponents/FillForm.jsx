@@ -22,7 +22,6 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
     
     // index: index of field, single: multiple objects, id : field id
     function RequireValidation(){
-        
         function onlyLettersAndNumbers(str) {
             return /^[A-Za-z0-9]*$/.test(str);
           }
