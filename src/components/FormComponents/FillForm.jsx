@@ -45,7 +45,7 @@ import Dictionary from '../../Dictionary';
  * @param {boolean}allowDisable restrict edit
  * @param {function}onChange allow pass changes to upper component
 */
-function FillForm({fields , className ,title ,description="" ,TitleMap={},postAPI,onSubmit,allowDisable=false},onChange) {
+function FillForm({fields , className ,title ,description="" ,TitleMap={},postAPI,onSubmit,allowDisable=false,onChange}) {
     const [disabled, setdisabled] = useState(true)
     const [ErrorMsg, setErrorMsg] = useState("")
     const [Fields, setFields] = useState()
@@ -55,9 +55,14 @@ function FillForm({fields , className ,title ,description="" ,TitleMap={},postAP
     }, [])
 
     useEffect(()=>{
-        if(onChange){
-            onChange(Fields)
+        if(Fields){
+            console.log("onchg",onChange)
+            console.log("return to parent",Fields)
+            if(onChange){
+                onChange(Fields)
+            }
         }
+        
     }, [Fields])
     
     // index: index of field, single: multiple objects, id : field id

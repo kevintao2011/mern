@@ -9,6 +9,13 @@ class Dictionary {
         ACTIVATED:'activated'
     };
 
+    static PaymentMethods= {
+        PAYME:"Payme",
+        FPS:"FPS",
+        CASH:"Cash",
+        DEPOSIT:"Deposit"
+    }
+
     static FPSMapTitle = {
         eng:{
             qr_code_url: 'QR Code',
@@ -26,6 +33,23 @@ class Dictionary {
         }
         
     };
+
+    static PaymentParams = {
+        FPS:{
+            QR_CODE_URL: 'qr_code_url',
+            PHONE_NUMBER: 'phone_number',
+            BANK_ACCOUNT: 'bank_account',
+            SHOWN_NAME: 'shown_name',
+            ACTIVATED:'activated'
+        },
+        Payme:{
+            PAYME_URL: 'payme_url',
+            PHONE_NUMBER: 'phone_number',
+            SHOWN_NAME: 'shown_name',
+            ACTIVATED:'activated'
+        },
+        
+    }
 
     static PaymeParams = {
         PAYME_URL: 'payme_url',

@@ -2,10 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { postURL } from '../../utils/fetch'
 import { Checkbox, CheckboxGroup } from 'rsuite';
 import FPSDetails from './FPSDetails';
+import Dictionary from '../../Dictionary';
+import PaymeDetails from './PaymeDetails';
 
-function PaymentOption({code,onUpdate}) {
+function PaymentOption({code}) {
   const data = ['Payme', 'FPS', 'Cash'];
   const [PaymentMethod, setPaymentMethod] = useState()
+  const [UpdatedDetails, setUpdatedDetails] = useState({})
   const [SelectedPayments, setSelectedPayments] = useState([])
   async function getPaymentMethod(){
       await postURL('/api/getpaymentmethod',true,{code:code}).then(result=>{
@@ -15,6 +18,12 @@ function PaymentOption({code,onUpdate}) {
           }
       })
   }
+  function update(paymentMethod,detail){
+    UpdatedDetails[paymentMethod]=detail
+    console.log("paymentOptionComponent:",UpdatedDetails)
+    setUpdatedDetails({...UpdatedDetails})
+  }
+
   useEffect(() => {
     getPaymentMethod()
 
@@ -45,13 +54,13 @@ function PaymentOption({code,onUpdate}) {
         </div> */}
         <div className="grid grid-cols-2 gap-5">
           {
-            data.map(method=>{
+            Object.values(Dictionary.PaymentMethods).map(method=>{
               if(PaymentMethod[method]){
                 switch (method) {
                   case "FPS":
-                    return(<FPSDetails details={PaymentMethod[method]}/>)
+                    return(<FPSDetails details={PaymentMethod[method]} onChange={(Fields=>{update("FPS",Fields)})}/>)
                   case "Payme":
-                    return(<FPSDetails details={PaymentMethod[method]}/>)
+                    return (<PaymeDetails details={PaymentMethod[method]} onChange={(Fields=>{update("Payme",Fields)})}/>)
                   default:
                     return(
                       <></>
