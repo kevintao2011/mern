@@ -123,8 +123,8 @@ function FillForm({fields , className ,title ,description="" ,TitleMap={},postAP
     return (
         <div className={`${className} font-mincho`}>
             <div className="">
-                <div className="flex flex-row ">
-                    <p className='text-2xl font-bold border '>{title}</p>
+                <div className="flex flex-row gap-5">
+                    <p className='text-2xl font-bold  '>{title}</p>
                     {
                         allowDisable&&(
                             

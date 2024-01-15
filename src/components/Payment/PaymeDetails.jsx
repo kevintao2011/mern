@@ -28,40 +28,34 @@ function PaymeDetails({details,onChange}) {
   function mapData(details){
     return [
       {
-        field_name:Dictionary.FPSParams.ACTIVATED,
+        field_name:Dictionary.PaymeParams.ACTIVATED,
         field_type:FormParams.Form.field_type.boolean,
         required:FormParams.Form.field_type.required.NOT_REQUIRED,
         single:FormParams.Form.field_type.single.SINGLE,
-        field_value:details[Dictionary.FPSParams.ACTIVATED]?details[Dictionary.FPSParams.ACTIVATED]:false,
+        field_value:details[Dictionary.PaymeParams.ACTIVATED]?details[Dictionary.PaymeParams.ACTIVATED]:false,
       },
       {
-        field_name:Dictionary.FPSParams.QR_CODE_URL,
+        field_name:Dictionary.PaymeParams.PAYME_URL,
         field_type:FormParams.Form.field_type.text,
         required:FormParams.Form.field_type.required.NOT_REQUIRED,
         single:FormParams.Form.field_type.single.SINGLE,
-        field_value:details[Dictionary.FPSParams.QR_CODE_URL]?details[Dictionary.FPSParams.QR_CODE_URL]:undefined,
+        field_value:details[Dictionary.PaymeParams.PAYME_URL]?details[Dictionary.PaymeParams.PAYME_URL]:undefined,
       },
       {
-        field_name:Dictionary.FPSParams.SHOWN_NAME,
+        field_name:Dictionary.PaymeParams.SHOWN_NAME,
         field_type:FormParams.Form.field_type.text,
         required:FormParams.Form.field_type.required.NOT_REQUIRED,
         single:FormParams.Form.field_type.single.SINGLE,
-        field_value:details.shown_name?details.shown_name:undefined,
+        field_value:details[Dictionary.PaymeParams.SHOWN_NAME]?details[Dictionary.PaymeParams.SHOWN_NAME]:undefined,
       },
       {
-        field_name:Dictionary.FPSParams.PHONE_NUMBER,
+        field_name:Dictionary.PaymeParams.PHONE_NUMBER,
         field_type:FormParams.Form.field_type.number,
         required:FormParams.Form.field_type.required.NOT_REQUIRED,
         single:FormParams.Form.field_type.single.SINGLE,
-        field_value:details[Dictionary.FPSParams.PHONE_NUMBER]?details.phone_number:undefined,
+        field_value:details[Dictionary.PaymeParams.PHONE_NUMBER]?details[Dictionary.PaymeParams.PHONE_NUMBER]:undefined,
       },
-      {
-        field_name:Dictionary.FPSParams.BANK_ACCOUNT,
-        field_type:FormParams.Form.field_type.text,
-        required:FormParams.Form.field_type.required.NOT_REQUIRED,
-        single:FormParams.Form.field_type.single.SINGLE,
-        field_value:details[Dictionary.FPSParams.BANK_ACCOUNT]?details[Dictionary.FPSParams.BANK_ACCOUNT]:undefined
-      },
+      
     ]
   }
   
@@ -96,7 +90,7 @@ function PaymeDetails({details,onChange}) {
     //onChange={()=>{updateDetails()}}
     mappedData&&(
       <div className='flex flex-col w-full'>
-        <FillForm fields={mappedData} title={"Payme"} TitleMap={Dictionary.FPSMapTitle.chi} allowDisable={true} onChange={(Fields=>{reverseMap(Fields)})}/>
+        <FillForm fields={mappedData} title={"Payme"} TitleMap={Dictionary.PaymeMapTitle.chi} allowDisable={true} onChange={(Fields=>{reverseMap(Fields)})}/>
     </div>
     )
     

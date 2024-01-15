@@ -34,6 +34,22 @@ class Dictionary {
         
     };
 
+    static PaymeMapTitle = {
+        eng:{
+            payme_url: 'Payme Link',
+            phone_number: 'Phone Number',
+            shown_name: 'Shown Name',
+            activated:"Activated"
+        },
+        chi:{
+            payme_url: 'Payme Link',
+            phone_number: '電話',
+            shown_name: '顯示名稱',
+            activated:"啟用"
+        }
+        
+    };
+
     static PaymentParams = {
         FPS:{
             QR_CODE_URL: 'qr_code_url',
@@ -48,7 +64,7 @@ class Dictionary {
             SHOWN_NAME: 'shown_name',
             ACTIVATED:'activated'
         },
-        
+
     }
 
     static PaymeParams = {

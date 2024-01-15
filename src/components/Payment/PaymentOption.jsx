@@ -76,7 +76,7 @@ function PaymentOption({code}) {
           }
         </div>
         <div className="">
-          <button className='rounded-md p-1 bg-green-600 text-white'>Save</button>
+          <button className='rounded-md p-1 bg-green-600 text-white' onClick={()=>{}}>Save</button>
         </div>
     </div>
     )
