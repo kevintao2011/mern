@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import FieldForArray from './FieldForArray'
 import ArrayofFields from './ArrayofFields';
 import ArrayofKVFields from './ArrayofKVFields';
-function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' ',isKV=false}) {
+function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' ',isKV=false,disabled=false}) {
     const splitMap = {
         '\\' : "single backslash",
         '\b' : "backspace",
@@ -65,6 +65,7 @@ function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' ',isKV
                                 handleTags(e)
                             }
                         })}
+                        disabled={disabled}
                     />
                     <div className="flex flex-row gap-2">
                     {
@@ -81,6 +82,7 @@ function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' ',isKV
                                                 uploadValues(i,values)
                                             }
                                         }
+                                        disabled={disabled}
                                     >
                                         <div className="flex flex-row">
                                             <div className="p-1">{tag}</div>

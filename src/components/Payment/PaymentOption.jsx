@@ -23,18 +23,18 @@ function PaymentOption({code,onUpdate}) {
   return (
     
     PaymentMethod&&(
-      <div className="flex flex-col">
-        <div className="flex flex-row border border-black items-center">
-            <div className="">付款資訊 Payment Method</div>
-            <Checkbox
+      <div className="flex flex-col p-5">
+        <div className="flex flex-row  items-center">
+            <div className="font-bold">付款資訊 Payment Method</div>
+            {/* <Checkbox
                 indeterminate={SelectedPayments.length > 0 && SelectedPayments.length < data.length}
                 checked={SelectedPayments.length === data.length}
                 onChange={(value, checked) => setSelectedPayments(checked ? data : [])}
             >
                 Check all
-            </Checkbox>
+            </Checkbox> */}
         </div>
-        <div className='flex '>
+        {/* <div className='flex '>
             <CheckboxGroup inline name="checkboxList" value={SelectedPayments} onChange={values => setSelectedPayments(values)}>
                 {data.map(item => (
                 <Checkbox key={item} value={item}>
@@ -42,20 +42,23 @@ function PaymentOption({code,onUpdate}) {
                 </Checkbox>
                 ))}
             </CheckboxGroup>
-        </div>
-        <div className="">
+        </div> */}
+        <div className="grid grid-cols-2 gap-5">
           {
             data.map(method=>{
               if(PaymentMethod[method]){
-                if(PaymentMethod[method].activated){
-                  return(
-                    method==="FPS"&&(
-                      <FPSDetails details={PaymentMethod[method]}/>
+                switch (method) {
+                  case "FPS":
+                    return(<FPSDetails details={PaymentMethod[method]}/>)
+                  case "Payme":
+                    return(<FPSDetails details={PaymentMethod[method]}/>)
+                  default:
+                    return(
+                      <></>
                     )
-                  )
-                }else{
-                  return(<></>)
+                    
                 }
+                
               }else{
                 return(<></>)
               }

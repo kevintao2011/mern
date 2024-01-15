@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { InputPicker } from 'rsuite';
-function SelectField({optionsMap,single,returnFunction,value,index}) {
+function SelectField({optionsMap,single,returnFunction,value,index,disabled=false}) {
     console.log("optionsMap",optionsMap)
     const [MappedOptions, setMappedOptions] = useState()
     useEffect(() => {
@@ -35,7 +35,7 @@ function SelectField({optionsMap,single,returnFunction,value,index}) {
     
     
     return (
-        <InputPicker data={MappedOptions} onChange={setSelectedValue} className='w-full' />
+        <InputPicker data={MappedOptions} onChange={setSelectedValue} className='w-full' disabled={disabled} />
     )
 }
 

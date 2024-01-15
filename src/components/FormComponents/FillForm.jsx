@@ -9,16 +9,56 @@ import EntryTable from '../table/EntryTable';
 import ProductCombination from './ProductCombination';
 import { toast } from 'sonner';
 import { classifyValue } from '../../utils/basicFunction';
+import Dictionary from '../../Dictionary';
 
+/*
+    Template
+    {
+        {
+            field_name:,
+            field_type:,
+            required:,
+            single:,
+            field_value:,
+            
+            --Optional--
+            a.Select
+                field_options
+            b.text
+                field_props
+                split_synbol
+                iskv
+            c.files
 
-function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,onSubmit}) {
-    // const [Headings, setHeadings] = useState([])
+        }
+    }
+
+*/
+/** 
+ * Doc
+ * @param {Array} fields [Array follows template above],
+ * @param {String}title Title of Form,
+ * @param {String}description Description of form,
+ * @param {Object}TitleMap Object(dictionary) that convert field_name to other name to dispaly,
+ * @param {String}postAPI exclusive to onSubmit, submit inside the component
+ * @param {function}onSubmit exclusive to postAPI, trigger submit action in parent
+ * @param {boolean}allowDisable restrict edit
+ * @param {function}onChange allow pass changes to upper component
+*/
+function FillForm({fields , className ,title ,description="" ,TitleMap={},postAPI,onSubmit,allowDisable=false},onChange) {
+    const [disabled, setdisabled] = useState(true)
     const [ErrorMsg, setErrorMsg] = useState("")
     const [Fields, setFields] = useState()
     useEffect(() => {
         console.log("Initing form")
         setFields(fields)
     }, [])
+
+    useEffect(()=>{
+        if(onChange){
+            onChange(Fields)
+        }
+    }, [Fields])
     
     // index: index of field, single: multiple objects, id : field id
     function RequireValidation(){
@@ -78,8 +118,29 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
     return (
         <div className={`${className} font-mincho`}>
             <div className="">
-                <p className='text-2xl font-bold pb-5'>{title}</p>
-                <p className='my-2 text-sm'>{description}</p>
+                <div className="flex flex-row ">
+                    <p className='text-2xl font-bold border '>{title}</p>
+                    {
+                        allowDisable&&(
+                            
+                            <div className="flex flex-col justify-center">
+                                <div className="h-full flex flex-row items-center ">
+                                    <div className=" ">{Dictionary.Form.displayText.edit.chi}</div>
+                                    <Toggle onChange={e=>{setdisabled(!e)}} defaultChecked={!disabled}/>
+                                </div>
+                            </div>
+                            
+                          
+                            
+                        )
+                    }
+                </div>
+                {
+                    description&&(
+                        <p className='my-2 text-sm'>{description}</p>
+                    )
+                }
+                
             </div>
             <table className="w-full ">
                 <tbody className=''>
@@ -98,8 +159,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                     returnFunction={updateField}
                                                     single={field.single}
                                                     value={field.field_value}
-                                                    
-                                                    
+                                                    disabled={disabled}
                                                 />
                                             )
                                             
@@ -114,6 +174,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                             cols="30" 
                                                             className='field w-full my-1' 
                                                             onChange={(e)=>{updateField(index,e.target.value)}}
+                                                            disabled={disabled}
                                                         >
 
                                                         </textarea>
@@ -124,6 +185,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                             type={field.field_type} 
                                                             value={field.field_value}
                                                             onChange={(e)=>{updateField(index,e.target.value)}}        
+                                                            disabled={disabled}
                                                             
                                                         />
                                                     )
@@ -136,7 +198,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                         splitSymbol={field.split_by}
                                                         index={index}
                                                         isKV={field.is_kv}
-                                                    
+                                                        disabled={disabled}
                                                     />
                                                 )
                                                 
@@ -151,6 +213,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                     value={field.field_value}
                                                     onChange={(e)=>{updateField(index,field.field_type==='file'?e.target.files:e.target.value)}}
                                                     min={0}                                      
+                                                    disabled={disabled}
                                                 />
                                             )
                                         }
@@ -163,7 +226,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                     single={field.single_value}
                                                     updatePhoto={updateField}
                                                     index={index}
-                                                    
+                                                    disabled={disabled}
                                                 />
                                             )
                                         }
@@ -173,6 +236,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                     format="yyyy-MM-dd HH:mm"
                                                     className='w-full shadow '
                                                     onChange={(v)=>{updateField(index,v)}}
+                                                    disabled={disabled}
                                                 />
                                             )
                                         }
@@ -182,6 +246,7 @@ function FillForm({fields , className ,title ,description ,TitleMap={},postAPI,o
                                                 onChange={v=>{updateField(index,v)}}
                                                 defaultChecked={field.single_value}
                                                 onLoad={()=>{updateField(index,false)}}
+                                                disabled={disabled}
                                             />  
                                             )
                                         }

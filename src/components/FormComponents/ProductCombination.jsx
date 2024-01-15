@@ -91,6 +91,14 @@ function ProductCombination({productData,update}) {
 
 
     function OptionInput({option,index,updateOptionChoice}) {
+        /*
+            Description:This component contains 2 parts
+            1.Options
+                add Categories for the subporducts
+            2.Choice
+                Render base on Options Inputted
+            3. 
+        */
         const [Input, setInput] = useState("")
         console.log("optionInput",option)
         return (

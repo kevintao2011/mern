@@ -1,6 +1,6 @@
 import React from 'react'
 
-function FileField({imgs, fieldTitle, updatePhoto,index,single,w=100, h=100}) {
+function FileField({imgs, fieldTitle, updatePhoto,index,single,w=100, h=100,disabled=false}) {
   function updatefileList(files){
     // const f = new File(files[0],files[0].name)
     // console.log(`uploading ${f} to ${imgs}`)
@@ -38,6 +38,7 @@ function FileField({imgs, fieldTitle, updatePhoto,index,single,w=100, h=100}) {
           placeholder=''
       onChange={(e)=>{updatePhoto(index,updatefileList(e.target.files));}}
           // onChange={(e)=>{console.log(e.target.files)}}
+          disabled={disabled}
       />
     </div>
     
