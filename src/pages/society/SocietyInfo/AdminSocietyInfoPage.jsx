@@ -17,6 +17,7 @@ function AdminSocietyInfoPage({code}) {
            
             <div className="card flex flex-col">
                 <PaymentOption code={code}/>
+                <div className="Basic Info"></div>
                 
             </div>
         </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Dictionary, {FormParams} from '../../Dictionary'
 import FillForm from '../FormComponents/FillForm'
 
-// const FPSSchema = {
+// const PaymeSchema = {
 //     qr_code_url:'#',
 //     phone_number:Number,
 //     bank_account:{
@@ -32,7 +32,7 @@ function PaymeDetails({details,onChange}) {
         field_type:FormParams.Form.field_type.boolean,
         required:FormParams.Form.field_type.required.NOT_REQUIRED,
         single:FormParams.Form.field_type.single.SINGLE,
-        field_value:details[Dictionary.PaymeParams.ACTIVATED]?details[Dictionary.PaymeParams.ACTIVATED]:false,
+        field_value:details[Dictionary.PaymeParams.ACTIVATED]||false?details[Dictionary.PaymeParams.ACTIVATED]:false,
       },
       {
         field_name:Dictionary.PaymeParams.PAYME_URL,
@@ -59,22 +59,23 @@ function PaymeDetails({details,onChange}) {
     ]
   }
   
+  /**
+   * Map FillForm data back to 
+   * @param {Array} FormFields 
+   */
   function reverseMap(FormFields){
     console.log("Reverse Map",FormFields)
     if(FormFields){
-      const FPSParams = Object.values(Dictionary.FPSParams)
-      var FPSField = {}
-      // FPSParams.forEach(param=>{
-        
-      // })
+      const PaymeParams = Object.values(Dictionary.PaymeParams)
+      let PaymeField = {}
       FormFields.forEach(field=>{
-        if(FPSParams.includes(field.field_name)){
-          FPSField[field.field_name]=field.field_value
+        if(PaymeParams.includes(field.field_name)){
+          PaymeField[field.field_name]=field.field_value
         }
       })
       if(onChange){
-        console.log("Detials pass to Option",FPSField)
-        onChange(FPSField)
+        console.log("Detials pass to Option",PaymeField)
+        onChange(PaymeField)
       }
     }
     

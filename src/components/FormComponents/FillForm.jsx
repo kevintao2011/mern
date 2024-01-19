@@ -35,17 +35,19 @@ import Dictionary from '../../Dictionary';
 
 */
 /** 
- * Doc
+ * Description
  * @param {Array} fields [Array follows template above],
  * @param {String}title Title of Form,
  * @param {String}description Description of form,
  * @param {Object}TitleMap Object(dictionary) that convert field_name to other name to dispaly,
- * @param {String}postAPI exclusive to onSubmit, submit inside the component
- * @param {function}onSubmit exclusive to postAPI, trigger submit action in parent
+ * @param {String}postAPI mutual exclusive to onSubmit, submit inside the component
+ * @param {function}onSubmit mutual exclusive to postAPI, trigger submit action in parent
  * @param {boolean}allowDisable restrict edit
- * @param {function}onChange allow pass changes to upper component
+ * @param {function}onChange allow pass changes to parent component
+ * @param {function}mapFunction map data to FillForm accepted shape (undone)
+ * @param {function}reverseMapFunction map FillForm returned data to desired shape (undone)
 */
-function FillForm({fields , className ,title ,description="" ,TitleMap={},postAPI,onSubmit,allowDisable=false,onChange}) {
+function FillForm({fields , className ,title ,description="" ,TitleMap={},postAPI,onSubmit,allowDisable=false,onChange,mapFunction,reverseMapFunction}) {
     const [disabled, setdisabled] = useState(true)
     const [ErrorMsg, setErrorMsg] = useState("")
     const [Fields, setFields] = useState()
@@ -70,7 +72,7 @@ function FillForm({fields , className ,title ,description="" ,TitleMap={},postAP
         function onlyLettersAndNumbers(str) {
             return /^[A-Za-z0-9]*$/.test(str);
           }
-        var msg =""
+        let msg =""
         console.log(Fields)
         Fields.forEach(field => {
             console.log(field.field_name,classifyValue(field.field_value))
@@ -96,7 +98,7 @@ function FillForm({fields , className ,title ,description="" ,TitleMap={},postAP
     }
     function updateField(index,values){
         console.log(Fields,"updating ",index,values)
-        var newFields  = Fields
+        let newFields  = Fields
         newFields[index]["field_value"]=values
         setFields([...newFields])
         console.log("updated",newFields)
@@ -105,7 +107,7 @@ function FillForm({fields , className ,title ,description="" ,TitleMap={},postAP
 
     function updateKVField(index,key,value){
         console.log(Fields,"updating ",key,value)
-        var newFields  = Fields
+        let newFields  = Fields
         newFields[index]["field_value"][key]=value
         setFields([...newFields])
         console.log("updated",newFields)
@@ -124,12 +126,12 @@ function FillForm({fields , className ,title ,description="" ,TitleMap={},postAP
         <div className={`${className} font-mincho`}>
             <div className="">
                 <div className="flex flex-row gap-5">
-                    <p className='text-2xl font-bold  '>{title}</p>
+                    <p className='text-xl font-bold  '>{title}</p>
                     {
                         allowDisable&&(
                             
                             <div className="flex flex-col justify-center">
-                                <div className="h-full flex flex-row items-center ">
+                                <div className="h-full flex flex-row items-center gap-2 ">
                                     <div className=" ">{Dictionary.Form.displayText.edit.chi}</div>
                                     <Toggle onChange={e=>{setdisabled(!e)}} defaultChecked={!disabled}/>
                                 </div>
@@ -155,7 +157,7 @@ function FillForm({fields , className ,title ,description="" ,TitleMap={},postAP
                             return(
                                 <tr key={`field-${index}`} className=''>
                                     <td className="text-start">{TitleMap[field.field_name]?TitleMap[field.field_name]:field.field_name}</td>
-                                    <td className='py-2'>
+                                    <td className='py-1'>
                                         {
                                             field.field_type.includes('select')&&(
                                                 <SelectField
@@ -249,7 +251,7 @@ function FillForm({fields , className ,title ,description="" ,TitleMap={},postAP
                                             field.field_type.includes('boolean')&&(
                                             <Toggle
                                                 onChange={v=>{updateField(index,v)}}
-                                                defaultChecked={field.single_value}
+                                                defaultChecked={field.field_value}
                                                 onLoad={()=>{updateField(index,false)}}
                                                 disabled={disabled}
                                             />  

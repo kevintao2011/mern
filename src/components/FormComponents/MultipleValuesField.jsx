@@ -13,7 +13,7 @@ function MultipleValuesField({values=[],uploadValues,index, splitSymbol=' ',isKV
     }
     function handleTags(e){
         console.log("fieldValue b4 handle",e.target.value,"default tags",values)
-        var fieldValue=e.target.value
+        let fieldValue=e.target.value
         fieldValue = fieldValue.split(splitSymbol)[0].trim()
         console.log("split",fieldValue)
         // fieldValue.splice(0,1)

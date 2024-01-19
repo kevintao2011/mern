@@ -38,8 +38,8 @@ const SetupAccount = () => {
     
     useEffect(() => {
         console.log(userDBInfo)
-        var currentYear = new Date()
-        var dateList = []
+        let currentYear = new Date()
+        let dateList = []
         for (let index = currentYear.getFullYear(); index > currentYear.getFullYear()-8; index--) {
             dateList.push(index)
             

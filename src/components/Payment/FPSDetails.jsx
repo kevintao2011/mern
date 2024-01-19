@@ -27,27 +27,28 @@ const FPSSchema = {
 function FPSDetails({details,onChange}) {
 
   function mapData(details){
+    console.log('boolean',Boolean(details[Dictionary.FPSParams.ACTIVATED]))
     return [
       {
         field_name:Dictionary.FPSParams.ACTIVATED,
         field_type:FormParams.Form.field_type.boolean,
         required:FormParams.Form.field_type.required.NOT_REQUIRED,
         single:FormParams.Form.field_type.single.SINGLE,
-        field_value:details[Dictionary.FPSParams.ACTIVATED]?details[Dictionary.FPSParams.ACTIVATED]:false,
+        field_value:Boolean(details[Dictionary.FPSParams.ACTIVATED])?details[Dictionary.FPSParams.ACTIVATED]:false,
       },
-      {
-        field_name:Dictionary.FPSParams.QR_CODE_URL,
-        field_type:FormParams.Form.field_type.text,
-        required:FormParams.Form.field_type.required.NOT_REQUIRED,
-        single:FormParams.Form.field_type.single.SINGLE,
-        field_value:details[Dictionary.FPSParams.QR_CODE_URL]?details[Dictionary.FPSParams.QR_CODE_URL]:undefined,
-      },
+      // {
+      //   field_name:Dictionary.FPSParams.QR_CODE_URL,
+      //   field_type:FormParams.Form.field_type.text,
+      //   required:FormParams.Form.field_type.required.NOT_REQUIRED,
+      //   single:FormParams.Form.field_type.single.SINGLE,
+      //   field_value:details[Dictionary.FPSParams.QR_CODE_URL]?details[Dictionary.FPSParams.QR_CODE_URL]:undefined,
+      // },
       {
         field_name:Dictionary.FPSParams.SHOWN_NAME,
         field_type:FormParams.Form.field_type.text,
         required:FormParams.Form.field_type.required.NOT_REQUIRED,
         single:FormParams.Form.field_type.single.SINGLE,
-        field_value:details.shown_name?details.shown_name:undefined,
+        field_value:details[Dictionary.FPSParams.SHOWN_NAME]?details[Dictionary.FPSParams.SHOWN_NAME]:undefined,
       },
       {
         field_name:Dictionary.FPSParams.PHONE_NUMBER,
@@ -70,7 +71,7 @@ function FPSDetails({details,onChange}) {
     console.log("Reverse Map",FormFields)
     if(FormFields){
       const FPSParams = Object.values(Dictionary.FPSParams)
-      var FPSField = {}
+      let FPSField = {}
       // FPSParams.forEach(param=>{
         
       // })

@@ -1,14 +1,6 @@
 
 class Dictionary {
 
-    static FPSParams = {
-        QR_CODE_URL: 'qr_code_url',
-        PHONE_NUMBER: 'phone_number',
-        BANK_ACCOUNT: 'bank_account',
-        SHOWN_NAME: 'shown_name',
-        ACTIVATED:'activated'
-    };
-
     static PaymentMethods= {
         PAYME:"Payme",
         FPS:"FPS",
@@ -16,16 +8,26 @@ class Dictionary {
         DEPOSIT:"Deposit"
     }
 
+
+    static FPSParams = {
+        // QR_CODE_URL: 'qr_code_url',
+        PHONE_NUMBER: 'phone_number',
+        BANK_ACCOUNT: 'bank_account',
+        SHOWN_NAME: 'shown_name',
+        ACTIVATED:'activated'
+    };
+
+    
     static FPSMapTitle = {
         eng:{
-            qr_code_url: 'QR Code',
+            // qr_code_url: 'QR Code',
             phone_number: 'Phone Number',
             bank_account: 'Bank Account',
             shown_name: 'Shown Name',
             activated:"Activated"
         },
         chi:{
-            qr_code_url: 'QR Code',
+            // qr_code_url: 'QR Code',
             phone_number: '電話',
             bank_account: '銀行號碼',
             shown_name: '顯示名稱',
@@ -50,6 +52,51 @@ class Dictionary {
         
     };
 
+    static PaymeParams = {
+        PAYME_URL: 'payme_url',
+        PHONE_NUMBER: 'phone_number',
+        SHOWN_NAME: 'shown_name',
+        ACTIVATED:'activated'
+    };
+
+    static DepositMapTitle = {
+        eng:{
+            bank_index: 'Bank Index',
+            bank_account: 'Bank Account',
+            shown_name: 'Shown Name',
+            activated:"Activated"
+        },
+        chi:{
+            bank_index: '銀行編號',
+            bank_account: '銀行號碼',
+            shown_name: '顯示名稱',
+            activated:"啟用"
+        }
+        
+    };
+
+    static DepositParams = {
+        BANK_INDEX:'bank_index',
+        BANK_ACCOUNT:'bank_account',
+        SHOWN_NAME: 'shown_name',
+        ACTIVATED:'activated'
+    };
+
+    static CashMapTitle = {
+        eng:{
+            activated:"Activated"
+        },
+        chi:{
+            activated:"啟用"
+        }
+        
+    };
+
+    static CashParams = {
+        ACTIVATED:'activated'
+    };
+
+
     static PaymentParams = {
         FPS:{
             QR_CODE_URL: 'qr_code_url',
@@ -67,19 +114,6 @@ class Dictionary {
 
     }
 
-    static PaymeParams = {
-        PAYME_URL: 'payme_url',
-        PHONE_NUMBER: 'phone_number',
-        SHOWN_NAME: 'shown_name',
-        ACTIVATED:'activated'
-    };
-
-    static PaymeMapTitleEng = {
-        payme_url: 'PayMe Code',
-        phone_number: 'Phone Number',
-        shown_name: 'Shown Name',
-        activated:'activated'
-    };
 
     static Form = {
         field_type:{

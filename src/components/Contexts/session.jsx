@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react"
 import { auth } from "../../utils/firebasefunction"
 import { createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateEmail,updatePassword,updateProfile,sendPasswordResetEmail,sendEmailVerification } from "firebase/auth"
 import {  toast } from "sonner"
+import { postURL } from "../../utils/fetch"
 
 
 const AuthContext = React.createContext()
@@ -42,6 +43,18 @@ export function AuthProvider({ children }) {
     return currentUser.updatePassword(password)
   }
 
+  async function getCart(){
+    await postURL('/api/getcart',true).then(result=>{
+      if(result.success){
+        console.log(result.data)
+        setCart(result.data)
+        console.log("updated cart",result.data)
+      }else{
+        toast.error(result.data)
+      }
+    })
+  }
+
   async function getDBInfo(){
     console.log("getDBInfo",auth.currentUser.uid)
     await auth.currentUser.getIdToken().then(async token=>{
@@ -66,11 +79,11 @@ export function AuthProvider({ children }) {
                 const data = await response.json()
                 console.log("userInfo",data)
                 setuserDBInfo(data)
-                if(!Cart){
-                  console.log("Cart in first load",Cart)
-                  setCart(data.cart)
-                  sessionStorage.setItem("Cart",JSON.stringify({[auth.currentUser.email]:data.cart}))
-                }
+                // if(!Cart){
+                //   console.log("Cart in first load",Cart)
+                //   setCart(data.cart)
+                //   sessionStorage.setItem("Cart",JSON.stringify({[auth.currentUser.email]:data.cart}))
+                // }
                 
                 toast.success("log in successfull")
                 
@@ -106,9 +119,16 @@ export function AuthProvider({ children }) {
     }
   }
   
-
+  useEffect(() => {
+    if(currentUser){
+      getCart()
+      
+    }
+  }, [currentUser])
+  
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async user => {
+      
       console.log("session changed",typeof(user),user)
       
       setCurrentUser(user)
@@ -152,6 +172,7 @@ export function AuthProvider({ children }) {
     updateEmail,
     updatePassword,
     setSoc,
+    getCart,
     Cart,
     setCart
     

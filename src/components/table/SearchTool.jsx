@@ -4,7 +4,7 @@ function SearchTool({inputData,updateOutput,searchFieldID,className}) {
   console.log("inputData",inputData)
   const [SearchTarget, setSearchTarget] = useState()
   useEffect(() => {
-    var result
+    let result
     if(SearchTarget){
       result=inputData.filter(entry=>{
         if (String(entry[searchFieldID]).toLowerCase().includes(String(SearchTarget).toLowerCase())){

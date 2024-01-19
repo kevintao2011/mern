@@ -11,7 +11,7 @@ export default function EditLastestnews() {
 
   function SaveFieldValues (fieldName,fieldValues,index){
     console.log("Updating value from field",fieldName)
-    var tmp = StaticData
+    let tmp = StaticData
     tmp[index]=fieldValues
     setStaticData(tmp)
   }

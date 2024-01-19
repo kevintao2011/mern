@@ -182,7 +182,14 @@ const Product = () => {
         
     // }
     async function addToCart(productsku){
-        postURL('/api/addtocart',true,productsku)
+        console.log(productsku)
+        await postURL('/api/addtocart',true,{sku:productsku,quantity:1}).then(result=>{
+            if(result.success){
+                setCart()
+            }else{
+
+            }
+        })
     }
     useEffect(() => {
         async function fetchProductInfo (){
@@ -351,7 +358,7 @@ const Product = () => {
                                 //     </div>
                                 // )
                                 <div className="w-full flex flex-row justify-center">
-                                    <button disabled={!SelectedProduct} className="bg-web-green text-white rounded-md p-1 disabled:bg-gray-500"
+                                    <button disabled={!SelectedProduct} className="bg-su-green text-white rounded-md p-1 disabled:bg-gray-500"
                                         onClick={()=>{addToCart(SelectedProduct.sku)}}
                                     >
                                         Add To Cart

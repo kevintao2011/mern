@@ -153,13 +153,18 @@ const Nav = () => {
                                                         className="flex   text-black "
                                                         onClick={async ()=>{setToggleDropdown(prev=>!prev);await uploadCart();}}
                                                     >
-                                                        <div className="">購物車 Cart</div>
-                                                        <div className="px-5">
+                                                        <div className="flex flex-row gap-5">
+                                                            <div className="">購物車 Cart</div>
+                                                            <div className="">
 
-                                                        
-                                                            <div className="w-7 h-7 rounded-full bg-red-600  ">
-                                                                <div className="w-full flex flex-row justify-center">
-                                                                <p className="   ">{CartNumber}</p>
+                                                            
+                                                                {/* <div className="w-7 h-7 rounded-full bg-red-600  ">
+                                                                    <div className="w-full flex flex-row justify-center">
+                                                                    <p className="   ">{CartNumber}</p>
+                                                                    </div>
+                                                                </div> */}
+                                                                <div className="aspect-square h-full flex flex-row justify-center items-center rounded-full bg-su-green text-white">
+                                                                    <div className="">{CartNumber}</div>
                                                                 </div>
                                                             </div>
                                                         </div>

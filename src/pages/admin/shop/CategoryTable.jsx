@@ -20,8 +20,8 @@ function CategoryTable() { // Array of nested list
                 
             }).then(async response => {
                 if (response.ok){
-                    var catergoryMap = {}
-                    var data = await response.json()
+                    let catergoryMap = {}
+                    let data = await response.json()
                     data.forEach(d=>{
                         catergoryMap[d.catergory_name]=d.id
                     })
@@ -39,7 +39,7 @@ function CategoryTable() { // Array of nested list
                     })
                     
                     setCategories(filteredData)
-                    var props = Object.keys(filteredData[0])
+                    let props = Object.keys(filteredData[0])
                     // props.splice(0,1)
                     console.log("Category porperty",filteredData)
                     setCategoryProperties(props)

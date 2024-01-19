@@ -7,7 +7,7 @@ function ActivityCalendar({Activities}) {
         const day = date.getDate();
         //[[],[{ time: '10:30 am', title: 'Meeting' }]]
         // console.log(day,date,typeof date)
-        var tdlist = []
+        let tdlist = []
         activities.forEach(activity=>{
             // console.log(`Compare ${String(new Date(activity.start_date)).slice(0,15)} and ${String(date).slice(0,15)}`)
             if((String(new Date(activity.start_date)).slice(0,15))===String(date).slice(0,15)){

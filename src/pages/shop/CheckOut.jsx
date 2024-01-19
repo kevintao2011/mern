@@ -94,7 +94,7 @@ const CheckOut = () => {
                 i.code!==Code
               )
               console.log(a)
-              setCart(a)
+              // setCart(a)
               sessionStorage.setItem("Cart",JSON.stringify({[currentUser.email]:a}))
               setCheckingOut(false)
               navigate("/profile")

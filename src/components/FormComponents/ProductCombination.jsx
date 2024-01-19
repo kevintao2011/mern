@@ -14,7 +14,7 @@ function ProductCombination({productData,update}) {
     )
     const [PriceList, setPriceList] = useState([])
     useEffect(() => {
-        var variantOptions = []
+        let variantOptions = []
         for (let index = 0; index < Option.length; index++) {
             variantOptions.push(Option[index].option.map(text=>{
                 return text

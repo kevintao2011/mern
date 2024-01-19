@@ -19,7 +19,7 @@ function SSelectFieldWithSearch({options,uploadSelected,index,single,values,canS
 
   function addValues (newValue){
     if(single){
-      var a =[]
+      let a =[]
       a.push(newValue)
       values=a
     }
