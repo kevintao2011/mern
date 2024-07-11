@@ -13,14 +13,17 @@ function AdminSocietyInfoPage({code}) {
     
     const data = ['payme', 'FPS', 'Cash', ''];
     return (
-        <div className='grid grid-cols-1 gap-2 my-2'>
-           
-            <div className="card flex flex-col">
-                <PaymentOption code={code}/>
-                <div className="Basic Info"></div>
-                
+        <div className="flex-col">
+            
+            <div className='grid grid-cols-1 gap-2 my-2'>
+                <div className="card flex flex-col">
+                    <PaymentOption code={code}/>
+                    <div className="Basic Info"></div>
+                    
+                </div>
             </div>
         </div>
+        
         
     )
 }

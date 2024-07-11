@@ -48,7 +48,7 @@ import Dictionary from '../../Dictionary';
  * @param {function}reverseMapFunction map FillForm returned data to desired shape (undone)
 */
 function FillForm({fields , className ,title ,description="" ,TitleMap={},postAPI,onSubmit,allowDisable=false,onChange,mapFunction,reverseMapFunction}) {
-    const [disabled, setdisabled] = useState(true)
+    const [disabled, setdisabled] = useState(false)
     const [ErrorMsg, setErrorMsg] = useState("")
     const [Fields, setFields] = useState()
     useEffect(() => {

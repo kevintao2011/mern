@@ -120,7 +120,7 @@ const Product = () => {
                                             console.log("toogled")
                                             if(selected){
                                                 selectedIndexs.push(i);
-                                                console.log("added",selectedIndexs)
+                                                console.log("selected",selectedIndexs)
                                                 onChange(selectedIndexs)
                                             }
                                             else{
@@ -184,10 +184,11 @@ const Product = () => {
     async function addToCart(productsku){
         console.log(productsku)
         await postURL('/api/addtocart',true,{sku:productsku,quantity:1}).then(result=>{
+            console.log('add to cart')
             if(result.success){
-                setCart()
+                console.log("added",result)
             }else{
-
+                console.log("not added")
             }
         })
     }
