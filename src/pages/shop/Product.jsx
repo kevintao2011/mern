@@ -184,7 +184,7 @@ const Product = () => {
     async function addToCart(productsku){
         console.log(productsku)
         await postURL('/api/addtocart',true,{sku:productsku,quantity:1}).then(result=>{
-            console.log('add to cart')
+            
             if(result.success){
                 console.log("added",result)
             }else{
