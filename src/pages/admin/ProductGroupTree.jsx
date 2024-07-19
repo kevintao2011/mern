@@ -1,3 +1,5 @@
+//abadon this page since tree approach is abandoned
+
 import React, { useEffect, useState } from 'react'
 import { CheckTree, InputPicker, Tree, TreePicker } from 'rsuite';
 import { mockTreeData } from './mock.js';
