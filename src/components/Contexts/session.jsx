@@ -7,6 +7,8 @@ import { postURL } from "../../utils/fetch"
 
 const AuthContext = React.createContext()
 
+
+
 export function useAuth() {
   return useContext(AuthContext)
 }
@@ -18,7 +20,7 @@ export function AuthProvider({ children }) {
   const [Soc, setSoc] = useState()
   const [Cart, setCart] = useState()
   
-
+  
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth,email, password)
   }
@@ -46,8 +48,8 @@ export function AuthProvider({ children }) {
   async function getCart(){
     await postURL('/api/getcart',true).then(result=>{
       if(result.success){
-        console.log(result.data)
-        setCart(result.data)
+        console.log('cart',result.data)
+        // setCart(mapCart(result.data))
         console.log("updated cart",result.data)
       }else{
         toast.error(result.data)

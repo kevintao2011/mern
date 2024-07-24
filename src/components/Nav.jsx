@@ -14,8 +14,7 @@ const Nav = () => {
     
     const location = useLocation() //get current path
     const [toggleDropdown, setToggleDropdown] = useState(false);
-    // const [MySociety, setMySociety] = useState([])
-    // const [loggedIn, setLoggedIn] = useState(false);
+
     
     const navigate = useNavigate();
     
@@ -24,18 +23,11 @@ const Nav = () => {
     const [CartNumber, setCartNumber] = useState([])
 
     const {currentUser,userDBInfo,loading,setuserDBInfo,Cart,setCart} = useAuth()
-    // console.log("loading Nav",currentUser,userDBInfo,loading)
-    // console.log("load user",currentUser,userDBInfo.societies)
-    // if(currentUser && userDBInfo){
-    //     console.log("Nav status",currentUser,userDBInfo.societies)
-    //     // setMySociety(Object.keys(userDBInfo.societies))
-        
-    // }
-  
+
     // from context
-    useEffect(() => {
-      setCartNumber(Cart?.length)
-    }, [setCart,Cart])
+    // useEffect(() => {
+    //   setCartNumber(Cart?.length)
+    // }, [setCart,Cart])
 
     async function uploadCart(){
         await fetch(
@@ -117,7 +109,7 @@ const Nav = () => {
                     </div>
                     <div className="flex flex-row gap-x-5  w-2/3 md:w-1/3 justify-end">             
                     <div className="absolute top-1 right-5 ">
-                            {currentUser&&userDBInfo&&Cart?(      // logged in               
+                            {currentUser&&userDBInfo?(      // logged in    &&Cart          
                                 <div className="flex flex-col mt-4 mr-4 font-mincho field border-2 border-gray-300">   
                                     {
                                         toggleDropdown?(
@@ -151,18 +143,14 @@ const Nav = () => {
                                                     <Link 
                                                         to="shop/cart"
                                                         className="flex   text-black "
-                                                        onClick={async ()=>{setToggleDropdown(prev=>!prev);await uploadCart();}}
+                                                        onClick={async ()=>{setToggleDropdown(prev=>!prev);}}
                                                     >
                                                         <div className="flex flex-row gap-5">
                                                             <div className="">購物車 Cart</div>
                                                             <div className="">
 
                                                             
-                                                                {/* <div className="w-7 h-7 rounded-full bg-red-600  ">
-                                                                    <div className="w-full flex flex-row justify-center">
-                                                                    <p className="   ">{CartNumber}</p>
-                                                                    </div>
-                                                                </div> */}
+                                                               
                                                                 <div className="aspect-square h-full flex flex-row justify-center items-center rounded-full bg-su-green text-white">
                                                                     <div className="">{CartNumber}</div>
                                                                 </div>
@@ -171,9 +159,6 @@ const Nav = () => {
                                                     </Link>
                                                     
                                                     
-                                                    {/* <button className="p-1 bg-green-500 rounded-md">
-                                                        checkout
-                                                    </button> */}
                                                     {userDBInfo.first_login?(
                                                         <Link 
                                                             to="account/setup"
@@ -198,7 +183,7 @@ const Nav = () => {
                                                             e.preventDefault();
                                                             auth.signOut()
                                                             setuserDBInfo(null)
-                                                            // alert("'trigggered onclick action'");
+                                                            
                                                             console.log('trigggered onclick action');
                                                             navigate("/")
                                                             setToggleDropdown(prev=>!prev)
@@ -236,12 +221,7 @@ const Nav = () => {
                                 
                             ):(   // not logged in 
                         <div className="flex flex-col  gap-y-1 text-xs ">
-                                    {/* <Link 
-                                        to={"/soclist"}
-                                        className="flex  selectlink"
-                                    >
-                                        組織列表 Society List
-                                    </Link> */}
+                                    
                                     <Link 
                                         to={"/signup"}
                                         className="flex flex-row text-xs font-mincho bg-su-green text-white rounded-md text-center p-1"

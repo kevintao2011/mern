@@ -11,6 +11,14 @@ export function useStaticInfo() {
 }
 
 export function InfoProvider({ children }) {
+    /**
+     * 000: Object { 
+     * _id: "64cf89986724b2386bba0395",
+     * code: "000", 
+     * society_eng: "Executive Committee of LingNam University Student Union"
+     * society_chinese: "麻將學會"
+     * society_eng: "Mahjong Society, LUSU"
+     */
     const [SocMap, setSocMap] = useState()
     const [PrivacyPage, setPrivacyPage] = useState()
     const [latestActivities, setlatestActivities] = useState([])

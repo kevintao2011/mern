@@ -179,7 +179,7 @@ function CreateSingleProductContainer({onExit,code,session,close}) {
                         if(result.success){
                             console.log("result",result)
                             toast.success(result.data)
-                            close()
+                            //close()
                         }else{
                             toast.error(result.data)
                         }

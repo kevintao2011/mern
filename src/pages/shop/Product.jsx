@@ -42,6 +42,8 @@ const Product = () => {
                 })
             })
             console.log('filters',filters)
+
+            //2. generate all possible options for the product options
             function recursiveFilter(subproducts,filters){
                 if(filters.length<1){
                     return subproducts
@@ -60,7 +62,7 @@ const Product = () => {
                 }
             }
             if(filters.length<1){
-                console.log("display all products")
+                console.log("display all products",SubProducts)
                 setdisplaySubProduct(SubProducts)
             }else{
                 setdisplaySubProduct(recursiveFilter(SubProducts,filters))
@@ -183,7 +185,7 @@ const Product = () => {
     // }
     async function addToCart(productsku){
         console.log(productsku)
-        await postURL('/api/addtocart',true,{sku:productsku,quantity:1}).then(result=>{
+        await postURL('/api/addtocart',true,{sku:SelectedProduct.sku,quantity:1}).then(result=>{
             
             if(result.success){
                 console.log("added",result)
@@ -321,9 +323,8 @@ const Product = () => {
                                             <button 
                                                 className={`bg-white  p-1 rounded-md text-gray-600 border-2 flex flex-row justify-center ${subproduct.name===SelectedProduct?.name?'border-sky-600 border-2':''}`}
                                                 onClick={()=>{
-                                                    if(subproduct.name===SelectedProduct?.name){
-                                                        setSelectedProduct()
-                                                    }else{
+                                                    console.log(subproduct)
+                                                    if(subproduct.name!==SelectedProduct?.name){
                                                         setSelectedProduct(subproduct)
                                                     }
                                                     
@@ -334,7 +335,7 @@ const Product = () => {
                                                         {subproduct.name}
                                                     </div>
                                                     <div className="">
-                                                        ${subproduct.price}
+                                                        {subproduct.price?"":`$${subproduct.price}`}
                                                     </div>
                                                 </div>
                                             </button>
